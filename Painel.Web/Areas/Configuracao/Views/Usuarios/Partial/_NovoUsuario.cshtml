@@ -1,0 +1,101 @@
+﻿@model Painel.Web.Areas.Configuracao.Models.CadastroUsuarioViewModel
+
+
+@using (Html.BeginForm("InserirUsuario", "Usuarios", FormMethod.Post))
+{
+    @Html.HiddenFor(model => model.Id)
+    @Html.AntiForgeryToken()
+    @*@Html.ValidationSummary(true, "", new { @class = "text-danger" })*@
+    <div class="col-lg-12">
+        <div class="row">
+            <div class="col-md-6 mb-3">
+                @Html.LabelFor(model => model.Nome)
+                @Html.TextBoxFor(model => model.Nome, new { @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.Nome)
+            </div>
+            <div class="col-md-6 mb-3">
+                @Html.LabelFor(model => model.CPF)
+                @Html.TextBoxFor(model => model.CPF, new { @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.CPF)
+                <br />
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-6 mb-3">
+                @Html.LabelFor(model => model.Email)
+                @Html.TextBoxFor(model => model.Email, new { @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.Email)
+            </div>
+            <div class="col-md-6 mb-3">
+                @if (ViewBag.status == "Ativo")
+                {
+                    @Html.LabelFor(model => model.userstatus)
+                    <select name="userstatus" class="form-control">
+                        <option value="Ativo">Ativo</option>
+                        <option value="Inativo">Inativo</option>
+                    </select>
+                    <br />
+
+                }
+                else
+                {
+                    @Html.LabelFor(model => model.userstatus)
+                    <select name="userstatus" class="form-control">
+                        <option value="Inativo">Inativo</option>
+                        <option value="Ativo">Ativo</option>
+                    </select>
+                    <br />
+
+                }
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-6 mb-3">
+                @Html.LabelFor(model => model.Empresa)
+                @Html.DropDownListFor(model => model.IdEmpresa, new SelectList(ViewBag.empresas, "value", "text", (Model != null) ? Model.Empresa : default(string)), new { @class = "form-control" })
+            </div>
+            <div class="col-md-6 mb-3">
+                @Html.LabelFor(model => model.Telefone2)
+                @Html.TextBoxFor(model => model.Telefone2, new { @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.Telefone2)
+                <br />
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-6 mb-3">
+                @Html.LabelFor(model => model.Telefone1)
+                @Html.TextBoxFor(model => model.Telefone1, new { @class = "form-control" })
+                <br />
+                <br />
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-12" align="center">
+                <button type="submit" class="btn btn-success btn-lg btn-block">
+                    <i class="fa fa-floppy-o"></i> Salvar Cadastro
+                </button>
+            </div>
+        </div>
+
+        @*<div class="row">
+            <div class="col-lg-12">
+                <button type="submit" class="btn btn-primary">Salvar</button>
+            </div>
+        </div>*@
+    </div>
+}
+
+<script>
+    if (window.jQuery) {
+        $(function () {
+
+            $('#CPF').mask('000.000.000-00', { clearIfNotMatch: true });
+            $('#Telefone1').mask('(00)0000-0000', { clearIfNotMatch: true });
+            $('#Telefone2').mask('(00)00000-0000', { clearIfNotMatch: true });
+
+        });
+    }
+</script>
+
+

@@ -1,0 +1,47 @@
+﻿@model List<Painel.Models.Contratos.Dependente>
+
+@if (Model != null && Model.Count > 0)
+{
+    <table>
+        <thead>
+            <tr style="background-color:#e8e2e2">
+                <th>Nome &nbsp</th>
+                <th>CPF &nbsp</th>
+                <th>Data de Nascimento &nbsp</th>
+                <th>Sexo &nbsp</th>
+                <th>Parentesco &nbsp</th>
+                <th>Valor</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td style="width:400px;">
+                        &nbsp  @item.NOMEDep
+                    </td>
+                    <td style="width:200px; text-align: center;">
+                        @item.CPFDep
+                    </td>
+                    <td style="width:200px; text-align: center;">
+                        @String.Format("{0:dd/MM/yyyy}", item.DATANASCIMENTODep)
+                    </td>
+                    <td style="width:200px; text-align: center;">
+                        @item.SEXODep
+                    </td>
+                    <td style="width:100px; text-align: center;">
+                        @item.PARENTESCODep
+                    </td>
+                    <td style="width:100px; text-align: right;">
+                        @item.VALORDep
+                    </td>
+
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+else
+{
+    <span style="color:#084c20">Nenhum Dependente Cadastrado</span>
+}

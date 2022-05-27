@@ -1,0 +1,75 @@
+﻿@model Painel.Web.Areas.Contratos.Models.OpcionalViewModel
+
+
+<link href="~/Contents/plugins/sweetalert/sweetalert2.min.css" rel="stylesheet" />
+<link href="~/Areas/Cadastro/Contents/css/empresas.css" rel="stylesheet" />
+<link href="~/Contents/plugins/pace/pace.css" rel="stylesheet" />
+<link href="~/Contents/css/jquery.fancybox.css" rel="stylesheet" />
+
+
+@using (Html.BeginForm("Postopcionais", "PessoaFisica", FormMethod.Post, new { id = "Postopcionais" }))
+{
+
+    @Html.AntiForgeryToken()
+    @Html.HiddenFor(model => model.id)
+    @Html.HiddenFor(model => model.guid)
+    @Html.HiddenFor(model => model.idplano)
+    <div row>
+        <div class="col-lg-6">
+            @Html.LabelFor(model => model.NOME)
+            @Html.DropDownListFor(model => model.IDADICIONAIS, new SelectList(ViewBag.opcionais, "value", "text", (Model != null) ? Model.NOME : default(string)), "Selecione...", new { @class = "form-control" })
+            @Html.ValidationMessageFor(model => model.NOME)
+        </div>
+        <div class="col-lg-6">
+            @Html.LabelFor(model => model.VALOR)
+            @Html.TextBoxFor(model => model.VALOR, new { @class = "form-control", @readonly = "true" })
+            <br />
+        </div>
+    </div>
+    <div row>
+        <div class="col-lg-6">
+            @Html.LabelFor(model => model.GRUPO)
+            @Html.TextBoxFor(model => model.GRUPO, new { @class = "form-control", @readonly = "true" })
+            <br />
+            <br />
+        </div>
+    </div>
+    <div class="col-md-12" align="center">
+        <button type="submit" class="btn btn-success btn-flat btn-block">
+            <i class="fa fa-plus-square"></i> incluir Opcional
+        </button>
+        <br />
+    </div>
+
+
+}
+
+
+<script>
+    if (window.jQuery) {
+        $(function () {
+
+            $('#VALOR').mask('#.##0,00', { reverse: true });
+
+            $(document).on("change", "select#IDADICIONAIS", function () {
+                if ($(this).val() != "") {
+
+                    $.fancybox.showLoading();
+
+                    $.post('@Url.Action("BuscaValorAdicionalPF", "PessoaFisica")', { idadicional: $("#IDADICIONAIS").val() },
+                        function (data) {
+                            if (data != false) {
+                                $("#VALOR").val(data.valor);
+                                $("#GRUPO").val(data.grupo);
+
+                            }
+                            $.fancybox.hideLoading();
+
+                        });
+                  };
+            });
+
+        });
+    }
+</script>
+

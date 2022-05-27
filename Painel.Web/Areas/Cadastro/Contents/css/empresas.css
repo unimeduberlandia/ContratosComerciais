@@ -1,0 +1,70 @@
+﻿@import url('https://fonts.googleapis.com/css?family=Roboto:400,700');
+
+* {
+    font-family: 'Roboto', sans-serif;
+}
+
+body {
+    background-color: #f2f2f2;
+}
+
+.container-perfilep {
+    background-color: #fff;
+    color: #025D52;
+}
+
+    .container-perfilep hr {
+        background-color: #CDDB6C;
+    }
+
+.field-validation-error {
+    color: #ff0000;
+    font-size: 90%;
+}
+
+.input-validation-error {
+    border: 1px solid #ff0000;
+}
+
+.pn_reservista,
+.pn_deficiencia,
+.pn_solteiro {
+    display: none;
+}
+
+.form-control:focus {
+    color: #495057;
+    background-color: #fff;
+    border-color: #025D52;
+    outline: 0;
+    box-shadow: 0 0 0 .2rem #CDDB6C;
+}
+
+label {
+    cursor: pointer;
+}
+
+.loading-overlay {
+    display: table;
+    opacity: 0.5;
+}
+
+.loading-overlay-content {
+    display: table-cell;
+    vertical-align: middle;
+    background: url('../img/loader.png') no-repeat center center;
+}
+
+.loading-overlay.loading-theme-light {
+    background-color: #fff;
+}
+
+.loading-overlay.loading-theme-dark {
+    background-color: #000;
+}
+
+.toggle-loading {
+    position: absolute;
+    background: url(../img/loading.gif) center center no-repeat;
+    z-index: 999999;
+}

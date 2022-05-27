@@ -1,0 +1,113 @@
+﻿@model List<Painel.Models.Contratos.CAEPF>
+
+
+
+<section class="content" id="pnresul">
+    <div class="box box-success box-solid">
+        <div class="box">
+            <div class="box-header">
+                <div class="row">
+                    <div class="col-md-12">
+                        @if (Model != null && Model.Count > 0)
+                        {
+                            <table class="table table-bordered table-striped table-hover" id="pnresultados">
+                                <thead>
+                                    <tr style="background-color:#e8e2e2">
+                                        <th>Data Criação</th>
+                                        <th>CAEPF</th>
+                                        <th>Empresa</th>
+                                        <th>Plano</th>
+                                        <th>Modalidade</th>
+                                        <th>Total de Vidas</th>
+                                        <th>Valor Mensalidade</th>
+                                        <th>Opcionais</th>
+                                        <th></th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var item in Model)
+                                    {
+                                        <tr>
+                                            <td>
+                                                @item.DATACADASTRO
+                                            </td>
+                                            <td>
+                                                @item.CNPJ
+                                            </td>
+                                            <td>
+                                                @item.RAZAOSOCIAL
+                                            </td>
+                                            <td>
+                                                @item.PLANO
+                                            </td>
+                                            <td>
+                                                @item.MODALIDADE
+                                            </td>
+                                            <td width="5%">
+                                                @item.TOTALDEVIDAS
+                                            </td>
+                                            <td>
+                                                @item.VALORTOTAL
+                                            </td>
+                                            <td width="5%">
+                                                @item.QNTOPCIONAIS
+                                            </td>
+
+                                            <td>
+                                                <a href="@Url.Action("EditarContratoCAEPF", "CAEPF", new { Area = "Contratos", id = @item.ID})" class="btn btn-editar data-toggle="tooltip" data-placement="top" title="Editar Contrato"><i class="fa  fa-pencil-square-o"></i></a>
+                                                <button class="btn btn-espelho" data-click="gerar-contrato" data-id="@item.ID" data-toggle="tooltip" data-placement="top" title="Gerar Arquivo Espelho e Qualificação PDF">
+                                                    <i class="fa fa-file-text-o"></i>
+                                                </button>
+                                                <button class="btn btn-pdf" data-click="abrir-pdf" data-id="@item.ID" data-toggle="tooltip" data-placement="top" title="Visuzalizar Contrato Plano PDF">
+                                                    <i class="fa fa-file-pdf-o"></i>
+                                                </button>
+                                                <button class="btn btn-opcionais" data-click="abrir-opcionais" data-id="@item.ID" data-toggle="tooltip" data-placement="top" title="Visualizar Opicionais & Termos">
+                                                    <i class="fa fa-file-pdf-o"></i>
+                                                </button>
+                                                <button class="btn btn-email" data-click="envio-email" data-id="@item.ID" data-toggle="tooltip" data-placement="top" title="Enviar Contrato e Termos por e-mail"> <i class="fa fa-envelope"></i></button>
+                                            </td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                            <script>
+                                $('#pnresultados').DataTable({
+
+                                    "language": {
+                                        "sEmptyTable": "Nenhum registro encontrado",
+                                        "sInfo": "Mostrando de _START_ até _END_ de _TOTAL_ registros",
+                                        "sInfoEmpty": "Mostrando 0 até 0 de 0 registros",
+                                        "sInfoFiltered": "(Filtrados de _MAX_ registros)",
+                                        "sInfoPostFix": "",
+                                        "sInfoThousands": ".",
+                                        "sLengthMenu": "_MENU_ resultados por página",
+                                        "sLoadingRecords": "Carregando...",
+                                        "sProcessing": "Processando...",
+                                        "sZeroRecords": "Nenhum registro encontrado",
+                                        "sSearch": "Pesquisar",
+                                        "oPaginate": {
+                                            "sNext": "Próximo",
+                                            "sPrevious": "Anterior",
+                                            "sFirst": "Primeiro",
+                                            "sLast": "Último"
+                                        },
+                                        "oAria": {
+                                            "sSortAscending": ": Ordenar colunas de forma ascendente",
+                                            "sSortDescending": ": Ordenar colunas de forma descendente"
+                                        }
+                                    }
+                                });
+                            </script>
+                        }
+                        else
+                        {
+                            <span style="color:#084c20">Nenhum Contrato cadastrado</span>
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+

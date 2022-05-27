@@ -1,0 +1,1364 @@
+﻿@model Painel.Web.Areas.Contratos.Models.PessoaJuridicaViewModel
+
+@{
+    ViewBag.Title = "Novo Contrato PJ";
+    Layout = "~/Views/Shared/_Servicos.cshtml";
+}
+
+@section css {
+    <link href="~/Contents/plugins/sweetalert/sweetalert2.min.css" rel="stylesheet" />
+    <link href="~/Contents/plugins/jquery.datetimepicker/jquery.datetimepicker.min.css" rel="stylesheet" />
+    <link href="~/Contents/plugins/bootstrap-daterangepicker/daterangepicker.css" rel="stylesheet" />
+    <link href="~/Contents/plugins/pace/pace.css" rel="stylesheet" />
+    <link href="~/Contents/css/jquery.fancybox.css" rel="stylesheet" />
+}
+@section js{
+    <script src="~/Contents/plugins/jquery.datetimepicker/jquery.datetimepicker.full.min.js"></script>
+    <script src="~/Contents/js/jquery.mask.min.js"></script>
+    <script src="~/Contents/plugins/pace/pace.min.js"></script>
+    <script src="~/Contents/js/jquerydownloader.min.js"></script>
+    <script src="~/Contents/js/jquery.fancybox.js"></script>
+    <script src="~/Contents/plugins/sweetalert/sweetalert2.min.js"></script>
+    <script src="~/Contents/plugins/block-ui/jquery.blockUI.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            $('#CEP').mask('00000-000', { clearIfNotMatch: true });
+            $('#CNPJ').mask('00.000.000/0000-00', { clearIfNotMatch: true });
+            $('#CEPCOBRANCA').mask('00000-000', { clearIfNotMatch: true });
+            $('#TELEFONE1').mask('(00)0000-00000', { clearIfNotMatch: true });
+            $('#TELEFONE2').mask('(00)0000-0000', { clearIfNotMatch: true });
+            $('#VALORTOTAL').mask('#.##0,00', { reverse: true });
+            $('#TAXADEINSCRICAO').mask('#.##0,00', { reverse: true });
+            $('#DATAVENCIMENTOMENSAL').mask('00', { reverse: true });
+            $('#DATAVENCIMENTOPRIMEIRAFATURA').mask("00/00/0000", { clearIfNotMatch: true });
+            $('#DATAVIGENCIACONTRATO').mask("00/00/0000", { clearIfNotMatch: true });
+            $('#CPFREPRESENTANTE').mask('000.000.000-00', { clearIfNotMatch: true });
+            $('#NUMEROCONTRATO').mask('00000', { reverse: true });
+            $('#PARTICIPACAOFINANCEIRA').mask('#0', { reverse: true });
+            $('#NUMEROPROPOSTA').mask('000000', { reverse: true });
+
+            $(".pn_segundo").fadeOut('fast');
+            $('[data-toggle="push-menu"]').pushMenu('toggle');
+
+            $.datetimepicker.setLocale('pt-BR');
+            $('.datepicker').mask('00/00/0000').datetimepicker({
+
+                format: 'd/m/Y',
+                timepicker: false
+            });
+
+           $(document).on("change", "select#Idsegundoendereco", function () {
+                if ($(this).val() != "Sim") {
+                    $(".pn_segundo").fadeIn('fast');
+                }
+                else {
+                    $(".pn_segundo").fadeOut('fast');
+                };
+            });
+
+
+            $(document).on("blur keyup", "#CPFREPRESENTANTE", function () {
+                if ($(this).val().length == 14) {
+
+                    $.post("@Url.Action("ValidaCPFTitular", "PessoaFisica")", { cpftitular: $("#CPFREPRESENTANTE").val() }, function (data) {
+                        $.fancybox.showLoading();
+                        if (data.cpftitular == "F") {
+                            swal({
+                                title: "Erro",
+                                text: "CPF não é válido",
+                                type: "warning",
+                                onClose: () => {
+                                }
+                            });
+                            var cpftitular = "";
+                            $("#CPFREPRESENTANTE").val(cpftitular);
+                        }
+
+                        $.fancybox.hideLoading();
+                    });
+                }
+            });
+
+            $(document).on("blur keyup", "#GRUPOECONOMICO", function () {
+                if ($(this).val().length == 26)
+                {
+                    swal({
+                        title: "Erro",
+                        text: "Grupo Econômico não ter pode ser mais que 25 digitos",
+                        type: "warning",
+                        onClose: () => {
+                        }
+                    });
+
+                    var grupo = "";
+
+                    $("#GRUPOECONOMICO").val(grupo);
+                }
+            });
+
+             $(document).on("blur keyup", "#CNPJ", function () {
+                 if ($(this).val().length == 18) {
+                     $.fancybox.showLoading();
+                     $("#RAZAOSOCIAL").focus();
+
+                     if ($(this).val().length == 18) {
+                         $.post("@Url.Action("ValidaCNPJ", "PessoaJuridica")", { cnpj: $("#CNPJ").val() }, function (data) {
+                             $.fancybox.showLoading();
+                             if (data.cnpj == "F") {
+                                 swal({
+                                     title: "Erro",
+                                     text: "CNPJ não é válido",
+                                     type: "warning",
+                                     onClose: () => {
+                                     }
+                                 });
+                                 var cnpj = "";
+                                 $("#CNPJ").val(cnpj);
+                                 $("#RAZAOSOCIAL").focus();
+                             }
+                             else {
+                                 $.post("@Url.Action("BuscaEmpresa", "PessoaJuridica")", { cnpj: $("#CNPJ").val() }, function (data) {
+                                     if (data != false) {
+                                         $("#RAZAOSOCIAL").val(data.razaosocial);
+                                         $("#NOMEFANTASIA").val(data.nomefantasia);
+                                         $("#ISS").val(data.iss);
+                                         $("#CONTATOINTERNO").val(data.contatointerno);
+                                         $("#INSCRICAOESTADUAL").val(data.inscricaoestadual);
+                                         $("#EMAIL").val(data.email);
+                                         $("#TELEFONE1").val(data.telefone1);
+                                         $("#TELEFONE2").val(data.telefone2);
+                                         $("#CEP").val(data.cep);
+                                         $("#ENDERECO").val(data.endereco);
+                                         $("#NUMERO").val(data.numero);
+                                         $("#BAIRRO").val(data.bairro);
+                                         $("#COMPLEMENTO").val(data.complemento);
+                                         $("#CIDADE").val(data.cidade);
+                                         $("#idUF").val(data.uf);
+                                         $("#REPRESENTANTELEGAL").val(data.representante);
+                                         $("#CPFREPRESENTANTE").val(data.cpfrepresentante);
+                                         $("#RGREPRESENTANTE").val(data.rgrepresentante);
+                                     }
+                                     $.fancybox.hideLoading();
+                                 });
+                             }
+                             $.fancybox.hideLoading();
+                         });
+                     }
+
+
+                 }
+             });
+
+
+            $(document).on("blur keyup", "#PARTICIPACAOFINANCEIRA", function () {
+                if ($(this).val() > 100) {
+                    $.fancybox.showLoading();
+                       $("#PARTICIPACAOFINANCEIRA").val(100);
+                   $.fancybox.hideLoading();
+
+                }
+            });
+
+            $(document).on("blur keyup", "#CEP", function () {
+                if ($(this).val().length == 9) {
+                    $.fancybox.showLoading();
+                    $("#ENDERECO").focus();
+                    $.post("@Url.Action("BuscaCep", "PessoaJuridica")", { cep: $("#CEP").val() }, function (data) {
+                        if (data != false) {
+                            $("#ENDERECO").val(data.end);
+                            $("#CIDADE").val(data.cidade);
+                            $("#COMPLEMENTO").val(data.complemento);
+                            $("#idUF").val(data.uf);
+                            $("#BAIRRO").val(data.bairro);
+                        }
+                        $.fancybox.hideLoading();
+
+                    });
+                }
+            });
+
+
+            $(document).on("blur keyup", "#CEPCOBRANCA", function () {
+                if ($(this).val().length == 9) {
+                    $.fancybox.showLoading();
+                    $("#ENDERECOCOBRANCA").focus();
+                    $.post("@Url.Action("BuscaCep2", "PessoaJuridica")", { cep: $("#CEPCOBRANCA").val() }, function (data) {
+                        if (data != false) {
+                            $("#ENDERECOCOBRANCA").val(data.end);
+                            $("#CIDADECOBRANCA").val(data.cidade);
+                            $("#COMPLEMENTOCOBRANCA").val(data.complemento);
+                            $("#IdUFCOBRANCA").val(data.uf);
+                            $("#BAIRROCOBRANCA").val(data.bairro);
+
+                        }
+                        $.fancybox.hideLoading();
+                    });
+                }
+            });
+
+
+            $(document).on("change", "select#IDPLANO", function () {
+                if ($(this).val() != "") {
+                    $.fancybox.showLoading();
+                    $.post('@Url.Action("BuscaPlano", "PessoaJuridica")', { idplano: $("#IDPLANO").val() },
+                        function (data) {
+                            if (data != false) {
+                                $("#ABRANGENCIA").val(data.abrangencia);
+                                $("#ACOMODACAO").val(data.acomodacao);
+                                $("#MODALIDADE").val(data.modalidade);
+                                $("#todosvalores").load('@Url.Action("PartialValores", "PessoaJuridica")');
+                            }
+
+                            $.fancybox.hideLoading();
+                            $(".pn_segundo").fadeIn('fast');
+                        });
+                };
+            });
+
+            $(document).on("click", "[data-click=adicionar-opcional]", function () {
+                $.fancybox({
+                    href: '@Url.Action("AdicionarOpcional", "PessoaJuridica")',
+                    type: 'ajax',
+                    maxWidth: 600,
+                    maxHeight: 270,
+                    fitToView: false,
+                    width: '100%',
+                    height: '100%',
+                    autoSize: false,
+                    afterClose: function () {
+                    }
+                });
+            });
+
+             $(document).on("click", "[data-click=adicionar-valor]", function () {
+                 var idplano = $("#IDPLANO").val();
+                 console.log(idplano);
+                 if (idplano == "") {
+                     swal({
+                         title: "Erro",
+                         text: "Primeiro escolha um plano",
+                         type: "warning",
+                         onClose: () => {
+
+                         }
+                     });
+
+                 }
+                 else {
+                     $.fancybox({
+                         href: '@Url.Action("AdicionarValor", "PessoaJuridica")/' + idplano,
+                         type: 'ajax',
+                         maxWidth: 900,
+                         maxHeight: 900,
+                         fitToView: false,
+                         width: '100%',
+                         height: '100%',
+                         autoSize: false,
+                         helpers: {
+                            overlay: { closeClick: false }
+                         },
+                         afterClose: function () {
+                         }
+                     });
+
+                 }
+            });
+
+            $(document).on("click", "[data-click=excluir]", function () {
+                var guid = $(this).data("guid");
+
+                if (window.confirm("Deseja mesmo excluir?")) {
+                    $.post("@Url.Action("ExcluirOpcionalPJ", "PessoaJuridica")", { guid: guid }, function (data) {
+
+                        if (data.success) {
+                            swal({
+                                title: "Sucesso",
+                                text: "Excluido com sucesso",
+                                type: "success",
+                                onClose: () => {
+                                    $("#todosopcionais").load('@Url.Action("PartialOpcionais", "PessoaJuridica")');
+                                }
+                            });
+                        }
+                        else {
+                            container.html(data);
+                            $.fancybox.update();
+                        }
+                    });
+                }
+            });
+
+
+            $(document).off("", "form").on("submit", "form", function (e) {
+                e.preventDefault();
+
+                var form = $(this);
+                var container = form.parent();
+
+                $.post(form.attr('action'), form.serialize(), function (data) {
+                    if (data.success) {
+                        if (data.dep == true) {
+                            swal({
+                            title: "Sucesso",
+                                text: "Custo Cadastrado com sucesso",
+                                type: "success",
+                                onClose: () => {
+                                    $.fancybox.close();
+                                    $("#todosvalores").load('@Url.Action("PartialValores", "PessoaJuridica")');
+                                    $.fancybox.close();
+                            }
+                        });
+                        }
+                        if (data.dep != true) {
+                            swal({
+                            title: "Sucesso",
+                            text: "Cadastrado com sucesso",
+                            type: "success",
+                            onClose: () => {
+                                $.fancybox.close();
+                                $("#todosopcionais").load('@Url.Action("PartialOpcionais", "PessoaJuridica")');
+                                  $.fancybox.close();
+                            }
+                        });
+                        }
+                    }
+                    else {
+                        container.html(data);
+                        $.fancybox.update();
+                        $.fancybox.close();
+                    }
+
+                });
+            });
+
+            var faixas = $("#QNTDEFAIXAS").val();
+
+            if (faixas == "0") {
+                $(".pn_faix1").fadeOut('fast');
+                $(".pn_faix2").fadeOut('fast');
+                $(".pn_faix3").fadeOut('fast');
+                $(".pn_faix4").fadeOut('fast');
+                $(".pn_faix5").fadeOut('fast');
+                $(".pn_faix6").fadeOut('fast');
+                $(".pn_faix7").fadeOut('fast');
+                $(".pn_faix8").fadeOut('fast');
+                $(".pn_faix9").fadeOut('fast');
+                $(".pn_faix10").fadeOut('fast');
+                $(".pn_faix11").fadeOut('fast');
+                $(".pn_faix12").fadeOut('fast');
+                $(".pn_faix13").fadeOut('fast');
+                $(".pn_faix14").fadeOut('fast');
+                $(".pn_faix15").fadeOut('fast');
+                $(".pn_faix16").fadeIn('fast');
+            }
+
+            if (faixas == "1") {
+                $(".pn_faix1").fadeIn('fast');
+                $(".pn_faix2").fadeOut('fast');
+                $(".pn_faix3").fadeOut('fast');
+                $(".pn_faix4").fadeOut('fast');
+                $(".pn_faix5").fadeOut('fast');
+                $(".pn_faix6").fadeOut('fast');
+                $(".pn_faix7").fadeOut('fast');
+                $(".pn_faix8").fadeOut('fast');
+                $(".pn_faix9").fadeOut('fast');
+                $(".pn_faix10").fadeOut('fast');
+                $(".pn_faix11").fadeOut('fast');
+                $(".pn_faix12").fadeOut('fast');
+                $(".pn_faix13").fadeOut('fast');
+                $(".pn_faix14").fadeOut('fast');
+                $(".pn_faix15").fadeOut('fast');
+                $(".pn_faix16").fadeOut('fast');
+            }
+            if (faixas == "2") {
+                $(".pn_faix1").fadeIn('fast');
+                $(".pn_faix2").fadeIn('fast');
+                $(".pn_faix3").fadeOut('fast');
+                $(".pn_faix4").fadeOut('fast');
+                $(".pn_faix5").fadeOut('fast');
+                $(".pn_faix6").fadeOut('fast');
+                $(".pn_faix7").fadeOut('fast');
+                $(".pn_faix8").fadeOut('fast');
+                $(".pn_faix9").fadeOut('fast');
+                $(".pn_faix10").fadeOut('fast');
+                $(".pn_faix11").fadeOut('fast');
+                $(".pn_faix12").fadeOut('fast');
+                $(".pn_faix13").fadeOut('fast');
+                $(".pn_faix14").fadeOut('fast');
+                $(".pn_faix15").fadeOut('fast');
+                $(".pn_faix16").fadeOut('fast');
+            }
+            if (faixas == "3") {
+                $(".pn_faix1").fadeIn('fast');
+                $(".pn_faix2").fadeIn('fast');
+                $(".pn_faix3").fadeIn('fast');
+                $(".pn_faix4").fadeOut('fast');
+                $(".pn_faix5").fadeOut('fast');
+                $(".pn_faix6").fadeOut('fast');
+                $(".pn_faix7").fadeOut('fast');
+                $(".pn_faix8").fadeOut('fast');
+                $(".pn_faix9").fadeOut('fast');
+                $(".pn_faix10").fadeOut('fast');
+                $(".pn_faix11").fadeOut('fast');
+                $(".pn_faix12").fadeOut('fast');
+                $(".pn_faix13").fadeOut('fast');
+                $(".pn_faix14").fadeOut('fast');
+                $(".pn_faix15").fadeOut('fast');
+                $(".pn_faix16").fadeOut('fast');
+            }
+            if (faixas == "4") {
+                $(".pn_faix1").fadeIn('fast');
+                $(".pn_faix2").fadeIn('fast');
+                $(".pn_faix3").fadeIn('fast');
+                $(".pn_faix4").fadeIn('fast');
+                $(".pn_faix5").fadeOut('fast');
+                $(".pn_faix6").fadeOut('fast');
+                $(".pn_faix7").fadeOut('fast');
+                $(".pn_faix8").fadeOut('fast');
+                $(".pn_faix9").fadeOut('fast');
+                $(".pn_faix10").fadeOut('fast');
+                $(".pn_faix11").fadeOut('fast');
+                $(".pn_faix12").fadeOut('fast');
+                $(".pn_faix13").fadeOut('fast');
+                $(".pn_faix14").fadeOut('fast');
+                $(".pn_faix15").fadeOut('fast');
+                $(".pn_faix16").fadeOut('fast');
+            }
+            if (faixas == "5") {
+                $(".pn_faix1").fadeIn('fast');
+                $(".pn_faix2").fadeIn('fast');
+                $(".pn_faix3").fadeIn('fast');
+                $(".pn_faix4").fadeIn('fast');
+                $(".pn_faix5").fadeIn('fast');
+                $(".pn_faix6").fadeOut('fast');
+                $(".pn_faix7").fadeOut('fast');
+                $(".pn_faix8").fadeOut('fast');
+                $(".pn_faix9").fadeOut('fast');
+                $(".pn_faix10").fadeOut('fast');
+                $(".pn_faix11").fadeOut('fast');
+                $(".pn_faix12").fadeOut('fast');
+                $(".pn_faix13").fadeOut('fast');
+                $(".pn_faix14").fadeOut('fast');
+                $(".pn_faix15").fadeOut('fast');
+                $(".pn_faix16").fadeOut('fast');
+            }
+            if (faixas == "6") {
+                $(".pn_faix1").fadeIn('fast');
+                $(".pn_faix2").fadeIn('fast');
+                $(".pn_faix3").fadeIn('fast');
+                $(".pn_faix4").fadeIn('fast');
+                $(".pn_faix5").fadeIn('fast');
+                $(".pn_faix6").fadeIn('fast');
+                $(".pn_faix7").fadeOut('fast');
+                $(".pn_faix8").fadeOut('fast');
+                $(".pn_faix9").fadeOut('fast');
+                $(".pn_faix10").fadeOut('fast');
+                $(".pn_faix11").fadeOut('fast');
+                $(".pn_faix12").fadeOut('fast');
+                $(".pn_faix13").fadeOut('fast');
+                $(".pn_faix14").fadeOut('fast');
+                $(".pn_faix15").fadeOut('fast');
+                $(".pn_faix16").fadeOut('fast');
+            }
+            if (faixas == "7") {
+                $(".pn_faix1").fadeIn('fast');
+                $(".pn_faix2").fadeIn('fast');
+                $(".pn_faix3").fadeIn('fast');
+                $(".pn_faix4").fadeIn('fast');
+                $(".pn_faix5").fadeIn('fast');
+                $(".pn_faix6").fadeIn('fast');
+                $(".pn_faix7").fadeIn('fast');
+                $(".pn_faix8").fadeOut('fast');
+                $(".pn_faix9").fadeOut('fast');
+                $(".pn_faix10").fadeOut('fast');
+                $(".pn_faix11").fadeOut('fast');
+                $(".pn_faix12").fadeOut('fast');
+                $(".pn_faix13").fadeOut('fast');
+                $(".pn_faix14").fadeOut('fast');
+                $(".pn_faix15").fadeOut('fast');
+                $(".pn_faix16").fadeOut('fast');
+            }
+            if (faixas == "8") {
+                $(".pn_faix1").fadeIn('fast');
+                $(".pn_faix2").fadeIn('fast');
+                $(".pn_faix3").fadeIn('fast');
+                $(".pn_faix4").fadeIn('fast');
+                $(".pn_faix5").fadeIn('fast');
+                $(".pn_faix6").fadeIn('fast');
+                $(".pn_faix7").fadeIn('fast');
+                $(".pn_faix8").fadeIn('fast');
+                $(".pn_faix9").fadeOut('fast');
+                $(".pn_faix10").fadeOut('fast');
+                $(".pn_faix11").fadeOut('fast');
+                $(".pn_faix12").fadeOut('fast');
+                $(".pn_faix13").fadeOut('fast');
+                $(".pn_faix14").fadeOut('fast');
+                $(".pn_faix15").fadeOut('fast');
+                $(".pn_faix16").fadeOut('fast');
+            }
+            if (faixas == "9") {
+                $(".pn_faix1").fadeIn('fast');
+                $(".pn_faix2").fadeIn('fast');
+                $(".pn_faix3").fadeIn('fast');
+                $(".pn_faix4").fadeIn('fast');
+                $(".pn_faix5").fadeIn('fast');
+                $(".pn_faix6").fadeIn('fast');
+                $(".pn_faix7").fadeIn('fast');
+                $(".pn_faix8").fadeIn('fast');
+                $(".pn_faix9").fadeIn('fast');
+                $(".pn_faix10").fadeOut('fast');
+                $(".pn_faix11").fadeOut('fast');
+                $(".pn_faix12").fadeOut('fast');
+                $(".pn_faix13").fadeOut('fast');
+                $(".pn_faix14").fadeOut('fast');
+                $(".pn_faix15").fadeOut('fast');
+                $(".pn_faix16").fadeOut('fast');
+            }
+            if (faixas == "10") {
+                $(".pn_faix1").fadeIn('fast');
+                $(".pn_faix2").fadeIn('fast');
+                $(".pn_faix3").fadeIn('fast');
+                $(".pn_faix4").fadeIn('fast');
+                $(".pn_faix5").fadeIn('fast');
+                $(".pn_faix6").fadeIn('fast');
+                $(".pn_faix7").fadeIn('fast');
+                $(".pn_faix8").fadeIn('fast');
+                $(".pn_faix9").fadeIn('fast');
+                $(".pn_faix10").fadeIn('fast');
+                $(".pn_faix11").fadeOut('fast');
+                $(".pn_faix12").fadeOut('fast');
+                $(".pn_faix13").fadeOut('fast');
+                $(".pn_faix14").fadeOut('fast');
+                $(".pn_faix15").fadeOut('fast');
+                $(".pn_faix16").fadeOut('fast');
+            }
+            if (faixas == "11") {
+                $(".pn_faix1").fadeIn('fast');
+                $(".pn_faix2").fadeIn('fast');
+                $(".pn_faix3").fadeIn('fast');
+                $(".pn_faix4").fadeIn('fast');
+                $(".pn_faix5").fadeIn('fast');
+                $(".pn_faix6").fadeIn('fast');
+                $(".pn_faix7").fadeIn('fast');
+                $(".pn_faix8").fadeIn('fast');
+                $(".pn_faix9").fadeIn('fast');
+                $(".pn_faix10").fadeIn('fast');
+                $(".pn_faix11").fadeIn('fast');
+                $(".pn_faix12").fadeOut('fast');
+                $(".pn_faix13").fadeOut('fast');
+                $(".pn_faix14").fadeOut('fast');
+                $(".pn_faix15").fadeOut('fast');
+                $(".pn_faix16").fadeOut('fast');
+            }
+            if (faixas == "12") {
+                $(".pn_faix1").fadeIn('fast');
+                $(".pn_faix2").fadeIn('fast');
+                $(".pn_faix3").fadeIn('fast');
+                $(".pn_faix4").fadeIn('fast');
+                $(".pn_faix5").fadeIn('fast');
+                $(".pn_faix6").fadeIn('fast');
+                $(".pn_faix7").fadeIn('fast');
+                $(".pn_faix8").fadeIn('fast');
+                $(".pn_faix9").fadeIn('fast');
+                $(".pn_faix10").fadeIn('fast');
+                $(".pn_faix11").fadeIn('fast');
+                $(".pn_faix12").fadeIn('fast');
+                $(".pn_faix13").fadeOut('fast');
+                $(".pn_faix14").fadeOut('fast');
+                $(".pn_faix15").fadeOut('fast');
+                $(".pn_faix16").fadeOut('fast');
+            }
+
+            if (faixas == "13") {
+                $(".pn_faix1").fadeIn('fast');
+                $(".pn_faix2").fadeIn('fast');
+                $(".pn_faix3").fadeIn('fast');
+                $(".pn_faix4").fadeIn('fast');
+                $(".pn_faix5").fadeIn('fast');
+                $(".pn_faix6").fadeIn('fast');
+                $(".pn_faix7").fadeIn('fast');
+                $(".pn_faix8").fadeIn('fast');
+                $(".pn_faix9").fadeIn('fast');
+                $(".pn_faix10").fadeIn('fast');
+                $(".pn_faix11").fadeIn('fast');
+                $(".pn_faix12").fadeIn('fast');
+                $(".pn_faix13").fadeIn('fast');
+                $(".pn_faix14").fadeOut('fast');
+                $(".pn_faix15").fadeOut('fast');
+                $(".pn_faix16").fadeOut('fast');
+            }
+
+            if (faixas == "14") {
+                $(".pn_faix1").fadeIn('fast');
+                $(".pn_faix2").fadeIn('fast');
+                $(".pn_faix3").fadeIn('fast');
+                $(".pn_faix4").fadeIn('fast');
+                $(".pn_faix5").fadeIn('fast');
+                $(".pn_faix6").fadeIn('fast');
+                $(".pn_faix7").fadeIn('fast');
+                $(".pn_faix8").fadeIn('fast');
+                $(".pn_faix9").fadeIn('fast');
+                $(".pn_faix10").fadeIn('fast');
+                $(".pn_faix11").fadeIn('fast');
+                $(".pn_faix12").fadeIn('fast');
+                $(".pn_faix13").fadeIn('fast');
+                $(".pn_faix14").fadeIn('fast');
+                $(".pn_faix15").fadeOut('fast');
+                $(".pn_faix16").fadeOut('fast');
+            }
+
+            if (faixas == "15") {
+                $(".pn_faix1").fadeIn('fast');
+                $(".pn_faix2").fadeIn('fast');
+                $(".pn_faix3").fadeIn('fast');
+                $(".pn_faix4").fadeIn('fast');
+                $(".pn_faix5").fadeIn('fast');
+                $(".pn_faix6").fadeIn('fast');
+                $(".pn_faix7").fadeIn('fast');
+                $(".pn_faix8").fadeIn('fast');
+                $(".pn_faix9").fadeIn('fast');
+                $(".pn_faix10").fadeIn('fast');
+                $(".pn_faix11").fadeIn('fast');
+                $(".pn_faix12").fadeIn('fast');
+                $(".pn_faix13").fadeIn('fast');
+                $(".pn_faix14").fadeIn('fast');
+                $(".pn_faix15").fadeIn('fast');
+                $(".pn_faix16").fadeOut('fast');
+            }
+
+            $(document).on("click", "[data-click=Gravar]", function () {
+                var id = $("#ID").val();
+                var cnpj = $("#CNPJ").val();
+                var razaosocial = $("#RAZAOSOCIAL").val();
+                var nomefantasia = $("#NOMEFANTASIA").val();
+                var inscricaoestadual = $("#INSCRICAOESTADUAL").val();
+                var iss = $("#ISS").val();
+                var contatointerno = $("#CONTATOINTERNO").val();
+			    var email = $("#EMAIL").val();
+			    var telefone1 = $("#TELEFONE1").val();
+                var telefone2 = $("#TELEFONE2").val();
+				var idplano = $("#IDPLANO").val();
+                var acomodacao = $("#ACOMODACAO").val();
+                var numerocontrato = $("#NUMEROCONTRATO").val();
+                var numeroproposta = $("#NUMEROPROPOSTA").val();
+                var grupoeconomico = $("#GRUPOECONOMICO").val();
+                var modalidade = $("#MODALIDADE").val();
+                var abrangencia = $("#ABRANGENCIA").val();
+                var taxadeinscricao = $("#TAXADEINSCRICAO").val();
+                var cep = $("#CEP").val();
+                var endereco = $("#ENDERECO").val();
+                var numero = $("#NUMERO").val();
+                var bairro = $("#BAIRRO").val();
+                var complemento = $("#COMPLEMENTO").val();
+                var cidade = $("#CIDADE").val();
+                var iduf = $("#idUF").val();
+                var idsegundoendereco = $("#Idsegundoendereco").val();
+                var cepcobranca = $("#CEPCOBRANCA").val();
+                var enderecocobranca = $("#ENDERECOCOBRANCA").val();
+                var numerocobranca = $("#NUMEROCOBRANCA").val();
+                var bairrocobranca = $("#BAIRROCOBRANCA").val();
+                var complementocobranca = $("#COMPLEMENTOCOBRANCA").val();
+                var cidadecobranca = $("#CIDADECOBRANCA").val();
+                var idufcobranca = $("#idUFCOBRANCA").val();
+                var representante = $("#REPRESENTANTELEGAL").val();
+                var cpfrepresentante = $("#CPFREPRESENTANTE").val();
+                var rgrepresentante = $("#RGREPRESENTANTE").val();
+                var valortotal = $("#VALORTOTAL").val();
+				var valorprimeirafatura = $("#VALORPRIMEIRAFATURA").val();
+                var totaldevidas = $("#TOTALDEVIDAS").val();
+                var datavigencia = $("#DATAVIGENCIACONTRATO").val();
+                var datavencimentomensal = $("#DATAVENCIMENTOMENSAL").val();
+                var datavencimentoprimeira = $("#DATAVENCIMENTOPRIMEIRAFATURA").val();
+                var participacaofinanceira =  $("#PARTICIPACAOFINANCEIRA").val();
+				var observacao = $("#OBSERVACAO").val();
+
+                if (complemento == "") {
+                    complemento = "S/N";
+                }
+
+
+
+                if (idsegundoendereco != "Nao") {
+                    cepcobranca = cep;
+                    enderecocobranca = endereco;
+                    numerocobranca = numero;
+                    bairrocobranca = bairro;
+                    complementocobranca = complemento;
+                    cidadecobranca = cidade;
+                    idufcobranca = iduf;
+                }
+
+                if (cnpj == "" || razaosocial == "" || participacaofinanceira == "" || numeroproposta=="" || nomefantasia == "" || representante == "" || cpfrepresentante == "" || rgrepresentante == "" || idplano== "" || iss == "" || contatointerno == "" || email == "" || telefone1 == "" || telefone2 == "" || acomodacao == "" || modalidade == "" || abrangencia == "" || taxadeinscricao == "" || cep == "" || endereco == "" || numero == "" || bairro == "" || complemento == "" || cidade == "" || iduf == "" || valortotal == "" || valorprimeirafatura == "" || totaldevidas == "" || datavigencia == "" || datavencimentomensal==""|| datavencimentoprimeira == ""  || observacao == "")
+                {
+                    document.getElementById("REPRESENTANTELEGAL").style.border = "1px solid #D2D6DE";
+                    document.getElementById("CPFREPRESENTANTE").style.border = "1px solid #D2D6DE";
+                    document.getElementById("RGREPRESENTANTE").style.border = "1px solid #D2D6DE";
+                    document.getElementById("CNPJ").style.border = "1px solid #D2D6DE";
+                    document.getElementById("RAZAOSOCIAL").style.border = "1px solid #D2D6DE";
+                    document.getElementById("NOMEFANTASIA").style.border = "1px solid #D2D6DE";
+                    document.getElementById("IDPLANO").style.border = "1px solid #D2D6DE";
+                    document.getElementById("ISS").style.border = "1px solid #D2D6DE";
+                    document.getElementById("EMAIL").style.border = "1px solid #D2D6DE";
+                    document.getElementById("TELEFONE1").style.border = "1px solid #D2D6DE";
+                    document.getElementById("TELEFONE2").style.border = "1px solid #D2D6DE";
+                    document.getElementById("TAXADEINSCRICAO").style.border = "1px solid #D2D6DE";
+                    document.getElementById("CEP").style.border = "1px solid #D2D6DE";
+                    document.getElementById("ENDERECO").style.border = "1px solid #D2D6DE";
+                    document.getElementById("NUMERO").style.border = "1px solid #D2D6DE";
+                    document.getElementById("BAIRRO").style.border = "1px solid #D2D6DE";
+                    document.getElementById("COMPLEMENTO").style.border = "1px solid #D2D6DE";
+                    document.getElementById("CIDADE").style.border = "1px solid #D2D6DE";
+                    document.getElementById("idUF").style.border = "1px solid #D2D6DE";
+                    document.getElementById("OBSERVACAO").style.border = "1px solid #D2D6DE";
+                    document.getElementById("VALORPRIMEIRAFATURA").style.border = "1px solid #D2D6DE";
+                    document.getElementById("VALORTOTAL").style.border = "1px solid #D2D6DE";
+                    document.getElementById("DATAVIGENCIACONTRATO").style.border = "1px solid #D2D6DE";
+                    document.getElementById("DATAVENCIMENTOMENSAL").style.border = "1px solid #D2D6DE";
+                    document.getElementById("DATAVENCIMENTOPRIMEIRAFATURA").style.border = "1px solid #D2D6DE";
+                    document.getElementById("PARTICIPACAOFINANCEIRA").style.border = "1px solid #D2D6DE";
+                    document.getElementById("NUMEROPROPOSTA").style.border = "1px solid #D2D6DE";
+
+                    if (representante == "")
+                    {
+                        document.getElementById("REPRESENTANTELEGAL").style.border = "1px solid #ef3c59";
+                    }
+
+                    if (numeroproposta == "")
+                    {
+                        document.getElementById("NUMEROPROPOSTA").style.border = "1px solid #ef3c59";
+                    }
+
+                    if (cpfrepresentante == "")
+                    {
+                        document.getElementById("CPFREPRESENTANTE").style.border = "1px solid #ef3c59";
+                    }
+
+                    if (rgrepresentante == "")
+                    {
+                        document.getElementById("RGREPRESENTANTE").style.border = "1px solid #ef3c59";
+                    }
+
+                    if (cnpj == "")
+                    {
+                        document.getElementById("CNPJ").style.border = "1px solid #ef3c59";
+                    }
+
+                    if (razaosocial == "")
+                    {
+                        document.getElementById("RAZAOSOCIAL").style.border = "1px solid #ef3c59";
+                    }
+
+                    if (nomefantasia == "")
+                    {
+                        document.getElementById("NOMEFANTASIA").style.border = "1px solid #ef3c59";
+                    }
+
+                    if (participacaofinanceira == "")
+                    {
+                        document.getElementById("PARTICIPACAOFINANCEIRA").style.border = "1px solid #ef3c59";
+                    }
+
+                    if (idplano == "")
+                    {
+                        document.getElementById("IDPLANO").style.border = "1px solid #ef3c59";
+                    }
+
+                    if (iss == "")
+                    {
+                        document.getElementById("ISS").style.border = "1px solid #ef3c59";
+                    }
+
+                    if (email == "")
+                    {
+                        document.getElementById("EMAIL").style.border = "1px solid #ef3c59";
+                    }
+
+                    if (telefone1 == "")
+                    {
+                        document.getElementById("TELEFONE1").style.border = "1px solid #ef3c59";
+                    }
+
+                    if (telefone2 == "")
+                    {
+                        document.getElementById("TELEFONE2").style.border = "1px solid #ef3c59";
+                    }
+
+                    if (taxadeinscricao == "")
+                    {
+                        document.getElementById("TAXADEINSCRICAO").style.border = "1px solid #ef3c59";
+                    }
+
+                    if (cep == "")
+                    {
+                        document.getElementById("CEP").style.border = "1px solid #ef3c59";
+                    }
+
+                    if (endereco == "")
+                    {
+                        document.getElementById("ENDERECO").style.border = "1px solid #ef3c59";
+                    }
+
+                    if (numero == "")
+                    {
+                        document.getElementById("NUMERO").style.border = "1px solid #ef3c59";
+                    }
+
+                    if (bairro == "")
+                    {
+                        document.getElementById("BAIRRO").style.border = "1px solid #ef3c59";
+                    }
+
+                    if (complemento == "")
+                    {
+                        document.getElementById("COMPLEMENTO").style.border = "1px solid #ef3c59";
+                    }
+
+                    if (cidade == "")
+                    {
+                        document.getElementById("CIDADE").style.border = "1px solid #ef3c59";
+                    }
+
+                    if (iduf == "")
+                    {
+                        document.getElementById("idUF").style.border = "1px solid #ef3c59";
+                    }
+
+                    if (observacao == "")
+                    {
+                        document.getElementById("OBSERVACAO").style.border = "1px solid #ef3c59";
+                    }
+
+                    if (valorprimeirafatura == "")
+                    {
+                        document.getElementById("VALORPRIMEIRAFATURA").style.border = "1px solid #ef3c59";
+                    }
+
+                    if (valortotal == "")
+                    {
+                        document.getElementById("VALORTOTAL").style.border = "1px solid #ef3c59";
+                    }
+
+                    //if (datavigencia == "")
+                    //{
+                    //    document.getElementById("DATAVIGENCIACONTRATO").style.border = "1px solid #ef3c59";
+                    //}
+
+                    if (datavencimentomensal == "")
+                    {
+                        document.getElementById("DATAVENCIMENTOMENSAL").style.border = "1px solid #ef3c59";
+                    }
+
+                    if (datavencimentoprimeira == "")
+                    {
+                        document.getElementById("DATAVENCIMENTOPRIMEIRAFATURA").style.border = "1px solid #ef3c59";
+                    }
+
+
+
+                    swal({
+                        title: "Erro",
+                        text: "Campos obrigatórios não foram preenchidos, corrija os erros e tente novamente",
+                        type: "warning",
+                        onClose: () => {
+
+                        }
+                    });
+                }
+
+                else {
+                    $.post('@Url.Action("InserirContratoPJ", "PessoaJuridica")', {id, cnpj, razaosocial, inscricaoestadual, representante, cpfrepresentante, rgrepresentante, nomefantasia, idplano, grupoeconomico, numerocontrato, iss, contatointerno, email, telefone1, telefone2, numeroproposta, acomodacao, modalidade, abrangencia, taxadeinscricao, cep, endereco, numero, bairro, complemento, cidade, iduf,  cepcobranca, enderecocobranca, numerocobranca, bairrocobranca, complementocobranca, cidadecobranca, idufcobranca, valortotal, valorprimeirafatura, totaldevidas, datavigencia, datavencimentomensal, datavencimentoprimeira, participacaofinanceira, observacao},
+                        function (data) {
+                            if (data.success) {
+                                $("#foo").val("");
+                                swal({
+                                    title: "Sucesso",
+                                    text: "Cadastro Efetuado",
+                                    type: "success",
+                                    onClose: () => {
+                                        window.location.href = '@Url.Action("Index", "PessoaJuridica")';
+                                    }
+                                });
+                            }
+                            else {
+                                container.html(data);
+                                $.fancybox.update();
+                            }
+                        });
+                }
+            });
+
+            $(document).on("click", "[data-click=calcular]", function () {
+                $.fancybox.showLoading();
+                $.post('@Url.Action("CalcularValor", "PessoaJuridica")', { valortaxa: $("#TAXADEINSCRICAO").val() },
+                    function (data) {
+                        if (data != false) {
+                            $("#VALORPRIMEIRAFATURA").val(data.valorprimeirafatura);
+                            $("#TOTALDEVIDAS").val(data.qntvidas);
+                            $("#VALORTOTAL").val(data.valortotal);
+                        }
+                        $.fancybox.hideLoading();
+                        $(".pn_valor").fadeIn('fast');
+                    });
+            });
+
+            $(window).bind("beforeunload", function () {
+                if ($("#foo").val().length > 0) {
+                    console.log($("#foo").val());
+                    //alert = 'As alterações feitas não vão ser salvas!';
+                    return "As alterações feitas não vão ser salvas!"
+                      //return e.originalEvent.alert = 'As alterações feitas não vão ser salvas!';
+                };
+            })
+
+        });
+    </script>
+}
+<br />
+<section class="header">
+    <div class="col-lg-12">
+        <div class="col-lg-10">
+            <ul class="nav nav-tabs" role="tablist">
+                <li role="presentation" class="active bg-gray"><a href="#empresa" aria-controls="empresa" role="tab" data-toggle="tab"><i class="fa  fa-building"></i> <span style="color:black">Informações Empresa</span></a></li>
+                <li role="presentation" class="bg-gray"><a href="#cadastroplano" aria-controls="cadastroplano" role="tab" data-toggle="tab"><i class="fa fa-heartbeat"></i><span style="color:black"> Informações do Plano</span> </a></li>
+                <li role="presentation" class="bg-gray"><a href="#cadendereco" aria-controls="cadendereco" role="tab" data-toggle="tab"><i class="fa fa-home"></i> <span style="color:black"> Endereço</span></a></li>
+                <li role="presentation" class="bg-gray"><a href="#custos" aria-controls="custos" role="tab" data-toggle="tab"><i class="fa fa-dollar "></i> <span style="color:black"> Custos e Valores</span> </a></li>
+                <li role="presentation" class="bg-gray"><a href="#salvarcadastro" aria-controls="salvarcadastro" data-click="calcular" role="tab" data-toggle="tab"><i class="fa fa-floppy-o"></i>  <span style="color:black"> SalvarContrato</span></a></li>
+            </ul>
+        </div>
+        <br />
+    </div>
+</section>
+
+@Html.AntiForgeryToken()
+@Html.HiddenFor(model => model.ID)
+<input type="Hidden" id="foo" value="10" size="50" />
+
+
+<div class="tab-content">
+    <div role="tabpanel" class="tab-pane active" id="empresa">
+        <section class="content">
+            <div class="col-lg-12">
+                <div class="box box-success box-solid">
+                    <div class="box">
+                        <div class="box-header">
+                            <i class="fa  fa-building-o"></i>
+                            @if (Model.statuscadastro == "nao")
+                            {
+                                <div class="row">
+                                    <div class="col-md-4 mb-4">
+                                        <h3 class="box-title">Informações da Empresa</h3>
+                                    </div>
+                                    <div class="col-md-4 mb-4">
+                                      
+                                    </div>
+                                    <div class="col-md-4 mb-4">
+                                        <spam><b>Autor Cadastro:</b> @Model.USUARIOCADASTRO</spam> <br />   <spam><b>Data Cadastro:</b> @Model.DATACADASTRO</spam>
+                                    </div>
+                                </div>
+                            }
+                            @if (Model.statuscadastro == "sim")
+                            {
+                                <div class="row">
+                                    <div class="col-md-4 mb-4">
+                                        <h3 class="box-title">Informações da Empresa</h3>
+                                    </div>
+                                    <div class="col-md-4 mb-4">
+                                        <spam><b>Autor Cadastro:</b> @Model.USUARIOCADASTRO</spam> <br />   <spam><b>Data Cadastro:</b> @Model.DATACADASTRO</spam>
+                                    </div>
+                                    <div class="col-md-4 mb-4">
+                                        <spam><b>Autor Atualização:</b> @Model.USUARIOATUALIZACAO</spam> <br />   <spam><b>Data Atualização:</b> @Model.DATAATUALIZACAO</spam>
+                                    </div>
+                                </div>
+                            }
+
+                            <h5>*Campos obrigatórios</h5>
+                            <br />
+
+                            <div class="row">
+                                <div class="col-md-4 mb-4">
+                                    @Html.LabelFor(model => model.CNPJ)
+                                    @Html.TextBoxFor(model => model.CNPJ, new { @class = "form-control" })
+                                </div>
+                                <div class="col-md-4 mb-4">
+                                    @Html.LabelFor(model => model.RAZAOSOCIAL)
+                                    @Html.TextBoxFor(model => model.RAZAOSOCIAL, new { @class = "form-control" })
+                                </div>
+                                <div class="col-md-4 mb-4">
+                                    @Html.LabelFor(model => model.NOMEFANTASIA)
+                                    @Html.TextBoxFor(model => model.NOMEFANTASIA, new { @class = "form-control" })
+                                    <br />
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-4 mb-4">
+                                    @Html.LabelFor(model => model.INSCRICAOESTADUAL)
+                                    @Html.TextBoxFor(model => model.INSCRICAOESTADUAL, new { @class = "form-control" })
+                                </div>
+                                <div class="col-md-4 mb-4">
+                                    @Html.LabelFor(model => model.ISS)
+                                    @Html.TextBoxFor(model => model.ISS, new { @class = "form-control" })
+                                </div>
+                                <div class="col-md-4 mb-4">
+                                    @Html.LabelFor(model => model.CONTATOINTERNO)
+                                    @Html.TextBoxFor(model => model.CONTATOINTERNO, new { @class = "form-control" })
+                                    <br />
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-md-4 mb-3">
+                                    @Html.LabelFor(model => model.REPRESENTANTELEGAL)
+                                    @Html.TextBoxFor(model => model.REPRESENTANTELEGAL, new { @class = "form-control" })
+                                    @Html.ValidationMessageFor(model => model.REPRESENTANTELEGAL, "", new { @class = "text-danger" })
+                                </div>
+                                <div class="col-md-4 mb-3">
+                                    @Html.LabelFor(model => model.CPFREPRESENTANTE)
+                                    @Html.TextBoxFor(model => model.CPFREPRESENTANTE, new { @class = "form-control" })
+                                    @Html.ValidationMessageFor(model => model.CPFREPRESENTANTE, "", new { @class = "text-danger" })
+                                </div>
+                                <div class="col-md-4 mb-3">
+                                    @Html.LabelFor(model => model.RGREPRESENTANTE)
+                                    @Html.TextBoxFor(model => model.RGREPRESENTANTE, new { @class = "form-control" })
+                                    @Html.ValidationMessageFor(model => model.RGREPRESENTANTE, "", new { @class = "text-danger" })
+
+                                    <br />
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-4 mb-4">
+                                    @Html.LabelFor(model => model.EMAIL)
+                                    @Html.TextBoxFor(model => model.EMAIL, new { @class = "form-control" })
+                                </div>
+                                <div class="col-md-4 mb-4">
+                                    @Html.LabelFor(model => model.TELEFONE1)
+                                    @Html.TextBoxFor(model => model.TELEFONE1, new { @class = "form-control" })
+                                </div>
+                                <div class="col-md-4 mb-4">
+                                    @Html.LabelFor(model => model.TELEFONE2)
+                                    @Html.TextBoxFor(model => model.TELEFONE2, new { @class = "form-control" })
+                                    <br />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+    <div role="tabpanel" class="tab-pane" id="cadastroplano">
+        <section class="content">
+            <div class="col-lg-12">
+                <div class="box box-success box-solid">
+                    <div class="box">
+                        <div class="box-header">
+                            <i class="fa fa-heartbeat"></i>
+                            <h3 class="box-title">Informações do Plano</h3>
+                            <br />
+                            <h5>*Campos obrigatórios</h5>
+                            <br />
+                            <div class="row">
+                                <div class="col-md-4 mb-4">
+                                    @Html.LabelFor(model => model.PLANO)
+                                    @Html.DropDownListFor(model => model.IDPLANO, new SelectList(ViewBag.planos, "value", "text", (Model != null) ? Model.PLANO : default(string)), "Selecione...", new { @class = "form-control" })
+                                    @Html.ValidationMessageFor(model => model.IDPLANO, "", new { @class = "text-danger" })
+                                </div>
+                                <div class="col-md-4 mb-4 ">
+                                    @Html.LabelFor(model => model.ACOMODACAO)
+                                    @Html.TextBoxFor(model => model.ACOMODACAO, new { @class = "form-control", @readonly = "true" })
+                                </div>
+                                <div class="col-md-4 mb-4 ">
+                                    @Html.LabelFor(model => model.MODALIDADE)
+                                    @Html.TextBoxFor(model => model.MODALIDADE, new { @class = "form-control", @readonly = "true" })
+                                    <br />
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-4 mb-4 ">
+                                    @Html.LabelFor(model => model.ABRANGENCIA)
+                                    @Html.TextBoxFor(model => model.ABRANGENCIA, new { @class = "form-control", @readonly = "true" })
+                                </div>
+                                <div class="col-md-4 mb-4">
+                                    @Html.LabelFor(model => model.TAXADEINSCRICAO)
+                                    @Html.TextBoxFor(model => model.TAXADEINSCRICAO, new { @class = "form-control" })
+
+                                </div>
+                                <div class="col-md-4 mb-4 ">
+                                    @Html.LabelFor(model => model.NUMEROCONTRATO)
+                                    @Html.TextBoxFor(model => model.NUMEROCONTRATO, new { @class = "form-control", @readonly = "true" })
+                                    <br />
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-4 mb-4 ">
+                                    @Html.LabelFor(model => model.NUMEROPROPOSTA)
+                                    @Html.TextBoxFor(model => model.NUMEROPROPOSTA, new { @class = "form-control" })
+                                </div>
+                                <div class="col-md-4 mb-4">
+                                    @Html.LabelFor(model => model.GRUPOECONOMICO)
+                                    @Html.TextBoxFor(model => model.GRUPOECONOMICO, new { @class = "form-control" })
+                                    <br />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <section class="content">
+            <div class="col-lg-12">
+                <div class="box box-success box-solid">
+                    <div class="box">
+                        <div class="box-header">
+                            <i class="fa  fa-plus"></i>
+                            <h3 class="box-title">Opcionais</h3>
+                            <br />
+                            <br />
+                            <div class="row">
+                                <div class="col-lg-10" id="todosopcionais">
+                                    @{ Html.RenderAction("PartialOpcionais", "PessoaJuridica");}
+                                </div>
+                                <div class="col-lg-2" align="right">
+                                    <button class="btn btn-primary btn-flat" data-click="adicionar-opcional" data-toggle="tooltip" data-placement="top" title="  Incluir Opcional"><i class="fa  fa-plus"></i></button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <div role="tabpanel" class="tab-pane" id="custos">
+        <section class="content">
+            <div class="col-lg-12">
+                <div class="box box-success box-solid">
+                    <div class="box">
+                        <div class="box-header">
+                            <i class="fa fa-dollar"></i>
+                            <h3 class="box-title">Custos e Valores</h3>
+                            <br />
+                            <h5>*Campos obrigatórios</h5>
+                            <br />
+                            <div class="row">
+                                <div class="col-lg-10" id="todosvalores">
+                                    @{ Html.RenderAction("PartialValores", "PessoaJuridica");}
+                                </div>
+                                <div class="col-lg-2" align="right">
+                                    <button class="btn btn-primary btn-flat" data-click="adicionar-valor" data-toggle="tooltip" data-placement="top" title="  Incluir Valor"><i class="fa  fa-plus"></i></button>
+                                </div>
+                            </div>
+                            <br class="clear:both" />
+                            <br class="clear:both" />
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <div role="tabpanel" class="tab-pane" id="cadendereco">
+        <section class="content">
+            <div class="col-lg-12">
+                <div class="box box-success box-solid">
+                    <div class="box">
+                        <div class="box-header">
+                            <i class="fa fa-home"></i>
+                            <h3 class="box-title">Endereço</h3>
+                            <br />
+                            <h5>*Campos obrigatórios</h5>
+                            <br />
+                            <div class="row">
+                                <div class="col-md-4 mb-4">
+                                    @Html.LabelFor(model => model.CEP)
+                                    @Html.TextBoxFor(model => model.CEP, new { @class = "form-control" })
+                                    @Html.ValidationMessageFor(model => model.CEP, "", new { @class = "text-danger" })
+                                </div>
+                                <div class="col-md-4 mb-4">
+                                    @Html.LabelFor(model => model.ENDERECO)
+                                    @Html.TextBoxFor(model => model.ENDERECO, new { @class = "form-control" })
+                                    @Html.ValidationMessageFor(model => model.ENDERECO, "", new { @class = "text-danger" })
+                                </div>
+                                <div class="col-md-4 mb-4">
+                                    @Html.LabelFor(model => model.NUMERO)
+                                    @Html.TextBoxFor(model => model.NUMERO, new { @class = "form-control" })
+                                    @Html.ValidationMessageFor(model => model.NUMERO, "", new { @class = "text-danger" })
+                                    <br />
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-4 mb-4">
+                                    @Html.LabelFor(model => model.BAIRRO)
+                                    @Html.TextBoxFor(model => model.BAIRRO, new { @class = "form-control" })
+                                    @Html.ValidationMessageFor(model => model.BAIRRO, "", new { @class = "text-danger" })
+                                </div>
+                                <div class="col-md-4 mb-4">
+                                    @Html.LabelFor(model => model.COMPLEMENTO)
+                                    @Html.TextBoxFor(model => model.COMPLEMENTO, new { @class = "form-control" })
+                                </div>
+                                <div class="col-md-4 mb-4">
+                                    @Html.LabelFor(model => model.CIDADE)
+                                    @Html.TextBoxFor(model => model.CIDADE, new { @class = "form-control" })
+                                    @Html.ValidationMessageFor(model => model.CIDADE, "", new { @class = "text-danger" })
+                                    <br />
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-4 mb-4">
+                                    @Html.LabelFor(model => model.UF)
+                                    @Html.DropDownListFor(model => model.idUF, new SelectList(ViewBag.Uf, "value", "text", (Model != null) ? Model.UF : default(string)), "Selecione...", new { @class = "form-control" })
+                                    <br />
+                                </div>
+                                <div class="col-md-4 mb-4">
+                                    @Html.LabelFor(model => model.segundoendereco)
+                                    @Html.DropDownListFor(model => model.Idsegundoendereco, new SelectList(ViewBag.segundoendereco, "value", "text", (Model != null) ? Model.segundoendereco : default(string)), new { @class = "form-control" })
+                                    @Html.ValidationMessageFor(model => model.Idsegundoendereco, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <section class="content pn_segundo">
+            <div class="col-lg-12">
+                <div class="box box-success box-solid">
+                    <div class="box">
+                        <div class="box-header">
+                            <i class="fa fa-home"></i>
+                            <h3 class="box-title">Endereço Cobrança</h3>
+                            <br />
+                            <br />
+                            <div class="row">
+                                <div class="col-md-4 mb-4">
+                                    @Html.LabelFor(model => model.CEPCOBRANCA)
+                                    @Html.TextBoxFor(model => model.CEPCOBRANCA, new { @class = "form-control" })
+                                </div>
+                                <div class="col-md-4 mb-4">
+                                    @Html.LabelFor(model => model.ENDERECOCOBRANCA)
+                                    @Html.TextBoxFor(model => model.ENDERECOCOBRANCA, new { @class = "form-control" })
+                                </div>
+                                <div class="col-md-4 mb-4">
+                                    @Html.LabelFor(model => model.NUMEROCOBRANCA)
+                                    @Html.TextBoxFor(model => model.NUMEROCOBRANCA, new { @class = "form-control" })
+                                    <br />
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-4 mb-4">
+                                    @Html.LabelFor(model => model.BAIRROCOBRANCA)
+                                    @Html.TextBoxFor(model => model.BAIRROCOBRANCA, new { @class = "form-control" })
+                                </div>
+                                <div class="col-md-4 mb-4">
+                                    @Html.LabelFor(model => model.COMPLEMENTOCOBRANCA)
+                                    @Html.TextBoxFor(model => model.COMPLEMENTOCOBRANCA, new { @class = "form-control" })
+                                </div>
+                                <div class="col-md-4 mb-4">
+                                    @Html.LabelFor(model => model.CIDADECOBRANCA)
+                                    @Html.TextBoxFor(model => model.CIDADECOBRANCA, new { @class = "form-control" })
+                                    <br />
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-4 mb-4">
+                                    @Html.LabelFor(model => model.UFCOBRANCA)
+                                    @Html.DropDownListFor(model => model.IdUFCOBRANCA, new SelectList(ViewBag.Uf, "value", "text", (Model != null) ? Model.UFCOBRANCA : default(string)), "Selecione...", new { @class = "form-control" })
+                                    <br />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+    <div role="tabpanel" class="tab-pane" id="salvarcadastro">
+        <section class="content">
+            <div class="col-lg-12">
+                <div class="box box-success box-solid">
+                    <div class="box">
+                        <div class="box-header">
+                            <i class="fa fa-check-square-o"></i>
+                            <h3 class="box-title">Informações do contrato</h3>
+                            <br />
+                            <h5>*Campos obrigatórios</h5>
+                            <br />
+
+                            <div class="row">
+                                <div class="col-md-6 mb-4">
+                                    @Html.LabelFor(model => model.VALORTOTAL)
+                                    @Html.TextBoxFor(model => model.VALORTOTAL, new { @class = "form-control", @readonly = "true" })
+                                </div>
+                                <div class="col-md-6 mb-4">
+                                    @Html.LabelFor(model => model.VALORPRIMEIRAFATURA)
+                                    @Html.TextBoxFor(model => model.VALORPRIMEIRAFATURA, new { @class = "form-control", @readonly = "true" })
+                                    <br />
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6 mb-4">
+                                    @Html.LabelFor(model => model.TOTALDEVIDAS)
+                                    @Html.TextBoxFor(model => model.TOTALDEVIDAS, new { @class = "form-control", @readonly = "true" })
+                                </div>
+                                <div class="col-md-6 mb-4">
+                                    @Html.LabelFor(model => model.DATAVENCIMENTOMENSAL)
+                                    @Html.TextBoxFor(model => model.DATAVENCIMENTOMENSAL, new { @class = "form-control" })
+                                    @Html.ValidationMessageFor(model => model.DATAVENCIMENTOMENSAL, "", new { @class = "text-danger" })
+                                    <br />
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6 mb-4">
+                                    @Html.LabelFor(model => model.DATAVIGENCIACONTRATO)
+                                    @Html.TextBoxFor(model => model.DATAVIGENCIACONTRATO, "", new { @class = "form-control datepicker" })
+                                    @Html.ValidationMessageFor(model => model.DATAVIGENCIACONTRATO, "", new { @class = "text-danger" })
+                                </div>
+                                <div class="col-md-6 mb-4">
+                                    @Html.LabelFor(model => model.DATAVENCIMENTOPRIMEIRAFATURA)
+                                    @Html.TextBoxFor(model => model.DATAVENCIMENTOPRIMEIRAFATURA, "", new { @class = "form-control datepicker" })
+                                    @Html.ValidationMessageFor(model => model.DATAVENCIMENTOPRIMEIRAFATURA, "", new { @class = "text-danger" })
+                                    <br />
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6 mb-4">
+                                    @Html.LabelFor(model => model.PARTICIPACAOFINANCEIRA)
+                                    @Html.TextBoxFor(model => model.PARTICIPACAOFINANCEIRA, "", new { @class = "form-control" })
+                                    @Html.ValidationMessageFor(model => model.PARTICIPACAOFINANCEIRA, "", new { @class = "text-danger" })
+                                    <br />
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-12 mb-4">
+                                    @Html.LabelFor(model => model.OBSERVACAO)
+                                    @Html.TextAreaFor(model => model.OBSERVACAO, new { @class = "form-control" })
+                                    <br />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+    <section class="content">
+        <div class="col-md-12" align="center">
+            <button type="submit" data-click="Gravar" class="btn btn-success btn-lg btn-block">
+                <i class="fa fa-floppy-o"></i> Salvar Contrato
+            </button>
+            <br />
+        </div>
+    </section>
+</div>
+
+<br class="clear:both" />
+<br class="clear:both" />
+<br class="clear:both" />
+<br class="clear:both" />
+<br class="clear:both" />
+<br class="clear:both" />
+
+
+
+
+

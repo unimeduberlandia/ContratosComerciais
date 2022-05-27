@@ -1,0 +1,65 @@
+﻿@model Painel.Web.Models.TrocarSenhaViewModel
+@{
+    ViewBag.Title = "Usuários do Sistema";
+    Layout = "~/Views/Shared/_Servicos.cshtml";
+}
+
+@using (Html.BeginForm("InserirNovaSenha", "Login", FormMethod.Post))
+{
+    @Html.HiddenFor(model => model.idusuario)
+    @Html.AntiForgeryToken()
+    <section class="content-header">
+        <h1>
+            Alterar Senha
+        </h1>
+    </section>
+    <section class="content">
+        <div class="col-lg-6 col-xs-6" align="center">
+            <div class="box box-success box-solid">
+                <div class="box-body">
+                    <div class="row">
+                        <div class="col-md-12 mb-3">
+                            @Html.LabelFor(model => model.Login)
+                            @Html.TextBoxFor(model => model.Login, new { @class = "form-control", @readonly = "true" })
+                            <br />
+                            <br />
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12 mb-3">
+                            @Html.LabelFor(model => model.senha)
+                            @Html.PasswordFor(model => model.senha, new { @class = "form-control" })
+                            @Html.ValidationMessageFor(model => model.senha)
+                            <br />
+                            <br />
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12 mb-3">
+                            @Html.LabelFor(model => model.novasenha)
+                            @Html.PasswordFor(model => model.novasenha, new { @class = "form-control" })
+                            @Html.ValidationMessageFor(model => model.novasenha)
+                            <br />
+                            <br />
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12 mb-3">
+                            @Html.LabelFor(model => model.novasenha2)
+                            @Html.PasswordFor(model => model.novasenha2, new { @class = "form-control" })
+                            @Html.ValidationMessageFor(model => model.novasenha2)
+                            <br />
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12" align="center">
+                            <button type="submit" class="btn btn-success btn-lg btn-block">
+                                <i class="fa fa-floppy-o"></i> Alterar Senha
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+}

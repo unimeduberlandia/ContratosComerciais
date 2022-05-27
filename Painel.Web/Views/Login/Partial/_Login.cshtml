@@ -1,0 +1,87 @@
+﻿@model Painel.Web.Models.LoginViewModel
+
+<style>
+
+    #Usuario::-moz-placeholder {
+        color: #BFC8BF;
+    }
+
+    #Usuario:-moz-placeholder {
+        color: #BFC8BF;
+    }
+
+    #Usuario:-ms-input-placeholder {
+        color: #BFC8BF;
+    }
+
+    #Usuario::-webkit-input-placeholder {
+        color: #BFC8BF;
+    }
+
+    #Senha::-moz-placeholder {
+        color: #BFC8BF;
+    }
+
+    #Senha:-moz-placeholder {
+        color: #BFC8BF;
+    }
+
+    #Senha:-ms-input-placeholder {
+        color: #BFC8BF;
+    }
+
+    #Senha::-webkit-input-placeholder {
+        color: #BFC8BF;
+    }
+
+    .palavra {
+        color: #BFC8BF/*black*/;
+    }
+</style>
+
+@using (Html.BeginForm("PostLogin", "Login", FormMethod.Post))
+{
+    @Html.AntiForgeryToken()
+    <div class="row">
+        <br />
+        <div class="col-lg-1">
+            <span class="glyphicon glyphicon-user Telalogin-feedback"></span>
+        </div>
+        <div class="col-lg-10" align="right">
+            @Html.TextBoxFor(model => model.Usuario, new { @class = "Telalogin", autocomplete = "off", placeholder = "CPF", style = "" })
+            @Html.ValidationMessageFor(model => model.Usuario)
+            <br />
+            <br />
+            <br />
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-lg-1">
+            <span class="glyphicon glyphicon-lock Telalogin-feedback"></span>
+        </div>
+        <div class="col-lg-10" align="right">
+            @Html.PasswordFor(model => model.Senha, new { @class = "Telalogin", placeholder = "Senha", style = "" })
+            @Html.ValidationMessageFor(model => model.Senha)
+        </div>
+    </div>
+    <div class="row">
+        <br />
+        <br />
+        @*<button type="submit" data-loading-text="Carregando..." class="btn-block btn-login">Entrar</button>*@
+
+        <button type="submit" class="btn-block btn btn-login col-lg-12">Entrar</button>
+        <br />
+        <div class="col-lg-12" align="center">
+            <a href="@Url.Action("EsqueciSenha", "Login", new { area = "" })">
+                <span class="palavra">Esqueci a senha</span>
+            </a>
+        </div>
+        <br />
+        <br />
+        <br />
+        <div class="row" align="center">
+            Desenvolvido pela Gestão de Tecnologia da Informação
+        </div>
+    </div>
+}
+

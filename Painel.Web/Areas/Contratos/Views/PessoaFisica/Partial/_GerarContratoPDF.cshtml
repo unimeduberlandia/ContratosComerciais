@@ -1,0 +1,273 @@
+﻿@model Painel.Models.Contratos.PDFPessoaFisica
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title></title>
+    <link href="~/Contents/plugins/datatables/datatables.net-bs/css/dataTables.bootstrap.min.css" rel="stylesheet" />
+
+    <style>
+        body {
+            padding-top: 2rem;
+            padding-bottom: 2rem;
+        }
+
+        h3 {
+            margin-top: 2rem;
+        }
+
+        h4 {
+            font-size: 10px;
+        }
+
+        hr {
+            color: #000;
+            width: 80%;
+            float: left;
+        }
+
+        [class*="body"] {
+            padding-top: 2rem;
+            padding-bottom: 2rem;
+        }
+
+        [class*="h3"] {
+            margin-top: 2rem;
+        }
+
+        [class*="h4"] {
+            font-size: 10px;
+        }
+
+        [class*="hr"] {
+            color: #000;
+            width: 80%;
+            float: left;
+        }
+
+        [class*="txtUnimed"] {
+            font-size: 14px;
+            /*border-bottom: 1px solid #C1C1BC;*/
+            margin-bottom: 10px;
+            height: 10px;
+            /*letter-spacing: px;*/
+            font-weight: bold;
+        }
+
+        [class*="tiraborda"] {
+            border: 2px solid #000000;
+        }
+
+        [class*="txtUnimed2"] {
+            font-size: 13px;
+            height: 40px;
+            font-weight: normal;
+            border-bottom: 0px solid #ffffff;
+            margin-bottom: 1px;
+        }
+
+        [class*="table1"] {
+            border-bottom: 1px solid #C1C1BC;
+            margin-bottom: 5px;
+            /*  width: 100%;
+            box-shadow: 0 1px 1px rgba(0, 0, 0, 0.1);*/
+        }
+
+        [class*="table2"] {
+            width: 100%;
+        }
+
+        [class*="table3"] {
+            border-bottom: 1px solid #C1C1BC;
+            margin-bottom: 5px;
+            border-top: 1px solid #C1C1BC;
+        }
+
+        [class*="titulo"] {
+            width: 100%;
+            margin-bottom: 5px;
+        }
+
+        [class*="dependentes"] {
+            font-size: 16px;
+            width: 1124px;
+        }
+
+        [class*="box"] {
+            border-radius: 3px;
+            background: #ffffff;
+            border-top: 2px solid #000000;
+            border-left: 2px solid #000000;
+            border-right: 2px solid #000000;
+            border-bottom: 2px solid #000000;
+            width: 99.9%;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="col-12">
+            <div class="row">
+                <div class="col-12" align="left" style="border:none; background-color:white">
+                    <img src="~/Areas/Contratos/Contents/img/topo3.png" width="1200" height="220" />
+                </div>
+                <br />
+            </div>
+            <div class="row">
+                <div class="box">
+                    <table class="table2">
+                        <thead>
+                            <tr>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td class="table1"><span class="txtUnimed">Nome Titular: </span><span class="txtUnimed2">@Model.TITULAR </span></td>
+                                <td class="table1"><span class="txtUnimed">|&nbsp &nbsp CPF: </span> <span class="txtUnimed2">@Model.CPFTITULAR </span></td>
+                                <td class="table1"><span class="txtUnimed">|&nbsp &nbsp Data Nascimento: </span><span class="txtUnimed2">@String.Format("{0:dd/MM/yyyy}", Model.DATANASCIMENTO) </span></td>
+                            </tr>
+                            <tr>
+                                <td class="table1"><span class="txtUnimed"> Nome da M ãe: </span><span class="txtUnimed2">@Model.NOMEDAMAE </span></td>
+                                <td class="table1"><span class="txtUnimed">|&nbsp &nbsp Sexo: </span> <span class="txtUnimed2">@Model.SEXO </span></td>
+                                <td class="table1"><span class="txtUnimed">|&nbsp &nbsp Cartão de Saúde: </span><span class="txtUnimed2">@Model.CARTAOSAUDE </span></td>
+                            </tr>
+                            <tr>
+                                <td class="table1"><span class="txtUnimed"> RG: </span><span class="txtUnimed2">@Model.RG </span></td>
+                                <td class="table1"><span class="txtUnimed">|&nbsp &nbsp Orgão Expedidor: </span> <span class="txtUnimed2">@Model.ORGAOEXPEDIDOR </span></td>
+                                <td class="table1"><span class="txtUnimed">|&nbsp &nbsp Data Expedição: </span><span class="txtUnimed2">@String.Format("{0:dd/MM/yyyy}", Model.DATAEXPEDICAO) </span></td>
+                            </tr>
+                            <tr>
+                                <td class="table1"><span class="txtUnimed"> E-Mail: </span><span class="txtUnimed2">@Model.EMAIL </span></td>
+                                <td class="table1"><span class="txtUnimed">|&nbsp &nbsp Telefone Celular: </span> <span class="txtUnimed2">@Model.TELEFONE1 </span></td>
+                                <td class="table1"><span class="txtUnimed">|&nbsp &nbsp Telefone Fixo: </span><span class="txtUnimed2">@Model.TELEFONE2 </span></td>
+                            </tr>
+                            <tr>
+                                <td class="txtUnimed"><span class="txtUnimed">Responsável Financeiro: </span><span class="txtUnimed2">@Model.RESPONSAVELFINANCEIRO</span></td>
+                                <td class="txtUnimed"><span class="txtUnimed">|&nbsp &nbsp CPF Responsável Financeiro: </span> <span class="txtUnimed2">@Model.CPFRESPONSAVEL </span></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="row">
+                <h3 class="titulo" align="center" style=" background: #C1C1BC; font-weight:bold; font-family:Helvetica">
+                    Endereço
+                </h3>
+                <div class="box">
+                    <table class="table2">
+                        <tbody>
+                            <tr>
+                                <td><span class="txtUnimed">Logradouro: </span><span class="txtUnimed2">@Model.ENDERECOCOBRANCA </span></td>
+                            </tr>
+                            <tr>
+                                <td class="table3"><span class="txtUnimed"> CEP: </span><span class="txtUnimed2">@Model.CEPCOBRANCA </span></td>
+                                <td class="table3"><span class="txtUnimed">|&nbsp &nbsp Bairro: </span> <span class="txtUnimed2">@Model.BAIRROCOBRANCA </span></td>
+                                <td class="table3"><span class="txtUnimed">|&nbsp &nbsp Nº: </span><span class="txtUnimed2">@Model.NUMEROCOBRANCA </span></td>
+                            </tr>
+                            <tr>
+                                <td class="table1"><span class="txtUnimed">Complemento: </span><span class="txtUnimed2">@Model.COMPLEMENTOCOBRANCA </span></td>
+                                <td class="table1"><span class="txtUnimed">|&nbsp &nbsp Cidade: </span> <span class="txtUnimed2">@Model.CIDADECOBRANCA </span></td>
+                                <td class="table1"><span class="txtUnimed">|&nbsp &nbsp UF: </span><span class="txtUnimed2">@Model.UFCOBRANCA</span></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="row">
+                <h3 class="titulo" align="center" style=" background: #C1C1BC; font-weight:bold; font-family:Helvetica">
+                    Informações do Plano
+                </h3>
+                <div class="box">
+                    <table class="table2">
+                        <tbody>
+                            <tr>
+                                <td><span class="txtUnimed">Plano: </span><span class="txtUnimed2">@Model.PLANO </span></td>
+                                <td><span class="txtUnimed">| Código AN S : </span> <span class="txtUnimed2">@Model.CODIGO </span></td>
+                            </tr>
+                            <tr>
+                                <td class="table3"><span class="txtUnimed">Abrangência: </span><span class="txtUnimed2">@Model.ABRANGENCIA </span></td>
+                                <td class="table3"><span class="txtUnimed">| Acomodação: </span> <span class="txtUnimed2">@Model.ACOMODACAO </span></td>
+                                <td class="table3"><span class="txtUnimed">| Modalidade: </span><span class="txtUnimed2">@Model.MODALIDADE</span></td>
+                            </tr>
+                            <tr>
+                                <td class="txtUnimed"><span class="txtUnimed">Nº do Contrato: </span><span class="txtUnimed2">@Model.NUMEROCONTRATO</span></td>
+                                <td class="txtUnimed"><span class="txtUnimed">| Nº da Proposta: </span> <span class="txtUnimed2">@Model.NUMEROPROPOSTA </span></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="row">
+                <h3 class="titulo" align="center" style=" background: #C1C1BC; font-weight:bold; font-family:Helvetica">
+                    Custo e Informações Adicionais
+                </h3>
+                <div class="box">
+                    <table class="table2">
+                        <tbody>
+                            <tr>
+                                <td class="table1"><span class="txtUnimed">Vigência: </span><span class="txtUnimed2">@String.Format("{0:dd/MM/yyyy}", Model.DATAVIGENCIACONTRATO) </span></td>
+                                @*<td class="table1"><span class="txtUnimed">|&nbsp &nbsp Atendimento: </span><span class="txtUnimed2">@String.Format("{0:dd/MM/yyyy}", Model.DATAATENDIMENTO) </span></td>*@
+                                <td class="table1"><span class="txtUnimed">|&nbsp &nbsp 1º Fatura: </span><span class="txtUnimed2">@String.Format("{0:dd/MM/yyyy}", Model.DATAPRIMEIRAFATURA) </span></td>
+                                <td class="table1"><span class="txtUnimed">|&nbsp &nbsp Qtde Vidas: </span><span class="txtUnimed2">@Model.TOTALVIDAS </span></td>
+                            </tr>
+                            <tr>
+                                <td class="table1"><span class="txtUnimed">Dia do Vencimento: </span> <span class="txtUnimed2">@Model.DIAVENCIMENTO </span></td>
+                                <td class="table1"><span class="txtUnimed">|&nbsp &nbsp Taxa de Inscrição: </span><span class="txtUnimed2">@Model.TAXAINSCRICAO</span></td>
+                                <td class="table1"></td>
+                            </tr>
+                            <tr>
+                                <td class="table1"><span class="txtUnimed">Valor 1ª Fatura: </span><span class="txtUnimed2">@Model.VALORPRIMEIRAFATURA </span></td>
+                                <td class="table1"><span class="txtUnimed">|&nbsp &nbsp Valor Mensalidade: </span> <span class="txtUnimed2">@Model.VALORTOTAL </span></td>
+                                <td class="table1"></td>
+                            </tr>
+                            <tr>
+                                <td><span class="txtUnimed">Observações: </span><span class="txtUnimed2">@Model.OBSERVACAO </span></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="row">
+                <h3 class="titulo" align="center" style=" background: #C1C1BC; font-weight:bold; font-family:Helvetica">
+                    Dependentes
+                </h3>
+                <div class="dependentes" align="left">
+                    @{Html.RenderAction("PartialDependentesPDF", "PessoaFisica", new { idplano = ViewBag.idcontrato });}
+                </div>
+            </div>
+            <br />
+            <div class="row">
+                <h3 class="titulo" align="center" style=" background: #C1C1BC; font-weight:bold; font-family:Helvetica">
+                    Opcionais
+                </h3>
+                <div class="dependentes" align="left">
+                    @{Html.RenderAction("PartialOpcionaisPDF", "PessoaFisica", new { idplano = ViewBag.idcontrato });}
+                    <br />
+                </div>
+                <div class="dependentes" align="left">
+                    *Os Opcionais não citados acima, não foram adquiridos pelo beneficiário.
+                </div>
+            </div>
+            <div class="row">
+                <table class="table2">
+                    <tbody>
+                        <tr>
+                            <td><span> <br /><br /><br /><br /> <br /> ____________________________________________________________________ <br />  <b>Contratante:</b> @Model.TITULAR</span></td>
+                            <td> <img src="~/Areas/Contratos/Contents/img/assinatura3.png" align="right" width="400" height="150" /></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="row">
+                <div class="col-9" align="left">
+                    <img src="~/Areas/Contratos/Contents/img/rodape3.png" width="1200" height="220" />
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
+
+

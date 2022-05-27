@@ -1,0 +1,36 @@
+﻿@model List<Painel.Models.Contratos.Opcional>
+
+@if (Model != null && Model.Count > 0)
+{
+    <table>
+        <thead>
+            <tr style="background-color:#e8e2e2">
+                <th>Nome &nbsp</th>
+                <th>Tipo &nbsp</th>
+                <th style="text-align: right;">Valor &nbsp</th>
+               
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+            <tr>
+                <td style="width:400px;text-align: left;">
+                    &nbsp  @item.NOME &nbsp
+                </td>
+                <td style="width:400px;text-align: center;">
+                    &nbsp @item.GRUPO &nbsp
+                </td>
+                <td style="width:320px; text-align: right;">
+                    &nbsp  @item.VALOR &nbsp
+                </td>
+             
+            </tr>
+            }
+        </tbody>
+    </table>
+}
+else
+{
+    <span style="color:#084c20">Nenhum Opcional Cadastrado</span>
+}

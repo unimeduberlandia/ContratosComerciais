@@ -1,0 +1,120 @@
+﻿<!DOCTYPE html>
+<style>
+    [class*="comercialTitulo"] {
+        font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+        /*color: #A2B06C;*/
+        color: #FFFFFF;
+        background: -webkit-repeating-radial-gradient(#FFFFFF, #A2B06C);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+    }
+    [class*="unimedtitulo"] {
+        font-family: Calibri, serif;
+        color: #fff;
+        font-weight: 500;
+        font-size: 22px;
+    }
+
+    .textTI {
+        font-family: Calibri, Tahoma, sans-serif, serif;
+        color: #A3AB9C;
+        font-weight: 600;
+        font-size: 25px;
+    }
+
+    .logoUnimed {
+        box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+    }
+</style>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>Gestão Comercial</title>
+    <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+    <link href="~/Contents/css/jquery.fancybox.css" rel="stylesheet" />
+    <link href="~/Contents/plugins/bootstrap3/bootstrap.min.css" rel="stylesheet" />
+    <link href="~/Contents/plugins/sweetalert/sweetalert2.min.css" rel="stylesheet" />
+    <link href="~/Contents/plugins/font-awesome/css/font-awesome.min.css" rel="stylesheet" />
+    <link href="~/Contents/plugins/Ionicons/css/ionicons.min.css" rel="stylesheet" />
+    <link href="~/Contents/plugins/pace/pace.css" rel="stylesheet" />
+    <link href="~/Contents/css/style.css" rel="stylesheet" />
+    <!--[if lt IE 9]>
+    <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
+    <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    <![endif]-->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700,300italic,400italic,600italic">
+</head>
+<body class="hold-transition login-page-comercial">
+    <div style="width: auto; overflow-x: hidden;">
+        <div class="login-box">
+            <div class="login-box-body">
+                <div class="login-logos">
+                    <img src="~/Contents/img/logo_login.png" class="logoUnimed" width="245" height="120" />
+
+                    @*<img src="~/Contents/img/logo_login.png" width="230" height="120" />*@
+                </div>
+                <div align="center">
+                    <div class="inline">
+                        <span class="unimedtitulo">Contratos</span>
+                        <span class="textTI">Comerciais</span>
+                    </div>
+                </div>
+                @*<div class="comercialTitulo" align="center">
+                    <h3>Contratos Comerciais</h3>
+                    <h3>O sistema encontra-se temporariamente indisponível </h3>
+                </div>*@
+                <div>
+                    @{ Html.RenderAction("PartialLogin", "Login");}
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="~/Contents/js/jquery.min.js"></script>
+    <script src="~/Contents/js/jquery.mask.min.js"></script>
+    <script src="~/Contents/plugins/bootstrap4/bootstrap.min.js"></script>
+    <script src="~/Contents/plugins/sweetalert/sweetalert2.min.js"></script>
+    <script src="~/Contents/js/jquery.fancybox.js"></script>
+    <script src="~/Contents/plugins/pace/pace.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            $('#Usuario').mask('000.000.000-00', { clearIfNotMatch: true });
+
+            $(document).ajaxStart(function () { Pace.restart(); });
+
+            $(document).off("", "form").on("submit", "form", function (e) {
+                $.fancybox.showLoading();
+                e.preventDefault();
+                var form = $(this);
+                var container = form.parent();
+
+                $.post(form.attr('action'), form.serialize(), function (data) {
+
+                    if (data.success) {
+                        $.fancybox.hideLoading();
+                        if (data.msg) {
+                            swal("Sucesso!", data.msg, "success");
+                        }
+                        if (data.urlajax != "") {
+                            $.ajax({
+                                url: data.urlajax,
+                                cache: false,
+                                dataType: "html",
+                                success: function (data) {
+                                    $("#formulario").html(data);
+                                }
+                            });
+                        }
+                        if (data.url != "") {
+                            window.location = data.url;
+                        }
+                    } else {
+                        $.fancybox.hideLoading();
+                        container.html(data);
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,1296 @@
+﻿@model Painel.Web.Areas.Contratos.Models.PessoaFisicaViewModel
+
+@{
+    ViewBag.Title = "Novo Contrato PF";
+    Layout = "~/Views/Shared/_Servicos.cshtml";
+}
+@section css {
+    <link href="~/Contents/plugins/sweetalert/sweetalert2.min.css" rel="stylesheet" />
+    <link href="~/Contents/plugins/jquery.datetimepicker/jquery.datetimepicker.min.css" rel="stylesheet" />
+    <link href="~/Contents/plugins/bootstrap-daterangepicker/daterangepicker.css" rel="stylesheet" />
+    <link href="~/Contents/plugins/pace/pace.css" rel="stylesheet" />
+    <link href="~/Contents/css/jquery.fancybox.css" rel="stylesheet" />
+}
+@section js{
+    <script src="~/Contents/plugins/jquery.datetimepicker/jquery.datetimepicker.full.min.js"></script>
+    <script src="~/Contents/js/jquery.mask.min.js"></script>
+    <script src="~/Contents/plugins/pace/pace.min.js"></script>
+    <script src="~/Contents/js/jquerydownloader.min.js"></script>
+    <script src="~/Contents/js/jquery.fancybox.js"></script>
+    <script src="~/Contents/plugins/sweetalert/sweetalert2.min.js"></script>
+    <script src="~/Contents/plugins/block-ui/jquery.blockUI.min.js"></script>
+    <script>
+
+        $(document).ready(function () {
+            $('#CPFTITULAR').mask('000.000.000-00', { clearIfNotMatch: true });
+            $('#CPFRESPONSAVEL').mask('000.000.000-00', { clearIfNotMatch: true });
+            $('#CEP').mask('00000-000', { clearIfNotMatch: true });
+            $('#CEPCOBRANCA').mask('00000-000', { clearIfNotMatch: true });
+            $('#TELEFONE1').mask('(00)0000-00000', { clearIfNotMatch: true });
+            $('#TELEFONE2').mask('(00)0000-0000', { clearIfNotMatch: true });
+            $('#DATANASCIMENTO').mask("00/00/0000", { clearIfNotMatch: true });
+            $('#DATAEXPEDICAO').mask("00/00/0000", { clearIfNotMatch: true });
+            $('#IDADE').mask('000');
+            $('#TAXADEINSCRICAO').mask('#.##0,00', { reverse: true });
+            $('#VALORINDIVIDUAL').mask('#.##0,00', { reverse: true });
+            $('#VALORPRIMEIRAFATURA').mask('#.##0,00', { reverse: true });
+            $('#TOTALTITULAR').mask('#.##0,00', { reverse: true });
+            $('#TOTALDEPENDENTES').mask('#.##0,00', { reverse: true });
+            $('#VALORTOTAL').mask('#.##0,00', { reverse: true });
+            $('#DATAVENCIMENTOMENSAL').mask('00', { reverse: true });
+            $('#DATAVENCIMENTOPRIMEIRAFATURA').mask("00/00/0000", { clearIfNotMatch: true });
+            $('#DATAFIMVIGENCIA').mask("00/00/0000", { clearIfNotMatch: true });
+            $('#DATAATENDIMENTO').mask("00/00/0000", { clearIfNotMatch: true });
+            $('#NUMEROCONTRATO').mask('00000', { reverse: true });
+            $('#NUMEROPROPOSTA').mask('000000', { reverse: true });
+
+            $(".pn_plano").fadeOut('fast');
+            $(".pn_valor").fadeOut('fast');
+            $(".pn_segundo").fadeOut('fast');
+            $('[data-toggle="push-menu"]').pushMenu('toggle');
+
+            $.datetimepicker.setLocale('pt-BR');
+            $('.datepicker').mask('00/00/0000').datetimepicker({
+
+                format: 'd/m/Y',
+                timepicker: false
+            });
+
+             $(document).on("blur keyup", "#CEP", function () {
+                 if ($(this).val().length == 9) {
+                     $.fancybox.showLoading();
+                     $("#ENDERECO").focus();
+
+                     $.post("@Url.Action("BuscaCep", "PessoaFisica")", { cep: $("#CEP").val() }, function (data) {
+                        if (data != false) {
+                            $("#ENDERECO").val(data.end);
+                            $("#CIDADE").val(data.cidade);
+                            $("#COMPLEMENTO").val(data.complemento);
+                            $("#idUF").val(data.uf);
+                            $("#BAIRRO").val(data.bairro);
+                        }
+                        $.fancybox.hideLoading();
+                     });
+                 }
+             });
+
+            $(document).on("blur keyup", "#VALORPRIMEIRAFATURA", function () {
+                var valor = $("#VALORPRIMEIRAFATURA").val();
+                $.fancybox.showLoading();
+                var f = valor.toLocaleString('pt-br', { style: 'currency', currency: 'BRL' }).toString();
+                $("#VALORPRIMEIRAFATURA").val(f);
+                $.fancybox.hideLoading();
+            });
+
+
+            $(document).on("blur keyup", "#CEPCOBRANCA", function () {
+
+                if ($(this).val().length == 9) {
+                    $.fancybox.showLoading();
+                    $("#ENDERECOCOBRANCA").focus();
+                    $.post("@Url.Action("BuscaCep2", "PessoaFisica")", { cep: $("#CEPCOBRANCA").val() }, function (data) {
+                        if (data != false) {
+                            $("#ENDERECOCOBRANCA").val(data.end);
+                            $("#CIDADECOBRANCA").val(data.cidade);
+                            $("#COMPLEMENTOCOBRANCA").val(data.complemento);
+                            $("#IdUFCOBRANCA").val(data.uf);
+                            $("#BAIRROCOBRANCA").val(data.bairro);
+                        }
+                      $.fancybox.hideLoading();
+                    });
+                }
+            });
+
+
+            $(document).on("blur keyup", "#DATANASCIMENTO", function () {
+                if ($(this).val().length == 10) {
+                    $("#NOMEDAMAE").focus();
+                    $.post("@Url.Action("BuscaIdade", "PessoaFisica")", { nascimento: $("#DATANASCIMENTO").val() }, function (data) {
+
+                        $.fancybox.showLoading();
+                        if (data != false) {
+                            $("#IDADE").val(data.idade);
+                            $(".pn_valor").fadeOut('fast');
+                            var valori = 0;
+                            $("#VALORINDIVIDUAL").val(valori);
+                        }
+                        $.fancybox.hideLoading();
+                        $(".pn_plano").fadeIn('fast');
+                    });
+                }
+            });
+
+            $(document).on("blur keyup", "#CPFTITULAR", function () {
+                if ($(this).val().length == 14) {
+
+                    $.post("@Url.Action("ValidaCPFTitular", "PessoaFisica")", { cpftitular: $("#CPFTITULAR").val() }, function (data) {
+                        $.fancybox.showLoading();
+                        if (data.cpftitular == "F") {
+                            swal({
+                                title: "Erro",
+                                text: "CPF não é válido",
+                                type: "warning",
+                                onClose: () => {
+                                }
+                            });
+                            var cpftitular = "";
+                            $("#CPFTITULAR").val(cpftitular);
+                        }
+                        else {
+                            $.post("@Url.Action("Buscatitular", "PessoaFisica")", { cpftitular: $("#CPFTITULAR").val() }, function (data) {
+                                     if (data != false) {
+                                         $("#TITULAR").val(data.titular);
+                                         $("#RESPONSAVELFINANCEIRO").val(data.responsavelfinanceiro);
+                                         $("#CPFRESPONSAVEL").val(data.cpfresponsavel);
+                                         $("#CARTAOSAUDE").val(data.cartaosaude);
+                                         $("#RG").val(data.rg);
+                                         $("#ORGAOEXPEDIDOR").val(data.orgaoexpedidor);
+                                         $("#NOMEDAMAE").val(data.nomedamae);
+                                         $("#EMAIL").val(data.email);
+                                         $("#ENDERECO").val(data.endereco);
+                                         $("#NUMERO").val(data.numero);
+                                         $("#BAIRRO").val(data.bairro);
+                                         $("#IDSEXO").val(data.sexo);
+                                         $("#CIDADE").val(data.cidade);
+                                         $("#idUF").val(data.uf);
+                                         $("#CEP").val(data.cep);
+                                         $("#COMPLEMENTO").val(data.complemento);
+                                         $("#TELEFONE2").val(data.telefone2);
+                                         $("#TELEFONE1").val(data.telefone1);
+
+                                     }
+                                     $.fancybox.hideLoading();
+                                 });
+                             }
+                             $.fancybox.hideLoading();
+                    });
+                }
+            });
+
+              $(document).on("blur keyup", "#CPFRESPONSAVEL", function () {
+                if ($(this).val().length == 14) {
+
+                    $.post("@Url.Action("ValidaCPFTitular", "PessoaFisica")", { cpftitular: $("#CPFRESPONSAVEL").val() }, function (data) {
+                        $.fancybox.showLoading();
+                        if (data.cpftitular == "F") {
+                            swal({
+                                title: "Erro",
+                                text: "CPF não é válido",
+                                type: "warning",
+                                onClose: () => {
+                                }
+                            });
+                            var cpftitular = "";
+                            $("#CPFRESPONSAVEL").val(cpftitular);
+                        }
+
+                        $.fancybox.hideLoading();
+                    });
+                }
+            });
+
+            $(document).on("change", "select#Idsegundoendereco", function () {
+                if ($(this).val() != "Sim") {
+                    $(".pn_segundo").fadeIn('fast');
+                }
+                else {
+                    $(".pn_segundo").fadeOut('fast');
+                };
+            });
+
+            $(document).on("change", "select#IDPLANO", function () {
+                  if ($(this).val() != "") {
+                    $.fancybox.showLoading();
+
+                      $.post('@Url.Action("BuscaValorPF", "PessoaFisica")', { idplano: $("#IDPLANO").val(),  idade: $("#IDADE").val() },
+                        function (data) {
+                            if (data != false) {
+                                $("#ABRANGENCIA").val(data.abrangencia);
+                                $("#ACOMODACAO").val(data.acomodacao);
+                                $("#MODALIDADE").val(data.modalidade);
+                                $("#VALORINDIVIDUAL").val(data.valor);
+                                $("#NUMEROCONTRATO").val(data.contrato);
+                            }
+                            if (data == false) {
+
+                                swal({
+                                    title: "Erro Plano",
+                                    text: "O Plano não contempla a idade selecionada",
+                                    type: "warning",
+                                    onClose: () => {
+                                         $("#VALORINDIVIDUAL").val("");
+                                    }
+                                });
+                            }
+                            $.fancybox.hideLoading();
+                            $(".pn_valor").fadeIn('fast');
+                        });
+                  };
+            });
+
+             $(document).on("click", "[data-click=calcular]", function () {
+                 $.fancybox.showLoading();
+                 var id = $("#ID").val();
+                 console.log(id);
+                 if (id == "") {
+                     $.post('@Url.Action("CalcularValor", "PessoaFisica")', { valortitular: $("#VALORINDIVIDUAL").val(), valortaxa: $("#TAXADEINSCRICAO").val(), datavigencia: $("#DATAFIMVIGENCIA").val()},
+                         function (data) {
+                             if (data != false) {
+                                 $("#TAXADEINSCRICAO2").val(data.taxainscricao2);
+                                 $("#SOMAOPCIONAIS").val(data.somaopcionais);
+                                 $("#SOMAPLANOS").val(data.somaplanos);
+                                 $("#TAXADEINSCRICAO").val(data.taxainscricao);
+                                 $("#VALORPRIMEIRAFATURA").val(data.valorprimeirafatura);
+                                 $("#TOTALDEVIDAS").val(data.qntdependente);
+                                 $("#TOTALTITULAR").val(data.valortitular);
+                                 $("#TOTALDEPENDENTES").val(data.valordepenten);
+                                 $("#VALORTOTAL").val(data.valortotal);
+                             }
+
+                             $.fancybox.hideLoading();
+                             $(".pn_valor").fadeIn('fast');
+                         });
+                 }
+                 if (id != 0)  {
+                        $.post('@Url.Action("CalcularValor", "PessoaFisica")', { valortitular: $("#VALORINDIVIDUAL").val(), valortaxa: $("#TAXADEINSCRICAO").val() },
+                         function (data) {
+                             if (data != false) {
+                                 $("#TAXADEINSCRICAO2").val(data.taxainscricao2);
+                                 $("#SOMAOPCIONAIS").val(data.somaopcionais);
+                                 $("#SOMAPLANOS").val(data.somaplanos);
+                                 $("#TAXADEINSCRICAO").val(data.taxainscricao);
+                             //    $("#VALORPRIMEIRAFATURA").val(data.valorprimeirafatura);
+                                 $("#TOTALDEVIDAS").val(data.qntdependente);
+                                 $("#TOTALTITULAR").val(data.valortitular);
+                                 $("#TOTALDEPENDENTES").val(data.valordepenten);
+                                 $("#VALORTOTAL").val(data.valortotal);
+                             }
+
+                             $.fancybox.hideLoading();
+                             $(".pn_valor").fadeIn('fast');
+                         });
+                 };
+             });
+
+            $(document).on("click", "[data-click=adicionar-dependente]", function () {
+                var id = $("#IDPLANO").val();
+
+                if (id != 0) {
+                    $.fancybox({
+                        href: '@Url.Action("AdicionarDependente", "PessoaFisica", new { area = "Contratos" })/' + id,
+                        type: 'ajax',
+                        maxWidth: 900,
+                        maxHeight: 400,
+                        fitToView: false,
+                        width: '100%',
+                        height: '100%',
+                        autoSize: false,
+                        afterClose: function () {
+                        }
+                    });
+                }
+                else {
+                    swal({
+                        title: "Selecione o plano",
+                        text: "Primeiro escolha um plano",
+                        type: "warning",
+                        onClose: () => {
+                            $("#todosdependente").load('@Url.Action("PartialDependente", "PessoaFisica")');
+                        }
+                    });
+                }
+            });
+
+            $(document).on("click", "[data-click=adicionar-opcional]", function () {
+                $.fancybox({
+                    href: '@Url.Action("AdicionarOpcional", "PessoaFisica")',
+                    type: 'ajax',
+                    maxWidth: 600,
+                    maxHeight: 270,
+                    fitToView: false,
+                    width: '100%',
+                    height: '100%',
+                    autoSize: false,
+                    afterClose: function () {
+                    }
+                });
+            });
+
+            $(document).on("click", "[data-click=excluir]", function () {
+                var guid = $(this).data("guid");
+                if (window.confirm("Deseja mesmo excluir?")) {
+                    $.post("@Url.Action("ExcluirOpcional", "PessoaFisica")", { guid: guid }, function (data) {
+                        if (data.success) {
+                            swal({
+                                title: "Sucesso",
+                                text: "Excluido com sucesso",
+                                type: "success",
+                                onClose: () => {
+                                    $("#todasopcoes").load('@Url.Action("PartialOpcionais", "PessoaFisica")');
+                                }
+                            });
+                        }
+                        else {
+                            container.html(data);
+                            $.fancybox.update();
+                        }
+                    });
+                }
+            });
+
+            $(document).on("click", "[data-click=excluirdependente]", function () {
+                var guid = $(this).data("guid");
+
+                if (window.confirm("Deseja mesmo excluir dependente?")) {
+                    $.post("@Url.Action("ExcluirDepentende", "PessoaFisica")", { guidDependente: guid }, function (data) {
+                        if (data.success) {
+                            swal({
+                                title: "Sucesso",
+                                text: "Excluido com sucesso",
+                                type: "success",
+                                onClose: () => {
+                                    $("#todosdependente").load('@Url.Action("PartialDependente", "PessoaFisica")');
+                                }
+                            });
+                        }
+                        else {
+                            container.html(data);
+                            $.fancybox.update();
+                        }
+                    });
+                }
+            });
+
+            $(document).on("click", "[data-click=Gravar]", function () {
+                var id = $("#ID").val();
+                var cpftitular = $("#CPFTITULAR").val();
+                var nomedotitular = $("#TITULAR").val();
+                var titularnascimento = $("#DATANASCIMENTO").val();
+                var titularidsexo = $("#IDSEXO").val();
+                var titularnomedamae = $("#NOMEDAMAE").val();
+                var cartaosaudetitular = $("#CARTAOSAUDE").val();
+                var rgtitular = $("#RG").val();
+                var orgaoexpedidortitu = $("#ORGAOEXPEDIDOR").val();
+                var dataexpedicaotitular = $("#DATAEXPEDICAO").val();
+                var emailtitular = $("#EMAIL").val();
+                var telefone1titular = $("#TELEFONE1").val();
+                var telefone2titular = $("#TELEFONE2").val();
+                var responsavelfinanceiro = $("#RESPONSAVELFINANCEIRO").val();
+                var cpfresponsavel = $("#CPFRESPONSAVEL").val();
+                var idadetitular = $("#IDADE").val();
+                var idplanotitular = $("#IDPLANO").val();
+                var valorindividualtitular = $("#VALORINDIVIDUAL").val();
+                var abrangenciatitular = $("#ABRANGENCIA").val();
+                var acomodacaotitular = $("#ACOMODACAO").val();
+                var modalidadetitular = $("#MODALIDADE").val();
+                var ceptitular = $("#CEP").val();
+                var enderecotitular = $("#ENDERECO").val();
+                var numerotitular = $("#NUMERO").val();
+                var bairrotitular = $("#BAIRRO").val();
+                var complementotitular = $("#COMPLEMENTO").val();
+                var cidadetitular = $("#CIDADE").val();
+                var iduftitular = $("#idUF").val();
+                var idsegundoenderecotitular = $("#Idsegundoendereco").val();
+                var cepcobrancatitular = $("#CEPCOBRANCA").val();
+                var enderecocobrancatitular = $("#ENDERECOCOBRANCA").val();
+                var numerocobrancatitular = $("#NUMEROCOBRANCA").val();
+                var bairrocobrancatitular = $("#BAIRROCOBRANCA").val();
+                var complementocobrancatitular = $("#COMPLEMENTOCOBRANCA").val();
+                var cidadecobrancatitular = $("#CIDADECOBRANCA").val();
+                var idufcobrancatitular = $("#idUFCOBRANCA").val();
+                var taxadeinscricaotitular = $("#TAXADEINSCRICAO").val();
+                var totaldevidastitular = $("#TOTALDEVIDAS").val();
+                var datavencimentomensaltitula  = $("#DATAVENCIMENTOMENSAL").val();
+                var datavencimentoprimeira = $("#DATAVENCIMENTOPRIMEIRAFATURA").val();
+                var valortotaltudo = $("#VALORTOTAL").val();
+                var numerocontrato = $("#NUMEROCONTRATO").val();
+                var numeroproposta = $("#NUMEROPROPOSTA").val();
+                var datafimvigenciatitular = $("#DATAFIMVIGENCIA").val();
+                var observacoestitular = $("#OBSERVACAO").val();
+                var valorprimeirafaturatudo = $("#VALORPRIMEIRAFATURA").val();
+
+                if (complementotitular == "") {
+                    complementotitular = "S/N";
+                }
+
+                if (responsavelfinanceiro == "") {
+                    responsavelfinanceiro = nomedotitular;
+                    cpfresponsavel = cpftitular;
+
+                }
+
+                if (idsegundoenderecotitular != "Nao") {
+                    cepcobrancatitular = ceptitular;
+                    enderecocobrancatitular = enderecotitular;
+                    numerocobrancatitular = numerotitular;
+                    bairrocobrancatitular = bairrotitular;
+                    complementocobrancatitular = complementotitular;
+                    cidadecobrancatitular = cidadetitular;
+                    idufcobrancatitular = iduftitular;
+                }
+
+                if (cartaosaude = "") {
+                    cartaosaude = "S/N"
+                }
+
+
+                if (cpftitular == "" || datafimvigenciatitular == "" || numerocontrato == "" || numeroproposta == "" || nomedotitular == "" || titularnascimento == "" || titularidsexo == "" || titularnomedamae == "" || cartaosaudetitular == "" || orgaoexpedidortitu == "" || dataexpedicaotitular == "" || emailtitular == "" || telefone1titular == "" || telefone2titular == "" || idplanotitular == "" || valorindividualtitular == "" || abrangenciatitular == "" || acomodacaotitular == "" || modalidadetitular == "" || ceptitular == "" || enderecotitular == "" || numerotitular == "" || bairrotitular == "" || complementotitular == "" || cidadetitular == "" || iduftitular == "" || cepcobrancatitular == "" || enderecocobrancatitular == "" || numerocobrancatitular == "" || bairrocobrancatitular == "" || complementocobrancatitular == "" || cidadecobrancatitular == "" || idufcobrancatitular == "" || taxadeinscricaotitular == "" || totaldevidastitular == "" || datavencimentomensaltitula == "" || datavencimentoprimeira == "" || valortotaltudo == "" || valorprimeirafaturatudo == "" || observacoestitular == "")
+                {
+
+
+                    document.getElementById("TITULAR").style.border = "1px solid #D2D6DE";
+                    document.getElementById("DATANASCIMENTO").style.border = "1px solid #D2D6DE";
+                    document.getElementById("DATAFIMVIGENCIA").style.border = "1px solid #D2D6DE";
+                    document.getElementById("NOMEDAMAE").style.border = "1px solid #D2D6DE";
+                    document.getElementById("IDSEXO").style.border = "1px solid #D2D6DE";
+                    document.getElementById("CARTAOSAUDE").style.border = "1px solid #D2D6DE";
+                    document.getElementById("ORGAOEXPEDIDOR").style.border = "1px solid #D2D6DE";
+                    document.getElementById("DATAEXPEDICAO").style.border = "1px solid #D2D6DE";
+                    document.getElementById("TELEFONE1").style.border = "1px solid #D2D6DE";
+                    document.getElementById("TELEFONE2").style.border = "1px solid #D2D6DE";
+                    document.getElementById("VALORPRIMEIRAFATURA").style.border = "1px solid #D2D6DE";
+                    document.getElementById("VALORTOTAL").style.border = "1px solid #D2D6DE";
+                    document.getElementById("DATAVENCIMENTOPRIMEIRAFATURA").style.border = "1px solid #D2D6DE";
+                    document.getElementById("DATAVENCIMENTOMENSAL").style.border = "1px solid #D2D6DE";
+                    document.getElementById("TOTALDEVIDAS").style.border = "1px solid #D2D6DE";
+                    document.getElementById("TAXADEINSCRICAO").style.border = "1px solid #D2D6DE";
+                    document.getElementById("CIDADECOBRANCA").style.border = "1px solid #D2D6DE";
+                    document.getElementById("COMPLEMENTOCOBRANCA").style.border = "1px solid #D2D6DE";
+                    document.getElementById("BAIRROCOBRANCA").style.border = "1px solid #D2D6DE";
+                    document.getElementById("NUMEROCOBRANCA").style.border = "1px solid #D2D6DE";
+                    document.getElementById("ENDERECOCOBRANCA").style.border = "1px solid #D2D6DE";
+                    document.getElementById("CEPCOBRANCA").style.border = "1px solid #D2D6DE";
+                    document.getElementById("idUF").style.border = "1px solid #D2D6DE";
+                    document.getElementById("CIDADE").style.border = "1px solid #D2D6DE";
+                    document.getElementById("COMPLEMENTO").style.border = "1px solid #D2D6DE";
+                    document.getElementById("BAIRRO").style.border = "1px solid #D2D6DE";
+                    document.getElementById("NUMERO").style.border = "1px solid #D2D6DE";
+                    document.getElementById("ENDERECO").style.border = "1px solid #D2D6DE";
+                    document.getElementById("CEP").style.border = "1px solid #D2D6DE";
+                    document.getElementById("MODALIDADE").style.border = "1px solid #D2D6DE";
+                    document.getElementById("ACOMODACAO").style.border = "1px solid #D2D6DE";
+                    document.getElementById("ABRANGENCIA").style.border = "1px solid #D2D6DE";
+                    document.getElementById("VALORINDIVIDUAL").style.border = "1px solid #D2D6DE";
+                    document.getElementById("IDPLANO").style.border = "1px solid #D2D6DE";
+                    document.getElementById("EMAIL").style.border = "1px solid #D2D6DE";
+                    document.getElementById("CPFTITULAR").style.border = "1px solid #D2D6DE";
+                    document.getElementById("RG").style.border = "1px solid #D2D6DE";
+                    document.getElementById("OBSERVACAO").style.border = "1px solid #D2D6DE";
+                    document.getElementById("NUMEROCONTRATO").style.border = "1px solid #D2D6DE";
+                    document.getElementById("NUMEROPROPOSTA").style.border = "1px solid #D2D6DE";
+
+                    if (numerocontrato == "")
+                    {
+                        document.getElementById("NUMEROCONTRATO").style.border = "1px solid #ef3c59";
+                    }
+
+                    if (numeroproposta == "")
+                    {
+                        document.getElementById("NUMEROPROPOSTA").style.border = "1px solid #ef3c59";
+                    }
+
+                    if (observacoestitular == "")
+                    {
+                        document.getElementById("OBSERVACAO").style.border = "1px solid #ef3c59";
+                    }
+
+                    if (cpftitular == "")
+                    {
+                        document.getElementById("CPFTITULAR").style.border = "1px solid #ef3c59";
+                    }
+
+                    if (valorprimeirafaturatudo == "")
+                    {
+                        document.getElementById("VALORPRIMEIRAFATURA").style.border = "1px solid #ef3c59";
+                    }
+
+                    if (valortotaltudo == "")
+                    {
+                        document.getElementById("VALORTOTAL").style.border = "1px solid #ef3c59";
+                    }
+
+                    if (rgtitular == "")
+                    {
+                        document.getElementById("RG").style.border = "1px solid #ef3c59";
+                    }
+
+                    if (datavencimentoprimeira == "")
+                    {
+                        document.getElementById("DATAVENCIMENTOPRIMEIRAFATURA").style.border = "1px solid #ef3c59";
+                    }
+
+                    if (datavencimentomensaltitula == "")
+                    {
+                        document.getElementById("DATAVENCIMENTOMENSAL").style.border = "1px solid #ef3c59";
+                    }
+
+                    if (totaldevidastitular == "")
+                    {
+                        document.getElementById("TOTALDEVIDAS").style.border = "1px solid #ef3c59";
+                    }
+
+                    if (taxadeinscricaotitular == "")
+                    {
+                        document.getElementById("TAXADEINSCRICAO").style.border = "1px solid #ef3c59";
+                    }
+
+                    //if (idufcobrancatitular == "")
+                    //{
+                    //    document.getElementById("idUFCOBRANCA").style.border = "1px solid #ef3c59";
+                    //}
+
+                    if (cidadecobrancatitular == "")
+                    {
+                        document.getElementById("CIDADECOBRANCA").style.border = "1px solid #ef3c59";
+                    }
+
+                    if (complementocobrancatitular == "")
+                    {
+                        document.getElementById("COMPLEMENTOCOBRANCA").style.border = "1px solid #ef3c59";
+                    }
+
+                    if (bairrocobrancatitular == "")
+                    {
+                        document.getElementById("BAIRROCOBRANCA").style.border = "1px solid #ef3c59";
+                    }
+
+                    if (numerocobrancatitular == "")
+                    {
+                        document.getElementById("NUMEROCOBRANCA").style.border = "1px solid #ef3c59";
+                    }
+
+                    if (enderecocobrancatitular == "")
+                    {
+                        document.getElementById("ENDERECOCOBRANCA").style.border = "1px solid #ef3c59";
+                    }
+
+                    if (cepcobrancatitular == "")
+                    {
+                        document.getElementById("CEPCOBRANCA").style.border = "1px solid #ef3c59";
+                    }
+
+                    if (iduftitular == "")
+                    {
+                        document.getElementById("idUF").style.border = "1px solid #ef3c59";
+                    }
+
+                    if (cidadetitular == "")
+                    {
+                        document.getElementById("CIDADE").style.border = "1px solid #ef3c59";
+                    }
+
+                    if (complementotitular == "")
+                    {
+                        document.getElementById("COMPLEMENTO").style.border = "1px solid #ef3c59";
+                    }
+
+                    if (bairrotitular == "")
+                    {
+                        document.getElementById("BAIRRO").style.border = "1px solid #ef3c59";
+                    }
+
+                    if (numerotitular == "")
+                    {
+                        document.getElementById("NUMERO").style.border = "1px solid #ef3c59";
+                    }
+
+                    if (enderecotitular == "")
+                    {
+                        document.getElementById("ENDERECO").style.border = "1px solid #ef3c59";
+                    }
+
+                    if (ceptitular == "")
+                    {
+                        document.getElementById("CEP").style.border = "1px solid #ef3c59";
+                    }
+
+                    if (modalidadetitular == "")
+                    {
+                        document.getElementById("MODALIDADE").style.border = "1px solid #ef3c59";
+                    }
+
+                    if (acomodacaotitular == "")
+                    {
+                        document.getElementById("ACOMODACAO").style.border = "1px solid #ef3c59";
+                    }
+
+                    if (abrangenciatitular == "")
+                    {
+                        document.getElementById("ABRANGENCIA").style.border = "1px solid #ef3c59";
+                    }
+
+                    if (valorindividualtitular == "")
+                    {
+                        document.getElementById("VALORINDIVIDUAL").style.border = "1px solid #ef3c59";
+                    }
+
+                    if (idplanotitular == "")
+                    {
+                        document.getElementById("IDPLANO").style.border = "1px solid #ef3c59";
+                    }
+
+                    if (telefone2titular == "")
+                    {
+                        document.getElementById("TELEFONE2").style.border = "1px solid #ef3c59";
+                    }
+
+                    if (telefone1titular == "")
+                    {
+                        document.getElementById("TELEFONE1").style.border = "1px solid #ef3c59";
+                    }
+
+                    if (emailtitular == "")
+                    {
+                        document.getElementById("EMAIL").style.border = "1px solid #ef3c59";
+                    }
+
+                    if (dataexpedicaotitular == "")
+                    {
+                        document.getElementById("DATAEXPEDICAO").style.border = "1px solid #ef3c59";
+                    }
+
+                    if (nomedotitular == "")
+                    {
+                        document.getElementById("TITULAR").style.border = "1px solid #ef3c59";
+                    }
+
+                    if (datafimvigenciatitular == "")
+                    {
+                        document.getElementById("DATAFIMVIGENCIA").style.border = "1px solid #ef3c59";
+                    }
+
+                    if (titularidsexo == "")
+                    {
+                        document.getElementById("IDSEXO").style.border = "1px solid #ef3c59";
+                    }
+
+                    if (titularnomedamae == "")
+                    {
+                        document.getElementById("NOMEDAMAE").style.border = "1px solid #ef3c59";
+                    }
+
+                    if (titularnascimento == "")
+                    {
+                        document.getElementById("DATANASCIMENTO").style.border = "1px solid #ef3c59";
+                    }
+
+                    if (cartaosaudetitular == "")
+                    {
+                        document.getElementById("CARTAOSAUDE").style.border = "1px solid #ef3c59";
+                    }
+
+                    if (orgaoexpedidortitu == "")
+                    {
+                        document.getElementById("ORGAOEXPEDIDOR").style.border = "1px solid #ef3c59";
+                    }
+                    swal({
+                        title: "Erro",
+                        text: "Campos obrigatórios não foram preenchidos, corrija os erros e tente novamente",
+                        type: "warning",
+                        onClose: () => {
+
+                        }
+                    });
+                }
+
+                else {
+
+                    $.post('@Url.Action("InserirContratoPF", "PessoaFisica")', {
+                        id: id,
+                        cpf: cpftitular,
+                        nometitular: nomedotitular,
+                        nascimento: titularnascimento,
+                        responsavelfin: responsavelfinanceiro,
+                        cpfresp: cpfresponsavel,
+                        idsexo: titularidsexo,
+                        nomedamae: titularnomedamae,
+                        cartaosaude: cartaosaudetitular,
+                        rg: rgtitular,
+                        orgaoexpedidor: orgaoexpedidortitu,
+                        dataexpedicao: dataexpedicaotitular,
+                        email: emailtitular,
+                        telefone1: telefone1titular,
+                        telefone2: telefone2titular,
+                        idade: idadetitular,
+                        idplano: idplanotitular,
+                        numerdodaproposta: numeroproposta,
+                        numerodocontrato: numerocontrato,
+                        valorindividual: valorindividualtitular,
+                        abrangencia: abrangenciatitular,
+                        acomodacao: acomodacaotitular,
+                        modalidade: modalidadetitular,
+                        cep: ceptitular,
+                        endereco: enderecotitular,
+                        numero: numerotitular,
+                        bairro: bairrotitular,
+                        complemento: complementotitular,
+                        cidade: cidadetitular,
+                        iduf: iduftitular,
+                        idsegundoendereco: idsegundoenderecotitular,
+                        cepcobranca: cepcobrancatitular,
+                        enderecocobranca: enderecocobrancatitular,
+                        numerocobranca: numerocobrancatitular,
+                        bairrocobranca: bairrocobrancatitular,
+                        complementocobranca: complementocobrancatitular,
+                        cidadecobranca: cidadecobrancatitular,
+                        idufcobranca: idufcobrancatitular,
+                        taxadeinscricao: taxadeinscricaotitular,
+                        totaldevidas: totaldevidastitular,
+                        datavencimentomensal: datavencimentomensaltitula,
+                        datavencimentoprimeirafatura: datavencimentoprimeira,
+                        valortotal: valortotaltudo,
+                        valorprimeirafatura: valorprimeirafaturatudo,
+                        observacoes: observacoestitular,
+                        datafimvigencia: datafimvigenciatitular
+
+
+                    },
+                        function (data) {
+
+                                if (data.success) {
+                                    $("#foo").val("");
+                                    swal({
+                                        title: "Sucesso",
+                                        text: "Cadastro Efetuado",
+                                        type: "success",
+                                        onClose: () => {
+                                            window.location.href = '@Url.Action("Index", "PessoaFisica")';
+                                        }
+                                    });
+                                }
+                                else {
+                                    container.html(data);
+                                    $.fancybox.hideLoading();
+
+                                    $.fancybox.update();
+                                }
+                            });
+                }
+            });
+
+            $(document).off("", "form").on("submit", "form", function (e) {
+                e.preventDefault();
+
+                var form = $(this);
+                var container = form.parent();
+
+                $.post(form.attr('action'), form.serialize(), function (data) {
+                    if (data.success) {
+                        if (data.dep == true) {
+                            swal({
+                            title: "Sucesso",
+                            text: "Dependente Cadastrado com sucesso",
+                            type: "success",
+                            onClose: () => {
+                                $.fancybox.close();
+                                $("#todosdependente").load('@Url.Action("PartialDependente", "PessoaFisica")');
+                                  $.fancybox.close();
+                            }
+
+                            });
+                        }
+                        if (data.dep != true) {
+                            swal({
+                            title: "Sucesso",
+                            text: "Cadastrado com sucesso",
+                            type: "success",
+                            onClose: () => {
+                                $.fancybox.close();
+                                $("#todasopcoes").load('@Url.Action("PartialOpcionais", "PessoaFisica")');
+                                  $.fancybox.close();
+                            }
+                        });
+                        }
+                    }
+                    else {
+                        container.html(data);
+                        $.fancybox.update();
+                        //$.fancybox.close();
+                    }
+
+                });
+            });
+
+
+            $(window).bind("beforeunload", function () {
+                if ($("#foo").val().length > 0) {
+                    return "As alterações feitas não serão salvas!"
+                };
+            })
+        });
+    </script>
+}
+
+<br />
+<section class="header">
+    <div class="col-lg-12">
+        <div class="col-lg-10">
+            <ul class="nav nav-tabs" role="tablist">
+                <li role="presentation" class="active bg-gray"><a href="#titular" aria-controls="titular" role="tab" data-toggle="tab"><i class="fa fa-user"></i> <span style="color:black">Informações do Titular</span></a></li>
+                <li role="presentation" class="bg-gray"><a href="#cadastroplano" aria-controls="cadastroplano" role="tab" data-toggle="tab"><i class="fa fa-heartbeat"></i><span style="color:black"> Informações do Plano</span> </a></li>
+                <li role="presentation" class="bg-gray"><a href="#dependentes" aria-controls="dependentes" role="tab" data-toggle="tab"><i class="fa fa-users"></i> <span style="color:black"> Informações dos Dependentes</span> </a></li>
+                <li role="presentation" class="bg-gray"><a href="#cadendereco" aria-controls="cadendereco" role="tab" data-toggle="tab"><i class="fa fa-home"></i> <span style="color:black"> Endereço</span></a></li>
+                <li role="presentation" class="bg-gray"><a href="#salvarcadastro" aria-controls="salvarcadastro" data-click="calcular" role="tab" data-toggle="tab"><i class="fa fa-floppy-o"></i>  <span style="color:black"> SalvarContrato</span></a></li>
+            </ul>
+        </div>
+        <br />
+    </div>
+</section>
+@Html.AntiForgeryToken()
+@Html.HiddenFor(model => model.ID)
+<input type="Hidden" id="foo" type="text" value="10" size="50" />
+<div class="tab-content">
+    <div role="tabpanel" class="tab-pane active" id="titular">
+        <section class="content">
+            <div class="col-lg-12">
+                <div class="box box-success box-solid">
+                    <div class="box">
+                        <div class="box-header">
+                            <i class="fa fa-user"></i>
+                            @if (Model.statuscadastro == "nao")
+                            {
+                                <div class="row">
+                                    <div class="col-md-4 mb-4">
+                                        <h3 class="box-title">Informações do Titular</h3>
+                                    </div>
+                                    <div class="col-md-4 mb-4">
+
+                                    </div>
+                                    <div class="col-md-4 mb-4">
+                                        <spam><b>Autor Cadastro:</b> @Model.USUARIOCADASTRO</spam> <br />   <spam><b>Data Cadastro:</b> @Model.DATACADASTRO</spam>
+                                    </div>
+                                </div>
+                            }
+                            @if (Model.statuscadastro == "sim")
+                            {
+                                <div class="row">
+                                    <div class="col-md-4 mb-4">
+                                        <h3 class="box-title">Informações do Titular</h3>
+                                    </div>
+                                    <div class="col-md-4 mb-4">
+                                        <spam><b>Autor Cadastro:</b> @Model.USUARIOCADASTRO</spam> <br />   <spam><b>Data Cadastro:</b> @Model.DATACADASTRO</spam>
+                                    </div>
+                                    <div class="col-md-4 mb-4">
+                                        <spam><b>Autor Atualização:</b> @Model.USUARIOATUALIZACAO</spam> <br />   <spam><b>Data Atualização:</b> @Model.DATAATUALIZACAO</spam>
+                                    </div>
+                                </div>
+                            }
+
+                            <br />
+                            <h5>*Campos obrigatórios</h5>
+                            <br />
+
+                            <div class="row">
+                                <div class="col-md-4 mb-4">
+
+                                    @Html.LabelFor(model => model.TITULAR)
+                                    @Html.TextBoxFor(model => model.TITULAR, new { @class = "form-control" })
+                                    @Html.ValidationMessageFor(model => model.TITULAR, "", new { @class = "text-danger" })
+                                </div>
+                                <div class="col-md-4 mb-4">
+                                    @Html.LabelFor(model => model.CPFTITULAR)
+                                    @Html.TextBoxFor(model => model.CPFTITULAR, new { @class = "form-control" })
+                                    @Html.ValidationMessageFor(model => model.CPFTITULAR, "", new { @class = "text-danger" })
+                                </div>
+                                <div class="col-md-4 mb-4">
+                                    @Html.LabelFor(model => model.SEXO)
+                                    @Html.DropDownListFor(model => model.IDSEXO, new SelectList(ViewBag.sexo, "value", "text", (Model != null) ? Model.SEXO : default(string)), "Selecione...", new { @class = "form-control" })
+                                    @Html.ValidationMessageFor(model => model.IDSEXO, "", new { @class = "text-danger" })
+                                    <br />
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-4 mb-4">
+                                    @Html.LabelFor(model => model.DATANASCIMENTO)
+                                    @Html.TextBoxFor(model => model.DATANASCIMENTO, "", new { @class = "form-control" })
+                                    @Html.ValidationMessageFor(model => model.DATANASCIMENTO, "", new { @class = "text-danger" })
+
+                                </div>
+                                <div class="col-md-4 mb-4">
+                                    @Html.LabelFor(model => model.NOMEDAMAE)
+                                    @Html.TextBoxFor(model => model.NOMEDAMAE, new { @class = "form-control" })
+                                    @Html.ValidationMessageFor(model => model.NOMEDAMAE, "", new { @class = "text-danger" })
+                                </div>
+                                <div class="col-md-4 mb-4">
+                                    @Html.LabelFor(model => model.CARTAOSAUDE)
+                                    @Html.TextBoxFor(model => model.CARTAOSAUDE, new { @class = "form-control" })
+                                    @Html.ValidationMessageFor(model => model.CARTAOSAUDE, "", new { @class = "text-danger" })
+                                    <br />
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-4 mb-4">
+                                    @Html.LabelFor(model => model.RG)
+                                    @Html.TextBoxFor(model => model.RG, new { @class = "form-control" })
+                                    @Html.ValidationMessageFor(model => model.RG, "", new { @class = "text-danger" })
+                                </div>
+                                <div class="col-md-4 mb-4">
+                                    @Html.LabelFor(model => model.ORGAOEXPEDIDOR)
+                                    @Html.TextBoxFor(model => model.ORGAOEXPEDIDOR, new { @class = "form-control" })
+                                    @Html.ValidationMessageFor(model => model.ORGAOEXPEDIDOR, "", new { @class = "text-danger" })
+                                </div>
+                                <div class="col-md-4 mb-4">
+                                    @Html.LabelFor(model => model.DATAEXPEDICAO)
+                                    @Html.TextBoxFor(model => model.DATAEXPEDICAO, "", new { @class = "form-control" })
+                                    @Html.ValidationMessageFor(model => model.DATAEXPEDICAO, "", new { @class = "text-danger" })
+                                    <br />
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-4 mb-4">
+                                    @Html.LabelFor(model => model.EMAIL)
+                                    @Html.TextBoxFor(model => model.EMAIL, new { @class = "form-control" })
+                                    @Html.ValidationMessageFor(model => model.EMAIL, "", new { @class = "text-danger" })
+                                </div>
+                                <div class="col-md-4 mb-4">
+                                    @Html.LabelFor(model => model.TELEFONE1)
+                                    @Html.TextBoxFor(model => model.TELEFONE1, new { @class = "form-control" })
+                                </div>
+                                <div class="col-md-4 mb-4">
+                                    @Html.LabelFor(model => model.TELEFONE2)
+                                    @Html.TextBoxFor(model => model.TELEFONE2, new { @class = "form-control" })
+                                    <br />
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-4 mb-4">
+                                    @Html.LabelFor(model => model.RESPONSAVELFINANCEIRO)
+                                    @Html.TextBoxFor(model => model.RESPONSAVELFINANCEIRO, new { @class = "form-control" })
+                                </div>
+                                <div class="col-md-4 mb-4">
+                                    @Html.LabelFor(model => model.CPFRESPONSAVEL)
+                                    @Html.TextBoxFor(model => model.CPFRESPONSAVEL, new { @class = "form-control" })
+                                    <br />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+    <div role="tabpanel" class="tab-pane" id="cadastroplano">
+        <section class="content">
+            <div class="col-lg-12">
+                <div class="box box-success box-solid">
+                    <div class="box">
+                        <div class="box-header">
+                            <i class="fa fa-heartbeat"></i>
+                            <h3 class="box-title">Informações do Plano</h3>
+                            <br />
+                            <h5>*Campos obrigatórios</h5>
+                            <br />
+                            <div class="row">
+                                <div class="col-md-4 mb-4">
+                                    @Html.LabelFor(model => model.IDADE)
+                                    @Html.TextBoxFor(model => model.IDADE, new { @class = "form-control", @readonly = "true" })
+                                    @Html.ValidationMessageFor(model => model.IDADE, "", new { @class = "text-danger" })
+                                </div>
+                                <div class="col-md-4 mb-4">
+                                    @Html.LabelFor(model => model.PLANO)
+                                    @Html.DropDownListFor(model => model.IDPLANO, new SelectList(ViewBag.planos, "value", "text", (Model != null) ? Model.PLANO : default(string)), "Selecione...", new { @class = "form-control" })
+                                    @Html.ValidationMessageFor(model => model.IDPLANO, "", new { @class = "text-danger" })
+                                </div>
+                                <div class="col-md-4 mb-4">
+                                    @Html.LabelFor(model => model.VALORINDIVIDUAL)
+                                    @Html.TextBoxFor(model => model.VALORINDIVIDUAL, new { @class = "form-control" })
+                                    @Html.ValidationMessageFor(model => model.VALORINDIVIDUAL, "", new { @class = "text-danger" })
+                                    <br />
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-4 mb-4 ">
+                                    @Html.LabelFor(model => model.ABRANGENCIA)
+                                    @Html.TextBoxFor(model => model.ABRANGENCIA, new { @class = "form-control", @readonly = "true" })
+                                </div>
+                                <div class="col-md-4 mb-4 ">
+                                    @Html.LabelFor(model => model.ACOMODACAO)
+                                    @Html.TextBoxFor(model => model.ACOMODACAO, new { @class = "form-control", @readonly = "true" })
+                                </div>
+                                <div class="col-md-4 mb-4 ">
+                                    @Html.LabelFor(model => model.MODALIDADE)
+                                    @Html.TextBoxFor(model => model.MODALIDADE, new { @class = "form-control", @readonly = "true" })
+                                    <br />
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-4 mb-4">
+                                    @Html.LabelFor(model => model.TAXADEINSCRICAO)
+                                    @Html.TextBoxFor(model => model.TAXADEINSCRICAO, new { @class = "form-control" })
+                                </div>
+                                <div class="col-md-4 mb-4">
+                                    @Html.LabelFor(model => model.NUMEROCONTRATO)
+                                    @Html.TextBoxFor(model => model.NUMEROCONTRATO, new { @class = "form-control", @readonly = "true" })
+                                </div>
+                                <div class="col-md-4 mb-4">
+                                    @Html.LabelFor(model => model.NUMEROPROPOSTA)
+                                    @Html.TextBoxFor(model => model.NUMEROPROPOSTA, new { @class = "form-control" })
+                                    <br />
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-4 mb-4">
+                                    @Html.LabelFor(model => model.DATAFIMVIGENCIA)
+                                    @Html.TextBoxFor(model => model.DATAFIMVIGENCIA, "", new { @class = "form-control datepicker" })
+                                    @Html.ValidationMessageFor(model => model.DATAFIMVIGENCIA, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <section class="content">
+            <div class="col-lg-12">
+                <div class="box box-success box-solid">
+                    <div class="box">
+                        <div class="box-header">
+                            <i class="fa  fa-plus"></i>
+                            <h3 class="box-title">Opcionais</h3>
+                            <br />
+                            <br />
+                            <div class="row">
+                                <div class="col-lg-10" id="todasopcoes">
+                                    @{ Html.RenderAction("PartialOpcionais", "PessoaFisica");}
+                                </div>
+                                <div class="col-lg-2" align="right">
+                                    <button class="btn btn-primary btn-flat" data-click="adicionar-opcional" data-toggle="tooltip" data-placement="top" title="  Incluir Opcional"><i class="fa  fa-plus"></i></button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+    <div role="tabpanel" class="tab-pane" id="dependentes">
+        <section class="content">
+            <div class="col-lg-12">
+                <div class="box box-success box-solid">
+                    <div class="box">
+                        <div class="box-header">
+                            <i class="fa  fa-users"></i>
+                            <h3 class="box-title">Informações dos Dependentes</h3>
+                            <br />
+                            <br />
+                            <div class="row">
+                                <div class="col-lg-11" id="todosdependente">
+                                    @{ Html.RenderAction("PartialDependente", "PessoaFisica");}
+                                </div>
+                                <div class="col-lg-1" align="right">
+                                    <button class="btn btn-primary btn-flat" data-click="adicionar-dependente" data-toggle="tooltip" data-placement="top" title="  Incluir Dependente"><i class="fa  fa-plus"></i></button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+    <div role="tabpanel" class="tab-pane" id="cadendereco">
+        <section class="content">
+            <div class="col-lg-12">
+                <div class="box box-success box-solid">
+                    <div class="box">
+                        <div class="box-header">
+                            <i class="fa fa-home"></i>
+                            <h3 class="box-title">Endereço</h3>
+                            <br />
+                            <h5>*Campos obrigatórios</h5>
+                            <br />
+                            <div class="row">
+                                <div class="col-md-4 mb-4">
+                                    @Html.LabelFor(model => model.CEP)
+                                    @Html.TextBoxFor(model => model.CEP, new { @class = "form-control" })
+                                    @Html.ValidationMessageFor(model => model.CEP, "", new { @class = "text-danger" })
+                                </div>
+                                <div class="col-md-4 mb-4">
+                                    @Html.LabelFor(model => model.ENDERECO)
+                                    @Html.TextBoxFor(model => model.ENDERECO, new { @class = "form-control" })
+                                    @Html.ValidationMessageFor(model => model.ENDERECO, "", new { @class = "text-danger" })
+                                </div>
+                                <div class="col-md-4 mb-4">
+                                    @Html.LabelFor(model => model.NUMERO)
+                                    @Html.TextBoxFor(model => model.NUMERO, new { @class = "form-control" })
+                                    @Html.ValidationMessageFor(model => model.NUMERO, "", new { @class = "text-danger" })
+                                    <br />
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-4 mb-4">
+                                    @Html.LabelFor(model => model.BAIRRO)
+                                    @Html.TextBoxFor(model => model.BAIRRO, new { @class = "form-control" })
+                                    @Html.ValidationMessageFor(model => model.BAIRRO, "", new { @class = "text-danger" })
+                                </div>
+                                <div class="col-md-4 mb-4">
+                                    @Html.LabelFor(model => model.COMPLEMENTO)
+                                    @Html.TextBoxFor(model => model.COMPLEMENTO, new { @class = "form-control" })
+                                </div>
+                                <div class="col-md-4 mb-4">
+                                    @Html.LabelFor(model => model.CIDADE)
+                                    @Html.TextBoxFor(model => model.CIDADE, new { @class = "form-control" })
+                                    @Html.ValidationMessageFor(model => model.CIDADE, "", new { @class = "text-danger" })
+                                    <br />
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-4 mb-4">
+                                    @Html.LabelFor(model => model.UF)
+                                    @Html.DropDownListFor(model => model.idUF, new SelectList(ViewBag.Uf, "value", "text", (Model != null) ? Model.UF : default(string)), "Selecione...", new { @class = "form-control" })
+                                    @Html.ValidationMessageFor(model => model.UF, "", new { @class = "text-danger" })
+                                    <br />
+                                </div>
+                                @*<div class="col-md-4 mb-4">
+                                        @Html.LabelFor(model => model.segundoendereco)
+                                        @Html.DropDownListFor(model => model.Idsegundoendereco, new SelectList(ViewBag.segundoendereco, "value", "text", (Model != null) ? Model.segundoendereco : default(string)), new { @class = "form-control" })
+                                        @Html.ValidationMessageFor(model => model.Idsegundoendereco, "", new { @class = "text-danger" })
+                                    </div>*@
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <section class="content pn_segundo">
+            <div class="col-lg-12">
+                <div class="box box-success box-solid">
+                    <div class="box">
+                        <div class="box-header">
+                            <i class="fa fa-home"></i>
+                            <h3 class="box-title">Endereço Cobrança</h3>
+                            <br />
+                            <br />
+                            <div class="row">
+                                <div class="col-md-4 mb-4">
+                                    @Html.LabelFor(model => model.CEPCOBRANCA)
+                                    @Html.TextBoxFor(model => model.CEPCOBRANCA, new { @class = "form-control" })
+                                </div>
+                                <div class="col-md-4 mb-4">
+                                    @Html.LabelFor(model => model.ENDERECOCOBRANCA)
+                                    @Html.TextBoxFor(model => model.ENDERECOCOBRANCA, new { @class = "form-control" })
+                                </div>
+                                <div class="col-md-4 mb-4">
+                                    @Html.LabelFor(model => model.NUMEROCOBRANCA)
+                                    @Html.TextBoxFor(model => model.NUMEROCOBRANCA, new { @class = "form-control" })
+                                    <br />
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-4 mb-4">
+                                    @Html.LabelFor(model => model.BAIRROCOBRANCA)
+                                    @Html.TextBoxFor(model => model.BAIRROCOBRANCA, new { @class = "form-control" })
+                                </div>
+                                <div class="col-md-4 mb-4">
+                                    @Html.LabelFor(model => model.COMPLEMENTOCOBRANCA)
+                                    @Html.TextBoxFor(model => model.COMPLEMENTOCOBRANCA, new { @class = "form-control" })
+                                </div>
+                                <div class="col-md-4 mb-4">
+                                    @Html.LabelFor(model => model.CIDADECOBRANCA)
+                                    @Html.TextBoxFor(model => model.CIDADECOBRANCA, new { @class = "form-control" })
+                                    <br />
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-4 mb-4">
+                                    @Html.LabelFor(model => model.UFCOBRANCA)
+                                    @Html.DropDownListFor(model => model.IdUFCOBRANCA, new SelectList(ViewBag.Uf, "value", "text", (Model != null) ? Model.UFCOBRANCA : default(string)), "Selecione...", new { @class = "form-control" })
+                                    <br />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+    <div role="tabpanel" class="tab-pane" id="salvarcadastro">
+        <section class="content">
+            <div class="col-lg-12">
+                <div class="box box-success box-solid">
+                    <div class="box">
+                        <div class="box-header">
+                            <i class="fa fa-check-square-o"></i>
+                            <h3 class="box-title">Informações do contrato</h3>
+                            <br />
+                            <h5>*Campos obrigatórios</h5>
+                            <br />
+                            <div class="row">
+                                <div class="col-md-4 mb-4">
+                                    @Html.LabelFor(model => model.SOMAPLANOS)
+                                    @Html.TextBoxFor(model => model.SOMAPLANOS, new { @class = "form-control", @readonly = "true" })
+                                </div>
+                                <div class="col-md-4 mb-4">
+                                    @Html.LabelFor(model => model.SOMAOPCIONAIS)
+                                    @Html.TextBoxFor(model => model.SOMAOPCIONAIS, new { @class = "form-control", @readonly = "true" })
+                                </div>
+                                <div class="col-md-4 mb-4">
+                                    @Html.LabelFor(model => model.VALORTOTAL)
+                                    @Html.TextBoxFor(model => model.VALORTOTAL, new { @class = "form-control", @readonly = "true" })
+                                    <br />
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-4 mb-4">
+                                    @Html.LabelFor(model => model.TOTALDEVIDAS)
+                                    @Html.TextBoxFor(model => model.TOTALDEVIDAS, new { @class = "form-control", @readonly = "true" })
+                                </div>
+                                <div class="col-md-4 mb-4">
+                                    @Html.LabelFor(model => model.TAXADEINSCRICAO2)
+                                    @Html.TextBoxFor(model => model.TAXADEINSCRICAO2, new { @class = "form-control", @readonly = "true" })
+                                </div>
+                                <div class="col-md-4 mb-4">
+                                    @Html.LabelFor(model => model.VALORPRIMEIRAFATURA)
+                                    @Html.TextBoxFor(model => model.VALORPRIMEIRAFATURA, new { @class = "form-control" })
+                                    <br />
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-4 mb-4">
+                                    @Html.LabelFor(model => model.DATAVENCIMENTOMENSAL)
+                                    @Html.TextBoxFor(model => model.DATAVENCIMENTOMENSAL, new { @class = "form-control" })
+                                    @Html.ValidationMessageFor(model => model.DATAVENCIMENTOMENSAL, "", new { @class = "text-danger" })
+
+                                </div>
+                                <div class="col-md-4 mb-4">
+                                    @Html.LabelFor(model => model.DATAVENCIMENTOPRIMEIRAFATURA)
+                                    @Html.TextBoxFor(model => model.DATAVENCIMENTOPRIMEIRAFATURA, "", new { @class = "form-control datepicker" })
+                                    @Html.ValidationMessageFor(model => model.DATAVENCIMENTOPRIMEIRAFATURA, "", new { @class = "text-danger" })
+                                </div>
+                                @*<div class="col-md-4 mb-4">
+                                        @Html.LabelFor(model => model.DATAATENDIMENTO)
+                                        @Html.TextBoxFor(model => model.DATAATENDIMENTO, "", new { @class = "form-control datepicker" })
+                                        @Html.ValidationMessageFor(model => model.DATAATENDIMENTO, "", new { @class = "text-danger" })
+                                        <br />
+                                    </div>*@
+                            </div>
+                            <div class="row">
+                                <div class="col-md-12 mb-4">
+                                    @Html.LabelFor(model => model.OBSERVACAO)
+                                    @Html.TextAreaFor(model => model.OBSERVACAO, new { @class = "form-control" })
+                                    <br />
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+    <section class="content">
+        <div class="col-md-12" align="center">
+            <button type="submit" data-click="Gravar" class="btn btn-success btn-lg btn-block">
+                <i class="fa fa-floppy-o"></i> Salvar Contrato
+            </button>
+            <br />
+        </div>
+    </section>
+</div>
+
+<br class="clear:both" />
+<br class="clear:both" />
+<br class="clear:both" />
+<br class="clear:both" />
+<br class="clear:both" />
+
+

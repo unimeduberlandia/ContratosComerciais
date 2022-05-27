@@ -1,0 +1,87 @@
+﻿@{
+    ViewBag.Title = "Visualizar Contrato";
+}
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>Contrato Plano de Saúde</title>
+    <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+    <link href="~/Contents/plugins/bootstrap3/bootstrap.min.css" rel="stylesheet" />
+    <link href="~/Contents/plugins/font-awesome/css/font-awesome.min.css" rel="stylesheet" />
+    <link href="~/Contents/plugins/Ionicons/css/ionicons.min.css" rel="stylesheet" />
+    <link href="~/Contents/css/style.css" rel="stylesheet" />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700,300italic,400italic,600italic">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700,300italic,400italic,600italic">
+    @section js{
+        <script src="~/Contents/plugins/pdfnapagina/jquery-1.8.2.js"></script>
+        <script src="~/Contents/plugins/pdfnapagina/jquery-ui-1.9.1.custom.js"></script>
+
+        <script language="javascript" type="text/javascript">
+            $(document).ready(function () {
+
+                $("codigoConduta").css("display", "block");
+
+
+            $.post("@Url.Action("GetDetailTermo", "Cadastros", new { area = "Compliance" })", {
+                id: Request.QueryString["id"]
+            }, function (data) {
+                $("#PnResultado").html(data);
+            });
+        });
+        </script>
+    }
+
+</head>
+<body>
+    <div class="row">
+        <div class="col-lg-12">
+            <h3 class="titulo" align="center" style=" background: #C1C1BC; font-weight:bold; font-family:Helvetica">
+                Espelho Contrato
+            </h3>
+            <br />
+            <br />
+            @if (@ViewBag.STATUSESPELHO == "")
+            {
+                <a>Nenhum arquivo para exibir</a>
+            }
+            @if (@ViewBag.STATUSESPELHO != "")
+            {
+                <iframe src="~/Publico/EspelhoContrato/PF/@ViewBag.STATUSESPELHO" width="100%" style="min-height:800px;"></iframe>
+            }
+        </div>
+        @*<div class="col-lg-12">
+            <h3 class="titulo" align="center" style=" background: #C1C1BC; font-weight:bold; font-family:Helvetica">
+                Qualificação Contrato
+            </h3>
+            <br />
+            <br />
+            @if (@ViewBag.QUALIFICACAO == "")
+            {
+                <a>Nenhum arquivo para exibir</a>
+            }
+            @if (@ViewBag.QUALIFICACAO != "")
+            {
+                <iframe src="~/Publico/QualificacaoContrato/PF/@ViewBag.QUALIFICACAO" width="100%" style="min-height:800px;"></iframe>
+            }
+        </div>
+        <div class="col-lg-12">
+            <h3 class="titulo" align="center" style=" background: #C1C1BC; font-weight:bold; font-family:Helvetica">
+                Contrato Plano de Saúde
+            </h3>
+            <br />
+            <br />
+            @if (@ViewBag.nomeArquivo == "")
+            {
+                <a>Nenhum arquivo para exibir</a>
+            }
+            @if (@ViewBag.nomeArquivo != "")
+            {
+                <iframe src="~/Publico/ContratosAssinados/PF/@ViewBag.nomeArquivo" width="100%" style="min-height:800px;"></iframe>
+            }
+        </div>*@
+
+    </div>
+</body>
+</html>

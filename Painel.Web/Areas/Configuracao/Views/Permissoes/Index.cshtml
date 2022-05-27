@@ -1,0 +1,202 @@
+﻿@model List<Painel.Models.Permissao>
+
+@{
+    ViewBag.Title = "Permissões";
+    Layout = "~/Views/Shared/_Servicos.cshtml";
+}
+
+@section css{
+    <link href="~/Contents/css/jquery.tagsinput.min.css" rel="stylesheet" />
+    <link href="~/Contents/plugins/sweetalert/sweetalert2.min.css" rel="stylesheet" />
+    <link href="~/Contents/css/jquery.fancybox.css" rel="stylesheet" />
+    <link href="~/Contents/plugins/datatables/datatables.net-bs/css/dataTables.bootstrap.min.css" rel="stylesheet" />
+}
+
+@section js{
+    <script src="~/Contents/js/jquery.tagsinput.min.js"></script>
+    <script src="~/Contents/plugins/sweetalert/sweetalert2.min.js"></script>
+    <script src="~/Contents/js/jquery.fancybox.js"></script>
+    <script src="~/Contents/plugins/datatables/datatables.net/js/jquery.dataTables.min.js"></script>
+    <script src="~/Contents/plugins/datatables/datatables.net-bs/js/dataTables.bootstrap.min.js"></script>
+    <script>
+        $(function () {
+            var dt = $('#tbl').DataTable({
+                "language": {
+                    "sEmptyTable": "Nenhum registro encontrado",
+                    "sInfo": "Mostrando de _START_ até _END_ de _TOTAL_ registros",
+                    "sInfoEmpty": "Mostrando 0 até 0 de 0 registros",
+                    "sInfoFiltered": "(Filtrados de _MAX_ registros)",
+                    "sInfoPostFix": "",
+                    "sInfoThousands": ".",
+                    "sLengthMenu": "_MENU_ resultados por página",
+                    "sLoadingRecords": "Carregando...",
+                    "sProcessing": "Processando...",
+                    "sZeroRecords": "Nenhum registro encontrado",
+                    "sSearch": "Pesquisar",
+                    "oPaginate": {
+                        "sNext": "Próximo",
+                        "sPrevious": "Anterior",
+                        "sFirst": "Primeiro",
+                        "sLast": "Último"
+                    },
+                    "oAria": {
+                        "sSortAscending": ": Ordenar colunas de forma ascendente",
+                        "sSortDescending": ": Ordenar colunas de forma descendente"
+                    }
+                }
+            });
+
+            $(document).on("click", "[data-click=apagar]", function () {
+                var id = $(this).data("id");
+                if (window.confirm("Deseja mesmo excluir este registro?")) {
+                    $.post("@Url.Action("Apagar", "Permissoes", new { area= "Configuracao" })", { id: id }, function (data) {
+                        if (data) {
+                            swal({
+                                title: "Sucesso",
+                                text: "Excluido com sucesso",
+                                type: "success",
+                                onClose: () => {
+                                    location.reload();
+                                }
+                            });
+                        }
+                        else {
+                            swal("Erro", "Erro ao excluir", "error");
+                        }
+                    });
+                }
+            });
+
+            $(document).on("click", "[data-click=editar]", function () {
+                var id = $(this).data("id");
+
+                $.fancybox({
+                    href: '@Url.Action("Editar", "Permissoes", new { area = "Configuracao" })/'+ id,
+                    type: 'ajax',
+                    afterClose: function () {
+                    }
+                });
+            });
+
+            $(document).on("click", "[data-click=adicionar]", function () {
+                $.fancybox({
+                    href: '@Url.Action("Novo", "Permissoes", new { area = "Configuracao" })',
+                    type: 'ajax',
+                    afterClose: function () {
+                    }
+                });
+            });
+
+            $(document).off("", "form").on("submit", "form", function (e) {
+                e.preventDefault();
+
+                var form = $(this);
+                var container = form.parent();
+
+                $.post(form.attr('action'), form.serialize(), function (data) {
+                    if (data.success) {
+                        swal({
+                            title: "Sucesso",
+                            text: "Cadastrado com sucesso",
+                            type: "success",
+                            onClose: () => {
+                                $.fancybox.close();
+                                location.reload();
+                            }
+                        });
+                    } else {
+                        container.html(data);
+                        $.fancybox.update();
+                    }
+                });
+            });
+        });
+    </script>
+}
+<section class="content-header">
+    <h1>
+        Permissões
+    </h1>
+</section>
+<section class="content">
+    <div class="box">
+        <div class="box-header">
+            @*<div class="row">
+                <div class="col-md-12">
+                    <button data-click="adicionar" class="btn btn-success " type="submit"><i class="fa fa-plus"></i>  Adicionar Permissão</button>
+                    <br /><br />
+                </div>
+            </div>*@
+            <div class="row">
+                <div class="col-md-12">
+                    <table class="table" id="tbl">
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Descrição</th>
+                                <th>Regras</th>
+                                <th>Usuários</th>
+                                @*<th></th>*@
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var item in Model)
+                            {
+                                <tr>
+                                    <td>@item.Id</td>
+                                    <td>
+                                        @item.Descricao
+                                    </td>
+                                    <td>
+                                        @{
+
+                                            if (item.Regras.Contains(Convert.ToChar(",")))
+                                            {
+                                                var regras = item.Regras.Split(Convert.ToChar(","));
+                                                foreach (var r in regras)
+                                                {
+                                                    <span class="badge bg-olive">@r</span>
+                                                }
+                                            }
+                                            else
+                                            {
+                                                <span class="badge bg-olive">@item.Regras</span>
+
+                                            }
+
+                                        }
+
+
+
+
+                                    </td>
+                                    <td>
+                                        @if (item.usuarios == 0)
+                                        {
+                                            <span class="badge bg-gray">não utilizado</span>
+                                        }
+                                        else
+                                        {
+                                            <span class="badge bg-orange">@item.usuarios</span>
+                                        }
+
+
+                                    </td>
+                                    @*<td>
+                                        <button class="btn btn-sm btn-success" data-click="editar" data-id="@item.Id">Editar</button>
+
+                                        @if (item.usuarios == 0)
+                                        {
+                                            <button class="btn btn-sm btn-danger" data-click="apagar" data-id="@item.Id">Apagar</button>
+                                        }
+                                        
+                                    </td>*@
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>

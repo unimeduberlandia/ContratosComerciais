@@ -1,0 +1,315 @@
+﻿@model List<Painel.Models.Contratos.PessoaFisica>
+
+@{
+    ViewBag.Title = "Contratos Pessoa Fisica";
+    Layout = "~/Views/Shared/_Servicos.cshtml";
+}
+@{
+    var hoje = DateTime.Now;
+    var ontem = DateTime.Now;
+}
+
+@section css{
+    <link href="~/Contents/css/jquery.tagsinput.min.css" rel="stylesheet" />
+    <link href="~/Contents/plugins/sweetalert/sweetalert2.min.css" rel="stylesheet" />
+    <link href="~/Contents/css/jquery.fancybox.css" rel="stylesheet" />
+    <link href="~/Contents/plugins/datatables/datatables.net-bs/css/dataTables.bootstrap.min.css" rel="stylesheet" />
+    <link href="~/Contents/plugins/jquery.datetimepicker/jquery.datetimepicker.min.css" rel="stylesheet" />
+    <link href="~/Contents/plugins/wysiwyg/samples/toolbarconfigurator/lib/codemirror/neo.css" rel="stylesheet" />
+}
+
+@section js{
+    <script src="~/Contents/js/jquery.tagsinput.min.js"></script>
+    <script src="~/Contents/plugins/sweetalert/sweetalert2.min.js"></script>
+    <script src="~/Contents/js/jquery.fancybox.js"></script>
+    <script src="https://cdn.ckeditor.com/4.13.0/standard/ckeditor.js"></script>
+    <script src="~/Contents/plugins/jquery.datetimepicker/jquery.datetimepicker.full.min.js"></script>
+    <script src="~/Contents/plugins/datatables/datatables.net/js/jquery.dataTables.min.js"></script>
+    <script src="~/Contents/plugins/datatables/datatables.net-bs/js/dataTables.bootstrap.min.js"></script>
+    <script src="https://cdn.datatables.net/plug-ins/1.10.19/dataRender/datetime.js"></script>
+    <script>
+        $(function () {
+            var dt = $('#tabela').DataTable({
+                //columnDefs: [{
+                //    targets: 6,
+                //    render: $.fn.dataTable.render.moment('DD/MM/YYYY 00:00:00', ' DD/MM/YYYY', 'PT')
+
+                //}],
+                "language": {
+                    "sEmptyTable": "Nenhum registro encontrado",
+                    "sInfo": "Mostrando de _START_ até _END_ de _TOTAL_ registros",
+                    "sInfoEmpty": "Mostrando 0 até 0 de 0 registros",
+                    "sInfoFiltered": "(Filtrados de _MAX_ registros)",
+                    "sInfoPostFix": "",
+                    "sInfoThousands": ".",
+                    "sLengthMenu": "_MENU_ resultados por página",
+                    "sLoadingRecords": "Carregando...",
+                    "sProcessing": "Processando...",
+                    "sZeroRecords": "Nenhum registro encontrado",
+                    "sSearch": "Pesquisar",
+                    "oPaginate": {
+                        "sNext": "Próximo",
+                        "sPrevious": "Anterior",
+                        "sFirst": "Primeiro",
+                        "sLast": "Último"
+                    },
+                    "oAria": {
+                        "sSortAscending": ": Ordenar colunas de forma ascendente",
+                        "sSortDescending": ": Ordenar colunas de forma descendente"
+                    }
+                }
+            });
+            $('[data-toggle="push-menu"]').pushMenu('toggle');
+            $.datetimepicker.setLocale('pt-BR');
+
+            $('.datepicker').mask('00/00/0000').datetimepicker({
+                format: 'd/m/Y',
+                timepicker: false
+            });
+
+            $("#dtInicio").val("@ontem.ToShortDateString()");
+            $("#dtFinal").val("@hoje.ToShortDateString()");
+
+            $(document).on("click", "[data-click=abrir-pdf]", function () {
+                var id = $(this).data("id");
+
+                $.fancybox({
+                    href: '@Url.Action("ContratoPDF", "PessoaFisica", new { area = "Contratos" })/' + id,
+                    type: 'ajax',
+                    maxWidth: 800,
+                    maxHeight: 600,
+                    fitToView: false,
+                    width: '100%',
+                    height: '100%',
+                    autoSize: false,
+                    afterClose: function () {
+                    }
+                });
+            });
+
+            $(document).on("click", "[data-click=envio-email]", function () {
+                var id = $(this).data("id");
+                if (window.confirm("Deseja enviar e-mail com o contrato e termos em PDF?")) {
+                    $.post("@Url.Action("enviaremail","PessoaFisica",new { area= "Contratos" })", { id: id }, function (data) {
+                      if (data == true) {
+                            swal({
+                                title: "Sucesso",
+                                text: "Arquivos enviados com sucesso",
+                                type: "success",
+                                onClose: () => {
+                                    location.reload();
+                                }
+                            });
+                        }
+                        if (data == false) {
+                            swal({
+                                title: "Erro",
+                                text: "Clique em gerar espelho antes de enviar por e-mail",
+                                type: "error",
+                                onClose: () => {
+                                    location.reload();
+                                }
+                            });
+                        }
+                        else {
+                              swal({
+                                title: "Sucesso",
+                                text: "Arquivos enviados com sucesso",
+                                type: "success",
+                                onClose: () => {
+                                    location.reload();
+                                }
+                            });
+                        }
+                    });
+                }
+            });
+
+            $(document).on("click", "[data-click=abrir-opcionais]", function () {
+                var id = $(this).data("id");
+
+                $.fancybox({
+                    href: '@Url.Action("GerarOpcionaisPDF", "PessoaFisica", new { area = "Contratos" })/' + id,
+                    type: 'ajax',
+                    maxWidth: 800,
+                    maxHeight: 600,
+                    fitToView: false,
+                    width: '100%',
+                    height: '100%',
+                    autoSize: false,
+                    afterClose: function () {
+                    }
+                });
+            });
+
+
+            $(document).on("click", "[data-click=atualizar]", function () {
+
+                if ($("#datainicial").val() == null || $("#datainicial").val() == ""
+                    || $("#datafinal").val() == null || $("#datafinal").val() == "") {
+                    alert('Informe a data inicial e data final!');
+                } else {
+
+                    $.fancybox.showLoading();
+                    $.post("@Url.Action("PartialRelatorio", "PessoaFisica", new { area = "Contratos" })",
+                        {
+                            datainicial: $("#datainicial").val(),
+                            datafinal: $("#datafinal").val()
+                        },
+                        function (data) {
+                            $.fancybox.hideLoading();
+                            $("#pnresultado").html(data);
+                            $(".pnresultado").show();
+                        });
+                }
+            });
+
+            $(document).on("click", "[data-click=gerar-contrato]", function () {
+                var id = $(this).data("id");
+
+                $.fancybox.showLoading();
+                $.post("@Url.Action("GerarContratoPDF","PessoaFisica",new { area= "Contratos" })", { id: id }, function (data) {
+
+                });
+
+
+                $.post("@Url.Action("MergePDF","PessoaFisica",new { area= "Contratos" })", { id: id }, function (data) {
+
+                    if (data == true) {
+                        swal({
+                            title: "Sucesso",
+                            text: "Arquivos enviados com sucesso",
+                            type: "success",
+                            onClose: () => {
+                                location.reload();
+                            }
+                        });
+                    }
+                    $.fancybox.hideLoading();
+                });
+
+            });
+
+        });
+    </script>
+}
+<style>
+    .btn-pdf {
+        color: #ffffff;
+        background-color: #979798;
+        /*border: 1px;*/
+        border-color: #ffffff;
+        border-radius: 0px;
+        width: 46%;
+    }
+
+    .btn-editar {
+        color: #ffffff;
+        background-color: #007BB6;
+        /*border: 1px;*/
+        border-color: #ffffff;
+        border-radius: 0px;
+        width: 46%;
+    }
+
+    .btn-opcionais {
+        color: #ffffff;
+        background-color: #c76118;
+        /*border: 1px;*/
+        border-color: #ffffff;
+        border-radius: 0px;
+        width: 46%;
+    }
+
+    .btn-email {
+        color: #ffffff;
+        background-color: #809e72;
+        /*border: 1px;*/
+        border-color: #ffffff;
+        border-radius: 0px;
+        width: 46%;
+    }
+
+    .btn-espelho {
+        color: #ffffff;
+        background-color: #0C0C0C;
+        /*border: 1px;*/
+        border-color: #ffffff;
+        border-radius: 0px;
+        width: 46%;
+    }
+
+        .btn-espelho:hover,
+        .btn-espelho:active,
+        .btn-espelho:focus,
+        .btn-espelho.hover {
+            background-color: #0C0C0C;
+            color: #979798;
+        }
+</style>
+
+<section class="content-header">
+    <h1>
+        Contratos Pessoa Física
+    </h1>
+</section>
+@if (@ViewData["Message"] == null)
+{
+
+}
+else
+{
+    <h4 class="alert alert-success" align="center">@ViewData["Message"]</h4>
+}
+
+
+<section class="content">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="box box-success box-solid">
+                <div class="box-header with-border">
+                    <h3 class="box-title"><i class="fa fa-dashboard"></i> Filtros para Exibição</h3>
+                </div>
+                <div class="box-body">
+                    <div class="col-lg-3">
+                        <div class="input-group date">
+                            <div class="input-group-addon">
+                                <i class="fa fa-calendar"></i>
+                            </div>
+                            <input class="form-control pull-right datepicker" id="datainicial" autocomplete="off" type="text" placeholder="Data Inicial">
+                        </div>
+                    </div>
+                    <div class="col-lg-3">
+                        <div class="input-group date">
+                            <div class="input-group-addon">
+                                <i class="fa fa-calendar"></i>
+                            </div>
+                            <input class="form-control pull-right datepicker" id="datafinal" autocomplete="off" type="text" placeholder="Data Final">
+                        </div>
+                    </div>
+                    <div class="col-lg-1">
+                        <button class="btn btn-primary" data-click="atualizar" id="buttonPesquisar" data-id="buttonPesquisar" data-toggle="tooltip" data-placement="top" title="Buscar">
+                            <i class="fa fa-search"></i> Pesquisar
+                        </button>
+                    </div>
+                    <div class="col-md-3">
+                        <a href="@Url.Action("NovoContrato", "PessoaFisica", new { Area = "Contratos" })" id="acessar" class="btn btn-success "><i class="fa fa-plus"></i> Adicionar Contrato</a>
+                        <br /><br />
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row pnresultado" style="display:none">
+        <div class="col-md-12">
+
+            <div class="box">
+                <div class="box-body">
+                    <div id="pnresultado"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</section>
+

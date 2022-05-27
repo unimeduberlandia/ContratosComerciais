@@ -1,0 +1,39 @@
+﻿@model List<Painel.Models.Contratos.Opcional>
+
+@if (Model != null && Model.Count > 0)
+{
+    <table class="table table-bordered table-striped table-hover" id="pnresultado">
+        <thead>
+            <tr style="background-color:#e8e2e2">
+                <th>Nome</th>
+                <th>Tipo</th>
+                <th>Valor</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>
+                        @item.NOME
+                    </td>
+                    <td>
+                        @item.GRUPO
+                    </td>
+                    <td>
+                        @item.VALOR
+                    </td>
+                    <td>
+                        <button class="btn btn-danger btn-flat" data-guid="@item.guid" data-click="excluir" data-toggle="tooltip" data-placement="top" title="Excluir Opcional"><i class="fa  fa-trash-o"></i></button>
+                    </td>
+
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+else
+{
+    <span style="color:#084c20">Nenhum Adicional cadastrado</span>
+}

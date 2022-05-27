@@ -1,0 +1,632 @@
+﻿@model Painel.Web.Areas.Contratos.Models.CustoExibirViewModel   
+
+
+@using (Html.BeginForm("consultavalor", "PessoaJuridica", FormMethod.Post, new { id = "consultavalorcadastrado" }))
+{
+    @Html.AntiForgeryToken()
+    @Html.HiddenFor(model => model.QNTDEFAIXAS)
+    @Html.HiddenFor(model => model.IDPLANO)
+    @Html.HiddenFor(model => model.guidCustoValor)
+    <div class="col-lg-12">
+        <div row class="pn_faix1">
+            <div class="col-lg-3">
+                @Html.LabelFor(model => model.NOM1)
+                @Html.TextBoxFor(model => model.NOM1, new { @class = "form-control", @readonly = "true" })
+            </div>
+            <div class="col-lg-3">
+                @Html.LabelFor(model => model.QNTDVIDA1)
+                @Html.TextBoxFor(model => model.QNTDVIDA1, new { @class = "form-control", @readonly = "true" })
+            </div>
+            <div class="col-lg-3">
+                @Html.LabelFor(model => model.VALORCUST1)
+                @Html.TextBoxFor(model => model.VALORCUST1, new { @class = "form-control", @readonly = "true" })
+
+            </div>
+            <div class="col-lg-3">
+                @Html.LabelFor(model => model.VALORINDIVIDUA1)
+                @Html.TextBoxFor(model => model.VALORINDIVIDUA1, new { @class = "form-control", @readonly = "true" })
+                <br />
+                <br />
+            </div>
+        </div>
+        <div row class="pn_faix2">
+            <div class="col-lg-3">
+                @Html.LabelFor(model => model.NOM2)
+                @Html.TextBoxFor(model => model.NOM2, new { @class = "form-control", @readonly = "true" })
+            </div>
+            <div class="col-lg-3">
+                @Html.LabelFor(model => model.QNTDVIDA2)
+                @Html.TextBoxFor(model => model.QNTDVIDA2, new { @class = "form-control", @readonly = "true" })
+            </div>
+            <div class="col-lg-3">
+                @Html.LabelFor(model => model.VALORCUST2)
+                @Html.TextBoxFor(model => model.VALORCUST2, new { @class = "form-control", @readonly = "true" })
+
+            </div>
+            <div class="col-lg-3">
+                @Html.LabelFor(model => model.VALORINDIVIDUA2)
+                @Html.TextBoxFor(model => model.VALORINDIVIDUA2, new { @class = "form-control", @readonly = "true" })
+                <br />
+                <br />
+            </div>
+        </div>
+        <div row class="pn_faix3">
+            <div class="col-lg-3">
+                @Html.LabelFor(model => model.NOM3)
+                @Html.TextBoxFor(model => model.NOM3, new { @class = "form-control", @readonly = "true" })
+            </div>
+            <div class="col-lg-3">
+                @Html.LabelFor(model => model.QNTDVIDA3)
+                @Html.TextBoxFor(model => model.QNTDVIDA3, new { @class = "form-control", @readonly = "true" })
+            </div>
+            <div class="col-lg-3">
+                @Html.LabelFor(model => model.VALORCUST3)
+                @Html.TextBoxFor(model => model.VALORCUST3, new { @class = "form-control", @readonly = "true" })
+
+            </div>
+            <div class="col-lg-3">
+                @Html.LabelFor(model => model.VALORINDIVIDUA3)
+                @Html.TextBoxFor(model => model.VALORINDIVIDUA3, new { @class = "form-control", @readonly = "true" })
+                <br />
+                <br />
+            </div>
+        </div>
+        <div row class="pn_faix4">
+            <div class="col-lg-3">
+                @Html.LabelFor(model => model.NOM4)
+                @Html.TextBoxFor(model => model.NOM4, new { @class = "form-control", @readonly = "true" })
+            </div>
+            <div class="col-lg-3">
+                @Html.LabelFor(model => model.QNTDVIDA4)
+                @Html.TextBoxFor(model => model.QNTDVIDA4, new { @class = "form-control", @readonly = "true" })
+            </div>
+            <div class="col-lg-3">
+                @Html.LabelFor(model => model.VALORCUST4)
+                @Html.TextBoxFor(model => model.VALORCUST4, new { @class = "form-control", @readonly = "true" })
+            </div>
+            <div class="col-lg-3">
+                @Html.LabelFor(model => model.VALORINDIVIDUA4)
+                @Html.TextBoxFor(model => model.VALORINDIVIDUA4, new { @class = "form-control", @readonly = "true" })
+                <br />
+                <br />
+            </div>
+        </div>
+        <div row class="pn_faix5">
+            <div class="col-lg-3">
+                @Html.LabelFor(model => model.NOM5)
+                @Html.TextBoxFor(model => model.NOM5, new { @class = "form-control", @readonly = "true" })
+            </div>
+            <div class="col-lg-3">
+                @Html.LabelFor(model => model.QNTDVIDA5)
+                @Html.TextBoxFor(model => model.QNTDVIDA5, new { @class = "form-control", @readonly = "true" })
+            </div>
+            <div class="col-lg-3">
+                @Html.LabelFor(model => model.VALORCUST5)
+                @Html.TextBoxFor(model => model.VALORCUST5, new { @class = "form-control", @readonly = "true" })
+            </div>
+            <div class="col-lg-3">
+                @Html.LabelFor(model => model.VALORINDIVIDUA5)
+                @Html.TextBoxFor(model => model.VALORINDIVIDUA5, new { @class = "form-control", @readonly = "true" })
+                <br />
+                <br />
+            </div>
+        </div>
+        <div row class="pn_faix6">
+            <div class="col-lg-3">
+                @Html.LabelFor(model => model.NOM6)
+                @Html.TextBoxFor(model => model.NOM6, new { @class = "form-control", @readonly = "true" })
+            </div>
+            <div class="col-lg-3">
+                @Html.LabelFor(model => model.QNTDVIDA6)
+                @Html.TextBoxFor(model => model.QNTDVIDA6, new { @class = "form-control", @readonly = "true" })
+            </div>
+            <div class="col-lg-3">
+                @Html.LabelFor(model => model.VALORCUST6)
+                @Html.TextBoxFor(model => model.VALORCUST6, new { @class = "form-control", @readonly = "true" })
+
+            </div>
+            <div class="col-lg-3">
+                @Html.LabelFor(model => model.VALORINDIVIDUA6)
+                @Html.TextBoxFor(model => model.VALORINDIVIDUA6, new { @class = "form-control", @readonly = "true" })
+                <br />
+                <br />
+            </div>
+        </div>
+        <div row class="pn_faix7">
+            <div class="col-lg-3">
+                @Html.LabelFor(model => model.NOM7)
+                @Html.TextBoxFor(model => model.NOM7, new { @class = "form-control", @readonly = "true" })
+            </div>
+            <div class="col-lg-3">
+                @Html.LabelFor(model => model.QNTDVIDA7)
+                @Html.TextBoxFor(model => model.QNTDVIDA7, new { @class = "form-control", @readonly = "true" })
+            </div>
+            <div class="col-lg-3">
+                @Html.LabelFor(model => model.VALORCUST7)
+                @Html.TextBoxFor(model => model.VALORCUST7, new { @class = "form-control", @readonly = "true" })
+
+            </div>
+            <div class="col-lg-3">
+                @Html.LabelFor(model => model.VALORINDIVIDUA7)
+                @Html.TextBoxFor(model => model.VALORINDIVIDUA7, new { @class = "form-control", @readonly = "true" })
+                <br />
+                <br />
+            </div>
+        </div>
+        <div row class="pn_faix8">
+            <div class="col-lg-3">
+                @Html.LabelFor(model => model.NOM8)
+                @Html.TextBoxFor(model => model.NOM8, new { @class = "form-control", @readonly = "true" })
+            </div>
+            <div class="col-lg-3">
+                @Html.LabelFor(model => model.QNTDVIDA8)
+                @Html.TextBoxFor(model => model.QNTDVIDA8, new { @class = "form-control", @readonly = "true" })
+            </div>
+            <div class="col-lg-3">
+                @Html.LabelFor(model => model.VALORCUST8)
+                @Html.TextBoxFor(model => model.VALORCUST8, new { @class = "form-control", @readonly = "true" })
+
+            </div>
+            <div class="col-lg-3">
+                @Html.LabelFor(model => model.VALORINDIVIDUA8)
+                @Html.TextBoxFor(model => model.VALORINDIVIDUA8, new { @class = "form-control", @readonly = "true" })
+                <br />
+                <br />
+            </div>
+        </div>
+        <div row class="pn_faix9">
+            <div class="col-lg-3">
+                @Html.LabelFor(model => model.NOM9)
+                @Html.TextBoxFor(model => model.NOM9, new { @class = "form-control", @readonly = "true" })
+            </div>
+            <div class="col-lg-3">
+                @Html.LabelFor(model => model.QNTDVIDA9)
+                @Html.TextBoxFor(model => model.QNTDVIDA9, new { @class = "form-control", @readonly = "true" })
+            </div>
+            <div class="col-lg-3">
+                @Html.LabelFor(model => model.VALORCUST9)
+                @Html.TextBoxFor(model => model.VALORCUST9, new { @class = "form-control", @readonly = "true" })
+            </div>
+            <div class="col-lg-3">
+                @Html.LabelFor(model => model.VALORINDIVIDUA9)
+                @Html.TextBoxFor(model => model.VALORINDIVIDUA9, new { @class = "form-control", @readonly = "true" })
+                <br />
+                <br />
+            </div>
+        </div>
+
+        <div row class="pn_faix10">
+            <div class="col-lg-3">
+                @Html.LabelFor(model => model.NOM10)
+                @Html.TextBoxFor(model => model.NOM10, new { @class = "form-control", @readonly = "true" })
+            </div>
+            <div class="col-lg-3">
+                @Html.LabelFor(model => model.QNTDVIDA10)
+                @Html.TextBoxFor(model => model.QNTDVIDA10, new { @class = "form-control", @readonly = "true" })
+            </div>
+            <div class="col-lg-3">
+                @Html.LabelFor(model => model.VALORCUST10)
+                @Html.TextBoxFor(model => model.VALORCUST10, new { @class = "form-control", @readonly = "true" })
+
+            </div>
+            <div class="col-lg-3">
+                @Html.LabelFor(model => model.VALORINDIVIDUA10)
+                @Html.TextBoxFor(model => model.VALORINDIVIDUA10, new { @class = "form-control", @readonly = "true" })
+                <br />
+                <br />
+            </div>
+        </div>
+        <div row class="pn_faix11">
+            <div class="col-lg-3">
+                @Html.LabelFor(model => model.NOM11)
+                @Html.TextBoxFor(model => model.NOM11, new { @class = "form-control", @readonly = "true" })
+            </div>
+            <div class="col-lg-3">
+                @Html.LabelFor(model => model.QNTDVIDA11)
+                @Html.TextBoxFor(model => model.QNTDVIDA11, new { @class = "form-control", @readonly = "true" })
+            </div>
+            <div class="col-lg-3">
+                @Html.LabelFor(model => model.VALORCUST11)
+                @Html.TextBoxFor(model => model.VALORCUST11, new { @class = "form-control", @readonly = "true" })
+
+            </div>
+            <div class="col-lg-3">
+                @Html.LabelFor(model => model.VALORINDIVIDUA11)
+                @Html.TextBoxFor(model => model.VALORINDIVIDUA11, new { @class = "form-control", @readonly = "true" })
+                <br />
+                <br />
+            </div>
+        </div>
+        <div row class="pn_faix12">
+            <div class="col-lg-3">
+                @Html.LabelFor(model => model.NOM12)
+                @Html.TextBoxFor(model => model.NOM12, new { @class = "form-control", @readonly = "true" })
+            </div>
+            <div class="col-lg-3">
+                @Html.LabelFor(model => model.QNTDVIDA12)
+                @Html.TextBoxFor(model => model.QNTDVIDA12, new { @class = "form-control", @readonly = "true" })
+            </div>
+            <div class="col-lg-3">
+                @Html.LabelFor(model => model.VALORCUST12)
+                @Html.TextBoxFor(model => model.VALORCUST12, new { @class = "form-control", @readonly = "true" })
+            </div>
+            <div class="col-lg-3">
+                @Html.LabelFor(model => model.VALORINDIVIDUA12)
+                @Html.TextBoxFor(model => model.VALORINDIVIDUA12, new { @class = "form-control", @readonly = "true" })
+                <br />
+                <br />
+            </div>
+        </div>
+        <div row class="pn_faix13">
+            <div class="col-lg-3">
+                @Html.LabelFor(model => model.NOM13)
+                @Html.TextBoxFor(model => model.NOM13, new { @class = "form-control", @readonly = "true" })
+            </div>
+            <div class="col-lg-3">
+                @Html.LabelFor(model => model.QNTDVIDA13)
+                @Html.TextBoxFor(model => model.QNTDVIDA13, new { @class = "form-control", @readonly = "true" })
+            </div>
+            <div class="col-lg-3">
+                @Html.LabelFor(model => model.VALORCUST13)
+                @Html.TextBoxFor(model => model.VALORCUST13, new { @class = "form-control", @readonly = "true" })
+
+            </div>
+            <div class="col-lg-3">
+                @Html.LabelFor(model => model.VALORINDIVIDUA13)
+                @Html.TextBoxFor(model => model.VALORINDIVIDUA13, new { @class = "form-control", @readonly = "true" })
+                <br />
+                <br />
+            </div>
+        </div>
+        <div row class="pn_faix14">
+            <div class="col-lg-3">
+                @Html.LabelFor(model => model.NOM14)
+                @Html.TextBoxFor(model => model.NOM14, new { @class = "form-control", @readonly = "true" })
+            </div>
+            <div class="col-lg-3">
+                @Html.LabelFor(model => model.QNTDVIDA14)
+                @Html.TextBoxFor(model => model.QNTDVIDA14, new { @class = "form-control", @readonly = "true" })
+            </div>
+            <div class="col-lg-3">
+                @Html.LabelFor(model => model.VALORCUST14)
+                @Html.TextBoxFor(model => model.VALORCUST14, new { @class = "form-control", @readonly = "true" })
+
+            </div>
+            <div class="col-lg-3">
+                @Html.LabelFor(model => model.VALORINDIVIDUA14)
+                @Html.TextBoxFor(model => model.VALORINDIVIDUA14, new { @class = "form-control", @readonly = "true" })
+                <br />
+                <br />
+            </div>
+        </div>
+        <div row class="pn_faix15">
+            <div class="col-lg-3">
+                @Html.LabelFor(model => model.NOM15)
+                @Html.TextBoxFor(model => model.NOM15, new { @class = "form-control", @readonly = "true" })
+            </div>
+            <div class="col-lg-3">
+                @Html.LabelFor(model => model.QNTDVIDA15)
+                @Html.TextBoxFor(model => model.QNTDVIDA15, new { @class = "form-control", @readonly = "true" })
+            </div>
+            <div class="col-lg-3">
+                @Html.LabelFor(model => model.VALORCUST15)
+                @Html.TextBoxFor(model => model.VALORCUST15, new { @class = "form-control" , @readonly = "true" })
+
+            </div>
+            <div class="col-lg-3">
+                @Html.LabelFor(model => model.VALORINDIVIDUA15)
+                @Html.TextBoxFor(model => model.VALORINDIVIDUA15, new { @class = "form-control", @readonly = "true" })
+                <br />
+                <br />
+            </div>
+        </div>
+    </div>
+    <div row class="pn_faix16">
+        <span style="color:#084c20">Nenhum custo cadastrado</span>
+    </div>
+
+}
+
+<script>
+    if (window.jQuery) {
+        $(function () {
+           
+             var faixas = $("#QNTDEFAIXAS").val();
+
+            if (faixas == "0") {
+                $(".pn_faix1").fadeOut('fast');
+                $(".pn_faix2").fadeOut('fast');
+                $(".pn_faix3").fadeOut('fast');
+                $(".pn_faix4").fadeOut('fast');
+                $(".pn_faix5").fadeOut('fast');
+                $(".pn_faix6").fadeOut('fast');
+                $(".pn_faix7").fadeOut('fast');
+                $(".pn_faix8").fadeOut('fast');
+                $(".pn_faix9").fadeOut('fast');
+                $(".pn_faix10").fadeOut('fast');
+                $(".pn_faix11").fadeOut('fast');
+                $(".pn_faix12").fadeOut('fast');
+                $(".pn_faix13").fadeOut('fast');
+                $(".pn_faix14").fadeOut('fast');
+                $(".pn_faix15").fadeOut('fast');
+                $(".pn_faix16").fadeIn('fast');
+            }
+
+            if (faixas == "1") {
+                $(".pn_faix1").fadeIn('fast');
+                $(".pn_faix2").fadeOut('fast');
+                $(".pn_faix3").fadeOut('fast');
+                $(".pn_faix4").fadeOut('fast');
+                $(".pn_faix5").fadeOut('fast');
+                $(".pn_faix6").fadeOut('fast');
+                $(".pn_faix7").fadeOut('fast');
+                $(".pn_faix8").fadeOut('fast');
+                $(".pn_faix9").fadeOut('fast');
+                $(".pn_faix10").fadeOut('fast');
+                $(".pn_faix11").fadeOut('fast');
+                $(".pn_faix12").fadeOut('fast');
+                $(".pn_faix13").fadeOut('fast');
+                $(".pn_faix14").fadeOut('fast');
+                $(".pn_faix15").fadeOut('fast');
+                $(".pn_faix16").fadeOut('fast');
+            }
+            if (faixas == "2") {
+                $(".pn_faix1").fadeIn('fast');
+                $(".pn_faix2").fadeIn('fast');
+                $(".pn_faix3").fadeOut('fast');
+                $(".pn_faix4").fadeOut('fast');
+                $(".pn_faix5").fadeOut('fast');
+                $(".pn_faix6").fadeOut('fast');
+                $(".pn_faix7").fadeOut('fast');
+                $(".pn_faix8").fadeOut('fast');
+                $(".pn_faix9").fadeOut('fast');
+                $(".pn_faix10").fadeOut('fast');
+                $(".pn_faix11").fadeOut('fast');
+                $(".pn_faix12").fadeOut('fast');
+                $(".pn_faix13").fadeOut('fast');
+                $(".pn_faix14").fadeOut('fast');
+                $(".pn_faix15").fadeOut('fast');
+                $(".pn_faix16").fadeOut('fast');
+            }
+            if (faixas == "3") {
+                $(".pn_faix1").fadeIn('fast');
+                $(".pn_faix2").fadeIn('fast');
+                $(".pn_faix3").fadeIn('fast');
+                $(".pn_faix4").fadeOut('fast');
+                $(".pn_faix5").fadeOut('fast');
+                $(".pn_faix6").fadeOut('fast');
+                $(".pn_faix7").fadeOut('fast');
+                $(".pn_faix8").fadeOut('fast');
+                $(".pn_faix9").fadeOut('fast');
+                $(".pn_faix10").fadeOut('fast');
+                $(".pn_faix11").fadeOut('fast');
+                $(".pn_faix12").fadeOut('fast');
+                $(".pn_faix13").fadeOut('fast');
+                $(".pn_faix14").fadeOut('fast');
+                $(".pn_faix15").fadeOut('fast');
+                $(".pn_faix16").fadeOut('fast');
+            }
+            if (faixas == "4") {
+                $(".pn_faix1").fadeIn('fast');
+                $(".pn_faix2").fadeIn('fast');
+                $(".pn_faix3").fadeIn('fast');
+                $(".pn_faix4").fadeIn('fast');
+                $(".pn_faix5").fadeOut('fast');
+                $(".pn_faix6").fadeOut('fast');
+                $(".pn_faix7").fadeOut('fast');
+                $(".pn_faix8").fadeOut('fast');
+                $(".pn_faix9").fadeOut('fast');
+                $(".pn_faix10").fadeOut('fast');
+                $(".pn_faix11").fadeOut('fast');
+                $(".pn_faix12").fadeOut('fast');
+                $(".pn_faix13").fadeOut('fast');
+                $(".pn_faix14").fadeOut('fast');
+                $(".pn_faix15").fadeOut('fast');
+                $(".pn_faix16").fadeOut('fast');
+            }
+            if (faixas == "5") {
+                $(".pn_faix1").fadeIn('fast');
+                $(".pn_faix2").fadeIn('fast');
+                $(".pn_faix3").fadeIn('fast');
+                $(".pn_faix4").fadeIn('fast');
+                $(".pn_faix5").fadeIn('fast');
+                $(".pn_faix6").fadeOut('fast');
+                $(".pn_faix7").fadeOut('fast');
+                $(".pn_faix8").fadeOut('fast');
+                $(".pn_faix9").fadeOut('fast');
+                $(".pn_faix10").fadeOut('fast');
+                $(".pn_faix11").fadeOut('fast');
+                $(".pn_faix12").fadeOut('fast');
+                $(".pn_faix13").fadeOut('fast');
+                $(".pn_faix14").fadeOut('fast');
+                $(".pn_faix15").fadeOut('fast');
+                $(".pn_faix16").fadeOut('fast');
+            }
+            if (faixas == "6") {
+                $(".pn_faix1").fadeIn('fast');
+                $(".pn_faix2").fadeIn('fast');
+                $(".pn_faix3").fadeIn('fast');
+                $(".pn_faix4").fadeIn('fast');
+                $(".pn_faix5").fadeIn('fast');
+                $(".pn_faix6").fadeIn('fast');
+                $(".pn_faix7").fadeOut('fast');
+                $(".pn_faix8").fadeOut('fast');
+                $(".pn_faix9").fadeOut('fast');
+                $(".pn_faix10").fadeOut('fast');
+                $(".pn_faix11").fadeOut('fast');
+                $(".pn_faix12").fadeOut('fast');
+                $(".pn_faix13").fadeOut('fast');
+                $(".pn_faix14").fadeOut('fast');
+                $(".pn_faix15").fadeOut('fast');
+                $(".pn_faix16").fadeOut('fast');
+            }
+            if (faixas == "7") {
+                $(".pn_faix1").fadeIn('fast');
+                $(".pn_faix2").fadeIn('fast');
+                $(".pn_faix3").fadeIn('fast');
+                $(".pn_faix4").fadeIn('fast');
+                $(".pn_faix5").fadeIn('fast');
+                $(".pn_faix6").fadeIn('fast');
+                $(".pn_faix7").fadeIn('fast');
+                $(".pn_faix8").fadeOut('fast');
+                $(".pn_faix9").fadeOut('fast');
+                $(".pn_faix10").fadeOut('fast');
+                $(".pn_faix11").fadeOut('fast');
+                $(".pn_faix12").fadeOut('fast');
+                $(".pn_faix13").fadeOut('fast');
+                $(".pn_faix14").fadeOut('fast');
+                $(".pn_faix15").fadeOut('fast');
+                $(".pn_faix16").fadeOut('fast');
+            }
+            if (faixas == "8") {
+                $(".pn_faix1").fadeIn('fast');
+                $(".pn_faix2").fadeIn('fast');
+                $(".pn_faix3").fadeIn('fast');
+                $(".pn_faix4").fadeIn('fast');
+                $(".pn_faix5").fadeIn('fast');
+                $(".pn_faix6").fadeIn('fast');
+                $(".pn_faix7").fadeIn('fast');
+                $(".pn_faix8").fadeIn('fast');
+                $(".pn_faix9").fadeOut('fast');
+                $(".pn_faix10").fadeOut('fast');
+                $(".pn_faix11").fadeOut('fast');
+                $(".pn_faix12").fadeOut('fast');
+                $(".pn_faix13").fadeOut('fast');
+                $(".pn_faix14").fadeOut('fast');
+                $(".pn_faix15").fadeOut('fast');
+                $(".pn_faix16").fadeOut('fast');
+            }
+            if (faixas == "9") {
+                $(".pn_faix1").fadeIn('fast');
+                $(".pn_faix2").fadeIn('fast');
+                $(".pn_faix3").fadeIn('fast');
+                $(".pn_faix4").fadeIn('fast');
+                $(".pn_faix5").fadeIn('fast');
+                $(".pn_faix6").fadeIn('fast');
+                $(".pn_faix7").fadeIn('fast');
+                $(".pn_faix8").fadeIn('fast');
+                $(".pn_faix9").fadeIn('fast');
+                $(".pn_faix10").fadeOut('fast');
+                $(".pn_faix11").fadeOut('fast');
+                $(".pn_faix12").fadeOut('fast');
+                $(".pn_faix13").fadeOut('fast');
+                $(".pn_faix14").fadeOut('fast');
+                $(".pn_faix15").fadeOut('fast');
+                $(".pn_faix16").fadeOut('fast');
+            }
+            if (faixas == "10") {
+                $(".pn_faix1").fadeIn('fast');
+                $(".pn_faix2").fadeIn('fast');
+                $(".pn_faix3").fadeIn('fast');
+                $(".pn_faix4").fadeIn('fast');
+                $(".pn_faix5").fadeIn('fast');
+                $(".pn_faix6").fadeIn('fast');
+                $(".pn_faix7").fadeIn('fast');
+                $(".pn_faix8").fadeIn('fast');
+                $(".pn_faix9").fadeIn('fast');
+                $(".pn_faix10").fadeIn('fast');
+                $(".pn_faix11").fadeOut('fast');
+                $(".pn_faix12").fadeOut('fast');
+                $(".pn_faix13").fadeOut('fast');
+                $(".pn_faix14").fadeOut('fast');
+                $(".pn_faix15").fadeOut('fast');
+                $(".pn_faix16").fadeOut('fast');
+            }
+            if (faixas == "11") {
+                $(".pn_faix1").fadeIn('fast');
+                $(".pn_faix2").fadeIn('fast');
+                $(".pn_faix3").fadeIn('fast');
+                $(".pn_faix4").fadeIn('fast');
+                $(".pn_faix5").fadeIn('fast');
+                $(".pn_faix6").fadeIn('fast');
+                $(".pn_faix7").fadeIn('fast');
+                $(".pn_faix8").fadeIn('fast');
+                $(".pn_faix9").fadeIn('fast');
+                $(".pn_faix10").fadeIn('fast');
+                $(".pn_faix11").fadeIn('fast');
+                $(".pn_faix12").fadeOut('fast');
+                $(".pn_faix13").fadeOut('fast');
+                $(".pn_faix14").fadeOut('fast');
+                $(".pn_faix15").fadeOut('fast');
+                $(".pn_faix16").fadeOut('fast');
+            }
+            if (faixas == "12") {
+                $(".pn_faix1").fadeIn('fast');
+                $(".pn_faix2").fadeIn('fast');
+                $(".pn_faix3").fadeIn('fast');
+                $(".pn_faix4").fadeIn('fast');
+                $(".pn_faix5").fadeIn('fast');
+                $(".pn_faix6").fadeIn('fast');
+                $(".pn_faix7").fadeIn('fast');
+                $(".pn_faix8").fadeIn('fast');
+                $(".pn_faix9").fadeIn('fast');
+                $(".pn_faix10").fadeIn('fast');
+                $(".pn_faix11").fadeIn('fast');
+                $(".pn_faix12").fadeIn('fast');
+                $(".pn_faix13").fadeOut('fast');
+                $(".pn_faix14").fadeOut('fast');
+                $(".pn_faix15").fadeOut('fast');
+                $(".pn_faix16").fadeOut('fast');
+            }
+
+            if (faixas == "13") {
+                $(".pn_faix1").fadeIn('fast');
+                $(".pn_faix2").fadeIn('fast');
+                $(".pn_faix3").fadeIn('fast');
+                $(".pn_faix4").fadeIn('fast');
+                $(".pn_faix5").fadeIn('fast');
+                $(".pn_faix6").fadeIn('fast');
+                $(".pn_faix7").fadeIn('fast');
+                $(".pn_faix8").fadeIn('fast');
+                $(".pn_faix9").fadeIn('fast');
+                $(".pn_faix10").fadeIn('fast');
+                $(".pn_faix11").fadeIn('fast');
+                $(".pn_faix12").fadeIn('fast');
+                $(".pn_faix13").fadeIn('fast');
+                $(".pn_faix14").fadeOut('fast');
+                $(".pn_faix15").fadeOut('fast');
+                $(".pn_faix16").fadeOut('fast');
+            }
+
+            if (faixas == "14") {
+                $(".pn_faix1").fadeIn('fast');
+                $(".pn_faix2").fadeIn('fast');
+                $(".pn_faix3").fadeIn('fast');
+                $(".pn_faix4").fadeIn('fast');
+                $(".pn_faix5").fadeIn('fast');
+                $(".pn_faix6").fadeIn('fast');
+                $(".pn_faix7").fadeIn('fast');
+                $(".pn_faix8").fadeIn('fast');
+                $(".pn_faix9").fadeIn('fast');
+                $(".pn_faix10").fadeIn('fast');
+                $(".pn_faix11").fadeIn('fast');
+                $(".pn_faix12").fadeIn('fast');
+                $(".pn_faix13").fadeIn('fast');
+                $(".pn_faix14").fadeIn('fast');
+                $(".pn_faix15").fadeOut('fast');
+                $(".pn_faix16").fadeOut('fast');
+            }
+
+            if (faixas == "15") {
+                $(".pn_faix1").fadeIn('fast');
+                $(".pn_faix2").fadeIn('fast');
+                $(".pn_faix3").fadeIn('fast');
+                $(".pn_faix4").fadeIn('fast');
+                $(".pn_faix5").fadeIn('fast');
+                $(".pn_faix6").fadeIn('fast');
+                $(".pn_faix7").fadeIn('fast');
+                $(".pn_faix8").fadeIn('fast');
+                $(".pn_faix9").fadeIn('fast');
+                $(".pn_faix10").fadeIn('fast');
+                $(".pn_faix11").fadeIn('fast');
+                $(".pn_faix12").fadeIn('fast');
+                $(".pn_faix13").fadeIn('fast');
+                $(".pn_faix14").fadeIn('fast');
+                $(".pn_faix15").fadeIn('fast');
+                $(".pn_faix16").fadeOut('fast');
+            }
+
+
+        });
+    }
+</script>

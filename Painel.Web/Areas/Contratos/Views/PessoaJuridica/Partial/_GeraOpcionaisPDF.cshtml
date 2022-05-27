@@ -1,0 +1,435 @@
+﻿@model Painel.Models.Contratos.PDFPessoaJuridica
+
+@{
+    ViewBag.Title = "Visualizar Contrato";
+}
+<!DOCTYPE html>
+<html>
+<head>
+
+</head>
+
+
+<body>
+    <h3 class="titulo" align="center" style=" background: #C1C1BC; font-weight:bold; font-family:Helvetica">
+        Opcionais
+    </h3>
+    <br />
+    @if (Model.QNTOPCIONAIS == 0)
+    {
+        <div class="row">
+            <h3>&nbsp &nbsp Nenhum Opcional para exibir</h3>
+        </div>
+    }
+    @if (Model.QNTOPCIONAIS == 1)
+    {
+        <div class="row">
+            <iframe src="~/Publico/ContratosAdicionais/@ViewBag.arquivo1" width="100%" style="min-height:800px;"></iframe>
+        </div>
+    }
+    @if (Model.QNTOPCIONAIS == 2)
+    {
+        <div class="row">
+            <iframe src="~/Publico/ContratosAdicionais/@ViewBag.arquivo1" width="100%" style="min-height:800px;"></iframe>
+        </div>
+        <br />
+        <br />
+        <div class="row">
+            <iframe src="~/Publico/ContratosAdicionais/@ViewBag.arquivo2" width="100%" style="min-height:800px;"></iframe>
+        </div>
+    }
+    @if (Model.QNTOPCIONAIS == 3)
+    {
+        <div class="row">
+            <iframe src="~/Publico/ContratosAdicionais/@ViewBag.arquivo1" width="100%" style="min-height:800px;"></iframe>
+        </div>
+        <br />
+        <br />
+        <div class="row">
+            <iframe src="~/Publico/ContratosAdicionais/@ViewBag.arquivo2" width="100%" style="min-height:800px;"></iframe>
+        </div>
+        <br />
+        <br />
+        <div class="row">
+            <iframe src="~/Publico/ContratosAdicionais/@ViewBag.arquivo3" width="100%" style="min-height:800px;"></iframe>
+        </div>
+    }
+    @if (Model.QNTOPCIONAIS == 4)
+    {
+        <div class="row">
+            <iframe src="~/Publico/ContratosAdicionais/@ViewBag.arquivo1" width="100%" style="min-height:800px;"></iframe>
+        </div>
+        <br />
+        <br />
+        <div class="row">
+            <iframe src="~/Publico/ContratosAdicionais/@ViewBag.arquivo2" width="100%" style="min-height:800px;"></iframe>
+        </div>
+        <br />
+        <br />
+        <div class="row">
+            <iframe src="~/Publico/ContratosAdicionais/@ViewBag.arquivo3" width="100%" style="min-height:800px;"></iframe>
+        </div>
+        <br />
+        <br />
+        <div class="row">
+            <iframe src="~/Publico/ContratosAdicionais/@ViewBag.arquivo4" width="100%" style="min-height:800px;"></iframe>
+        </div>
+    }
+    @if (Model.QNTOPCIONAIS == 5)
+    {
+        <div class="row">
+            <iframe src="~/Publico/ContratosAdicionais/@ViewBag.arquivo1" width="100%" style="min-height:800px;"></iframe>
+        </div>
+        <br />
+        <br />
+        <div class="row">
+            <iframe src="~/Publico/ContratosAdicionais/@ViewBag.arquivo2" width="100%" style="min-height:800px;"></iframe>
+        </div>
+        <br />
+        <br />
+        <div class="row">
+            <iframe src="~/Publico/ContratosAdicionais/@ViewBag.arquivo3" width="100%" style="min-height:800px;"></iframe>
+        </div>
+        <br />
+        <br />
+        <div class="row">
+            <iframe src="~/Publico/ContratosAdicionais/@ViewBag.arquivo4" width="100%" style="min-height:800px;"></iframe>
+        </div>
+        <br />
+        <br />
+        <div class="row">
+            <iframe src="~/Publico/ContratosAdicionais/@ViewBag.arquivo5" width="100%" style="min-height:800px;"></iframe>
+        </div>
+    }
+    @if (Model.QNTOPCIONAIS == 6)
+    {
+        <div class="row">
+            <iframe src="~/Publico/ContratosAdicionais/@ViewBag.arquivo1" width="100%" style="min-height:800px;"></iframe>
+        </div>
+        <br />
+        <br />
+        <div class="row">
+            <iframe src="~/Publico/ContratosAdicionais/@ViewBag.arquivo2" width="100%" style="min-height:800px;"></iframe>
+        </div>
+        <br />
+        <br />
+        <div class="row">
+            <iframe src="~/Publico/ContratosAdicionais/@ViewBag.arquivo3" width="100%" style="min-height:800px;"></iframe>
+        </div>
+        <br />
+        <br />
+        <div class="row">
+            <iframe src="~/Publico/ContratosAdicionais/@ViewBag.arquivo4" width="100%" style="min-height:800px;"></iframe>
+        </div>
+        <br />
+        <br />
+        <div class="row">
+            <iframe src="~/Publico/ContratosAdicionais/@ViewBag.arquivo5" width="100%" style="min-height:800px;"></iframe>
+        </div>
+        <br />
+        <br />
+        <div class="row">
+            <iframe src="~/Publico/ContratosAdicionais/@ViewBag.arquivo6" width="100%" style="min-height:800px;"></iframe>
+        </div>
+    }
+    <br />
+    <h3 class="titulo" align="center" style=" background: #C1C1BC; font-weight:bold; font-family:Helvetica">
+        Termos
+    </h3>
+    <br />
+    @if (Model.QNTDTERMOS == 0 || Model.QNTDTERMOS > 10)
+    {
+        <div class="row">
+            <h3>&nbsp &nbsp Nenhum termo para exibir</h3>
+        </div>
+    }
+    @if (Model.QNTDTERMOS == 1)
+    {
+        <div class="row">
+            <iframe src="~/Publico/TermosContratuais/@ViewBag.termo1" width="100%" style="min-height:800px;"></iframe>
+        </div>
+    }
+    @if (Model.QNTDTERMOS == 2)
+    {
+        <div class="row">
+            <iframe src="~/Publico/TermosContratuais/@ViewBag.termo1" width="100%" style="min-height:800px;"></iframe>
+        </div>
+        <br />
+        <br />
+        <div class="row">
+            <iframe src="~/Publico/TermosContratuais/@ViewBag.termo2" width="100%" style="min-height:800px;"></iframe>
+        </div>
+    }
+    @if (Model.QNTDTERMOS == 3)
+    {
+        <div class="row">
+            <iframe src="~/Publico/TermosContratuais/@ViewBag.termo1" width="100%" style="min-height:800px;"></iframe>
+        </div>
+        <br />
+        <br />
+        <div class="row">
+            <iframe src="~/Publico/TermosContratuais/@ViewBag.termo2" width="100%" style="min-height:800px;"></iframe>
+        </div>
+        <br />
+        <br />
+        <div class="row">
+            <iframe src="~/Publico/TermosContratuais/@ViewBag.termo3" width="100%" style="min-height:800px;"></iframe>
+        </div>
+    }
+
+    @if (Model.QNTDTERMOS == 4)
+    {
+        <div class="row">
+            <iframe src="~/Publico/TermosContratuais/@ViewBag.termo1" width="100%" style="min-height:800px;"></iframe>
+        </div>
+        <br />
+        <br />
+        <div class="row">
+            <iframe src="~/Publico/TermosContratuais/@ViewBag.termo2" width="100%" style="min-height:800px;"></iframe>
+        </div>
+        <br />
+        <br />
+        <div class="row">
+            <iframe src="~/Publico/TermosContratuais/@ViewBag.termo3" width="100%" style="min-height:800px;"></iframe>
+        </div>
+        <br />
+        <br />
+        <div class="row">
+            <iframe src="~/Publico/TermosContratuais/@ViewBag.termo4" width="100%" style="min-height:800px;"></iframe>
+        </div>
+    }
+
+    @if (Model.QNTDTERMOS == 5)
+    {
+        <div class="row">
+            <iframe src="~/Publico/TermosContratuais/@ViewBag.termo1" width="100%" style="min-height:800px;"></iframe>
+        </div>
+        <br />
+        <br />
+        <div class="row">
+            <iframe src="~/Publico/TermosContratuais/@ViewBag.termo2" width="100%" style="min-height:800px;"></iframe>
+        </div>
+        <br />
+        <br />
+        <div class="row">
+            <iframe src="~/Publico/TermosContratuais/@ViewBag.termo3" width="100%" style="min-height:800px;"></iframe>
+        </div>
+        <br />
+        <br />
+        <div class="row">
+            <iframe src="~/Publico/TermosContratuais/@ViewBag.termo4" width="100%" style="min-height:800px;"></iframe>
+        </div>
+        <br />
+        <br />
+        <div class="row">
+            <iframe src="~/Publico/TermosContratuais/@ViewBag.termo5" width="100%" style="min-height:800px;"></iframe>
+        </div>
+    }
+    @if (Model.QNTDTERMOS == 6)
+    {
+        <div class="row">
+            <iframe src="~/Publico/TermosContratuais/@ViewBag.termo1" width="100%" style="min-height:800px;"></iframe>
+        </div>
+        <br />
+        <br />
+        <div class="row">
+            <iframe src="~/Publico/TermosContratuais/@ViewBag.termo2" width="100%" style="min-height:800px;"></iframe>
+        </div>
+        <br />
+        <br />
+        <div class="row">
+            <iframe src="~/Publico/TermosContratuais/@ViewBag.termo3" width="100%" style="min-height:800px;"></iframe>
+        </div>
+        <br />
+        <br />
+        <div class="row">
+            <iframe src="~/Publico/TermosContratuais/@ViewBag.termo4" width="100%" style="min-height:800px;"></iframe>
+        </div>
+        <br />
+        <br />
+        <div class="row">
+            <iframe src="~/Publico/TermosContratuais/@ViewBag.termo5" width="100%" style="min-height:800px;"></iframe>
+        </div>
+        <br />
+        <br />
+        <div class="row">
+            <iframe src="~/Publico/TermosContratuais/@ViewBag.termo6" width="100%" style="min-height:800px;"></iframe>
+        </div>
+    }
+    @if (Model.QNTDTERMOS == 7)
+    {
+        <div class="row">
+            <iframe src="~/Publico/TermosContratuais/@ViewBag.termo1" width="100%" style="min-height:800px;"></iframe>
+        </div>
+        <br />
+        <br />
+        <div class="row">
+            <iframe src="~/Publico/TermosContratuais/@ViewBag.termo2" width="100%" style="min-height:800px;"></iframe>
+        </div>
+        <br />
+        <br />
+        <div class="row">
+            <iframe src="~/Publico/TermosContratuais/@ViewBag.termo3" width="100%" style="min-height:800px;"></iframe>
+        </div>
+        <br />
+        <br />
+        <div class="row">
+            <iframe src="~/Publico/TermosContratuais/@ViewBag.termo4" width="100%" style="min-height:800px;"></iframe>
+        </div>
+        <br />
+        <br />
+        <div class="row">
+            <iframe src="~/Publico/TermosContratuais/@ViewBag.termo5" width="100%" style="min-height:800px;"></iframe>
+        </div>
+        <br />
+        <br />
+        <div class="row">
+            <iframe src="~/Publico/TermosContratuais/@ViewBag.termo6" width="100%" style="min-height:800px;"></iframe>
+        </div>
+        <br />
+        <br />
+        <div class="row">
+            <iframe src="~/Publico/TermosContratuais/@ViewBag.termo7" width="100%" style="min-height:800px;"></iframe>
+        </div>
+    }
+    @if (Model.QNTDTERMOS == 8)
+    {
+        <div class="row">
+            <iframe src="~/Publico/TermosContratuais/@ViewBag.termo1" width="100%" style="min-height:800px;"></iframe>
+        </div>
+        <br />
+        <br />
+        <div class="row">
+            <iframe src="~/Publico/TermosContratuais/@ViewBag.termo2" width="100%" style="min-height:800px;"></iframe>
+        </div>
+        <br />
+        <br />
+        <div class="row">
+            <iframe src="~/Publico/TermosContratuais/@ViewBag.termo3" width="100%" style="min-height:800px;"></iframe>
+        </div>
+        <br />
+        <br />
+        <div class="row">
+            <iframe src="~/Publico/TermosContratuais/@ViewBag.termo4" width="100%" style="min-height:800px;"></iframe>
+        </div>
+        <br />
+        <br />
+        <div class="row">
+            <iframe src="~/Publico/TermosContratuais/@ViewBag.termo5" width="100%" style="min-height:800px;"></iframe>
+        </div>
+        <br />
+        <br />
+        <div class="row">
+            <iframe src="~/Publico/TermosContratuais/@ViewBag.termo6" width="100%" style="min-height:800px;"></iframe>
+        </div>
+        <br />
+        <br />
+        <div class="row">
+            <iframe src="~/Publico/TermosContratuais/@ViewBag.termo7" width="100%" style="min-height:800px;"></iframe>
+        </div>
+        <br />
+        <br />
+        <div class="row">
+            <iframe src="~/Publico/TermosContratuais/@ViewBag.termo8" width="100%" style="min-height:800px;"></iframe>
+        </div>
+    }
+    @if (Model.QNTDTERMOS == 9)
+    {
+        <div class="row">
+            <iframe src="~/Publico/TermosContratuais/@ViewBag.termo1" width="100%" style="min-height:800px;"></iframe>
+        </div>
+        <br />
+        <br />
+        <div class="row">
+            <iframe src="~/Publico/TermosContratuais/@ViewBag.termo2" width="100%" style="min-height:800px;"></iframe>
+        </div>
+        <br />
+        <br />
+        <div class="row">
+            <iframe src="~/Publico/TermosContratuais/@ViewBag.termo3" width="100%" style="min-height:800px;"></iframe>
+        </div>
+        <br />
+        <br />
+        <div class="row">
+            <iframe src="~/Publico/TermosContratuais/@ViewBag.termo4" width="100%" style="min-height:800px;"></iframe>
+        </div>
+        <br />
+        <br />
+        <div class="row">
+            <iframe src="~/Publico/TermosContratuais/@ViewBag.termo5" width="100%" style="min-height:800px;"></iframe>
+        </div>
+        <br />
+        <br />
+        <div class="row">
+            <iframe src="~/Publico/TermosContratuais/@ViewBag.termo6" width="100%" style="min-height:800px;"></iframe>
+        </div>
+        <br />
+        <br />
+        <div class="row">
+            <iframe src="~/Publico/TermosContratuais/@ViewBag.termo7" width="100%" style="min-height:800px;"></iframe>
+        </div>
+        <br />
+        <br />
+        <div class="row">
+            <iframe src="~/Publico/TermosContratuais/@ViewBag.termo8" width="100%" style="min-height:800px;"></iframe>
+        </div>
+        <br />
+        <br />
+        <div class="row">
+            <iframe src="~/Publico/TermosContratuais/@ViewBag.termo9" width="100%" style="min-height:800px;"></iframe>
+        </div>
+    }
+    @if (Model.QNTDTERMOS == 10)
+    {
+        <div class="row">
+            <iframe src="~/Publico/TermosContratuais/@ViewBag.termo1" width="100%" style="min-height:800px;"></iframe>
+        </div>
+        <br />
+        <br />
+        <div class="row">
+            <iframe src="~/Publico/TermosContratuais/@ViewBag.termo2" width="100%" style="min-height:800px;"></iframe>
+        </div>
+        <br />
+        <br />
+        <div class="row">
+            <iframe src="~/Publico/TermosContratuais/@ViewBag.termo3" width="100%" style="min-height:800px;"></iframe>
+        </div>
+        <br />
+        <br />
+        <div class="row">
+            <iframe src="~/Publico/TermosContratuais/@ViewBag.termo4" width="100%" style="min-height:800px;"></iframe>
+        </div>
+        <br />
+        <br />
+        <div class="row">
+            <iframe src="~/Publico/TermosContratuais/@ViewBag.termo5" width="100%" style="min-height:800px;"></iframe>
+        </div>
+        <br />
+        <br />
+        <div class="row">
+            <iframe src="~/Publico/TermosContratuais/@ViewBag.termo6" width="100%" style="min-height:800px;"></iframe>
+        </div>
+        <br />
+        <br />
+        <div class="row">
+            <iframe src="~/Publico/TermosContratuais/@ViewBag.termo7" width="100%" style="min-height:800px;"></iframe>
+        </div>
+        <br />
+        <br />
+        <div class="row">
+            <iframe src="~/Publico/TermosContratuais/@ViewBag.termo8" width="100%" style="min-height:800px;"></iframe>
+        </div>
+        <br />
+        <br />
+        <div class="row">
+            <iframe src="~/Publico/TermosContratuais/@ViewBag.termo9" width="100%" style="min-height:800px;"></iframe>
+        </div>
+        <br />
+        <br />
+        <div class="row">
+            <iframe src="~/Publico/TermosContratuais/@ViewBag.termo10" width="100%" style="min-height:800px;"></iframe>
+        </div>
+    }
+
+</body>
+</html>

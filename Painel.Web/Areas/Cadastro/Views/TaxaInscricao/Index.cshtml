@@ -1,0 +1,196 @@
+﻿@model List<Painel.Models.Cadastro.TaxaInscricao>
+
+
+@{
+    ViewBag.Title = "Taxa de Inscrição";
+    Layout = "~/Views/Shared/_Servicos.cshtml";
+}
+
+@section css{
+    <link href="~/Contents/css/jquery.tagsinput.min.css" rel="stylesheet" />
+    <link href="~/Contents/plugins/sweetalert/sweetalert2.min.css" rel="stylesheet" />
+    <link href="~/Contents/css/jquery.fancybox.css" rel="stylesheet" />
+    <link href="~/Contents/plugins/datatables/datatables.net-bs/css/dataTables.bootstrap.min.css" rel="stylesheet" />
+    <link href="~/Contents/plugins/jquery.datetimepicker/jquery.datetimepicker.min.css" rel="stylesheet" />
+    <link href="~/Contents/plugins/bootstrap-daterangepicker/daterangepicker.css" rel="stylesheet" />
+}
+
+@section js{
+    <script src="~/Contents/js/jquery.tagsinput.min.js"></script>
+    <script src="~/Contents/plugins/sweetalert/sweetalert2.min.js"></script>
+    <script src="~/Contents/js/jquery.fancybox.js"></script>
+    <script src="~/Contents/plugins/datatables/datatables.net/js/jquery.dataTables.min.js"></script>
+    <script src="~/Contents/plugins/datatables/datatables.net-bs/js/dataTables.bootstrap.min.js"></script>
+    <script src="https://cdn.datatables.net/plug-ins/1.10.19/dataRender/datetime.js"></script>
+    <script>
+        $(function () {
+            var dt = $('#tabela').DataTable({
+                  "language": {
+                    "sEmptyTable": "Nenhum registro encontrado",
+                    "sInfo": "Mostrando de _START_ até _END_ de _TOTAL_ registros",
+                    "sInfoEmpty": "Mostrando 0 até 0 de 0 registros",
+                    "sInfoFiltered": "(Filtrados de _MAX_ registros)",
+                    "sInfoPostFix": "",
+                    "sInfoThousands": ".",
+                    "sLengthMenu": "_MENU_ resultados por página",
+                    "sLoadingRecords": "Carregando...",
+                    "sProcessing": "Processando...",
+                    "sZeroRecords": "Nenhum registro encontrado",
+                    "sSearch": "Pesquisar",
+                    "oPaginate": {
+                        "sNext": "Próximo",
+                        "sPrevious": "Anterior",
+                        "sFirst": "Primeiro",
+                        "sLast": "Último"
+                    },
+                    "oAria": {
+                        "sSortAscending": ": Ordenar colunas de forma ascendente",
+                        "sSortDescending": ": Ordenar colunas de forma descendente"
+                    }
+                }
+            });
+
+            $(document).on("click", "[data-click=adicionar-taxa]", function () {
+                $.fancybox({
+                    href: '@Url.Action("NovaTaxa", "TaxaInscricao", new { area = "Cadastro" })',
+                    type: 'ajax',
+                    maxWidth: 800,
+                    maxHeight: 320,
+                    fitToView: false,
+                    width: '100%',
+                    height: '100%',
+                    autoSize: false,
+                    helpers : {
+                    overlay : {closeClick: false}
+                     },
+                    afterClose: function () {
+                    }
+                });
+            });
+
+            $(document).on("click", "[data-click=abrir-editar]", function () {
+                var id = $(this).data("id");
+                console.log(id);
+                $.fancybox({
+                    href: '@Url.Action("EditarTaxa", "TaxaInscricao", new { area = "Cadastro" })/' + id,
+                    type: 'ajax',
+                    maxWidth: 800,
+                    maxHeight: 320,
+                    fitToView: false,
+                    width: '100%',
+                    height: '100%',
+                    autoSize: false,
+                    helpers : {
+                     overlay : {closeClick: false}
+                     },
+                    afterClose: function () {
+                    }
+                });
+            });
+
+            $(document).off("", "form").on("submit", "form", function (e) {
+                e.preventDefault();
+
+                var form = $(this);
+                var container = form.parent();
+
+                $.post(form.attr('action'), form.serialize(), function (data) {
+                    if (data.success) {
+                        swal({
+                            title: "Sucesso",
+                            text: "Cadastrado com sucesso",
+                            type: "success",
+                            onClose: () => {
+                                $.fancybox.close();
+                                location.reload();
+                            }
+                        });
+                    } else {
+                        container.html(data);
+                        $.fancybox.update();
+                    }
+
+                });
+            });
+        });
+    </script>
+}
+<section class="content-header">
+    <h1>
+        Taxa de Inscrição
+    </h1>
+</section>
+
+<section class="content">
+    <div class="box">
+        <div class="box-header">
+            <div class="row">
+                <div class="col-md-12">
+                    <button data-click="adicionar-taxa" class="btn btn-success " type="submit"><i class="fa fa-plus"></i>  Adicionar Taxa</button>
+                    <br /><br />
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-12">
+                    @if (Model != null && Model.Count > 0)
+                    {
+                        <table class="table table-bordered table-striped table-hover" id="tabela">
+                            <thead>
+                                <tr style="background-color:#e8e2e2">
+                                    <th>Nome</th>
+                                    <th>Preço</th>
+                                    <th>Data Cadastro</th>
+                                    <th>Última Atualização</th>
+                                    <th>Ativo</th>
+                                    <th></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var item in Model)
+                                {
+                                    <tr>
+                                        <td>
+                                            @item.NOME
+                                        </td>
+                                        <td>
+                                            @item.VALOR
+                                        </td>
+                                        <td>
+                                            @String.Format("{0:dd/MM/yyyy}", item.DATACADASTRO)
+
+                                        </td>
+                                        <td>
+                                            @String.Format("{0:dd/MM/yyyy}", item.DATAATUALIZACAO)
+
+                                        </td>
+                                        @if (@item.STATUS == "Sim")
+                                        {
+                                            <td>
+                                                Sim
+                                            </td>
+
+                                        }
+                                        else
+                                        {
+                                            <td>
+                                                Nâo
+                                            </td>
+                                        }
+
+                                        <td>
+                                            <button class="btn btn-linkedin btn-flat" data-click="abrir-editar" data-id="@item.ID" data-toggle="tooltip" data-placement="top" title="Editar Cadastro"><i class="fa  fa-pencil-square-o"></i></button>
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    }
+                    else
+                    {
+                        <span style="color:#084c20">Nenhuma taxa de inscrição cadastrada</span>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</section>

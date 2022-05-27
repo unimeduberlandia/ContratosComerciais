@@ -1,0 +1,182 @@
+﻿@model Painel.Web.Models.LoginViewModel
+
+
+<!DOCTYPE html>
+<style>
+    [class*="comercialTitulo"] {
+        font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+        color: #A2B06C;
+        background: -webkit-repeating-radial-gradient(#FFFFFF, #A2B06C);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+    }
+
+    .palavra {
+        font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+        color: #BFC8BF/*black*/;
+        font-weight: bold;
+
+
+    }
+</style>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>Gestão Comercial</title>
+    <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+    <link href="~/Contents/plugins/bootstrap3/bootstrap.min.css" rel="stylesheet" />
+    <link href="~/Contents/plugins/sweetalert/sweetalert2.min.css" rel="stylesheet" />
+    <link href="~/Contents/plugins/font-awesome/css/font-awesome.min.css" rel="stylesheet" />
+    <link href="~/Contents/plugins/Ionicons/css/ionicons.min.css" rel="stylesheet" />
+    <link href="~/Contents/plugins/pace/pace.css" rel="stylesheet" />
+    <link href="~/Contents/css/style.css" rel="stylesheet" />
+    <!--[if lt IE 9]>
+    <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
+    <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    <![endif]-->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700,300italic,400italic,600italic">
+</head>
+<body class="hold-transition login-page-comercial">
+    <div class="row">
+
+    </div>
+
+    @using (Html.BeginForm("PostEsqueciSenha", "Login", FormMethod.Post))
+    {
+        @Html.AntiForgeryToken()
+        <div class="login-box">
+
+            <div class="login-box-body">
+                <div class="row">
+                    @if (@ViewData["Message"] == null)
+                    {
+
+                    }
+                    else
+                    {
+                        <h4 class="alert alert-success" id="top">@ViewData["Message"]</h4>
+
+                    }
+                </div>
+                <div class="login-logos">
+                    <img src="~/Contents/img/logo_login.png" width="245" height="120" />
+                </div>
+                <div class="comercialTitulo" align="center">
+                    <h3>Informe o CPF</h3>
+                    <h3>cadastrado</h3>
+                </div>
+                <div class="row">
+                    <br />
+                    <div class="col-lg-1">
+                        <span class="glyphicon glyphicon-user Telalogin-feedback"></span>
+                    </div>
+                    <div class="col-lg-10" align="right">
+                        @Html.TextBoxFor(model => model.Usuario, new { @class = "Telalogin", autocomplete = "off", placeholder = "CPF", style = "" })
+                        @Html.ValidationMessageFor(model => model.Usuario)
+                        <br />
+                        <br />
+                    </div>
+                </div>
+                <div class="row">
+                    <br />
+                    <button type="submit" class="btn-block btn btn-login col-lg-12">Enviar Senha</button>
+                    <br />
+                    <div class="col-lg-12" align="center">
+                        <br />
+                        <a href="http://contratoscomerciais.unimeduberlandia.coop.br/login">
+                            <span class="palavra">Voltar</span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+    <script src="~/Contents/js/jquery.min.js"></script>
+    <script src="~/Contents/js/jquery.mask.min.js"></script>
+    <script src="~/Contents/plugins/bootstrap4/bootstrap.min.js"></script>
+    <script src="~/Contents/plugins/sweetalert/sweetalert2.min.js"></script>
+    <script src="~/Contents/plugins/pace/pace.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            $('#Usuario').mask('000.000.000-00', { clearIfNotMatch: true });
+
+            $(document).ajaxStart(function () { Pace.restart(); });
+
+            $(document).off("", "form").on("submit", "form", function (e) {
+                e.preventDefault();
+                var form = $(this);
+                var container = form.parent();
+
+                $.post(form.attr('action'), form.serialize(), function (data) {
+                    if (data.success) {
+                        if (data.msg) {
+                            swal("Sucesso!", data.msg, "success");
+                        }
+                        if (data.urlajax != "") {
+                            $.ajax({
+                                url: data.urlajax,
+                                cache: false,
+                                dataType: "html",
+                                success: function (data) {
+                                    $("#formulario").html(data);
+                                }
+                            });
+                        }
+                        if (data.url != "") {
+                            window.location = data.url;
+                        }
+                    } else {
+                        container.html(data);
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+</html>
+
+
+
+
+
+
+
+
+<style>
+
+    #Usuario::-moz-placeholder {
+        color: #BFC8BF;
+    }
+
+    #Usuario:-moz-placeholder {
+        color: #BFC8BF;
+    }
+
+    #Usuario:-ms-input-placeholder {
+        color: #BFC8BF;
+    }
+
+    #Usuario::-webkit-input-placeholder {
+        color: #BFC8BF;
+    }
+
+    #Senha::-moz-placeholder {
+        color: #BFC8BF;
+    }
+
+    #Senha:-moz-placeholder {
+        color: #BFC8BF;
+    }
+
+    #Senha:-ms-input-placeholder {
+        color: #BFC8BF;
+    }
+
+    #Senha::-webkit-input-placeholder {
+        color: #BFC8BF;
+    }
+</style>
+
+
+

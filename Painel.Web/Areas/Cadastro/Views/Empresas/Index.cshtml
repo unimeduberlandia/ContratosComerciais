@@ -1,0 +1,182 @@
+﻿@model List<Painel.Models.Cadastro.Empresas>
+
+@{
+    ViewBag.Title = "Empresas";
+    Layout = "~/Views/Shared/_Servicos.cshtml";
+}
+
+@section css{
+    <link href="~/Contents/css/jquery.tagsinput.min.css" rel="stylesheet" />
+    <link href="~/Contents/plugins/sweetalert/sweetalert2.min.css" rel="stylesheet" />
+    <link href="~/Contents/css/jquery.fancybox.css" rel="stylesheet" />
+    <link href="~/Contents/plugins/datatables/datatables.net-bs/css/dataTables.bootstrap.min.css" rel="stylesheet" />
+}
+
+@section js{
+    <script src="~/Contents/js/jquery.tagsinput.min.js"></script>
+    <script src="~/Contents/plugins/sweetalert/sweetalert2.min.js"></script>
+    <script src="~/Contents/js/jquery.fancybox.js"></script>
+    <script src="~/Contents/plugins/datatables/datatables.net/js/jquery.dataTables.min.js"></script>
+    <script src="~/Contents/plugins/datatables/datatables.net-bs/js/dataTables.bootstrap.min.js"></script>
+    <script>
+        $(function () {
+            var dt = $('#tabela').DataTable({
+                "language": {
+                    "sEmptyTable": "Nenhum registro encontrado",
+                    "sInfo": "Mostrando de _START_ até _END_ de _TOTAL_ registros",
+                    "sInfoEmpty": "Mostrando 0 até 0 de 0 registros",
+                    "sInfoFiltered": "(Filtrados de _MAX_ registros)",
+                    "sInfoPostFix": "",
+                    "sInfoThousands": ".",
+                    "sLengthMenu": "_MENU_ resultados por página",
+                    "sLoadingRecords": "Carregando...",
+                    "sProcessing": "Processando...",
+                    "sZeroRecords": "Nenhum registro encontrado",
+                    "sSearch": "Pesquisar",
+                    "oPaginate": {
+                        "sNext": "Próximo",
+                        "sPrevious": "Anterior",
+                        "sFirst": "Primeiro",
+                        "sLast": "Último"
+                    },
+                    "oAria": {
+                        "sSortAscending": ": Ordenar colunas de forma ascendente",
+                        "sSortDescending": ": Ordenar colunas de forma descendente"
+                    }
+                }
+            });
+
+            $(document).on("click", "[data-click=adicionar-empresa]", function () {
+                $.fancybox({
+                    href: '@Url.Action("NovaEmpresa", "Empresas", new { area = "Cadastro" })',
+                    type: 'ajax',
+                    maxWidth: 900,
+                    maxHeight: 600,
+                    fitToView: false,
+                    width: '100%',
+                    height: '100%',
+                    autoSize: false,
+                    helpers : { 
+                     overlay : {closeClick: false}
+                     },
+                    afterClose: function () {
+                    }
+                });
+            });
+
+            $(document).on("click", "[data-click=abrir-editar]", function () {
+                var id = $(this).data("id");
+              
+                $.fancybox({
+                    href: '@Url.Action("EditarEmpresa", "Empresas", new { area = "Cadastro" })/' + id,
+                    type: 'ajax',
+                    maxWidth: 900,
+                    maxHeight: 600,
+                    fitToView: false,
+                    width: '100%',
+                    height: '100%',
+                    autoSize: false,
+                    helpers : { 
+                     overlay : {closeClick: false}
+                     },
+                    afterClose: function () {
+                    }
+                });
+            });
+
+            $(document).off("", "form").on("submit", "form", function (e) {
+                e.preventDefault();
+
+                var form = $(this);
+                var container = form.parent();
+
+                $.post(form.attr('action'), form.serialize(), function (data) {
+                    if (data.success) {
+                        swal({
+                            title: "Sucesso",
+                            text: "Cadastrado com sucesso",
+                            type: "success",
+                            onClose: () => {
+                                $.fancybox.close();
+                                location.reload();
+                            }
+                        });
+                    } else {
+                        container.html(data);
+                        $.fancybox.update();
+                    }
+
+                });
+            });
+        });
+    </script>
+}
+<section class="content-header">
+    <h1>
+        Empresas
+    </h1>
+</section>
+<section class="content">
+    <div class="box">
+        <div class="box-header">
+            <div class="row">
+                <div class="col-md-12">
+                    <button data-click="adicionar-empresa" class="btn btn-success " type="submit"><i class="fa fa-plus"></i>  Adicionar Empresa</button>
+                    <br /><br />
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-12">
+                    @if (Model != null && Model.Count > 0)
+                    {
+                        <table class="table table-bordered table-striped table-hover" id="tabela">
+                            <thead>
+                                <tr style="background-color:#e8e2e2">
+                                    <th>CNPJ</th>
+                                    <th>Razão Social</th>
+                                    <th>E-mail</th>
+                                    <th>Cidade</th>
+                                    <th>Estado</th>
+                                    <th>Ativo</th>
+                                    <th></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var item in Model)
+                                {
+                                <tr>
+                                    <td>@item.CNPJ</td>
+                                    <td>
+                                        @item.RAZAOSOCIAL
+                                    </td>
+                                    <td>
+                                        @item.EMAIL
+                                    </td>
+                                    <td>
+                                        @item.CIDADE
+                                    </td>
+                                    <td>
+                                        @item.UF
+                                    </td>
+                                    <td>
+                                        @item.STATUS
+                                    </td>
+                                    <td>
+                                        <button class="btn btn-linkedin btn-flat" data-click="abrir-editar" data-id="@item.ID" data-toggle="tooltip" data-placement="top" title="Editar Empresa"><i class="fa  fa-pencil-square-o"></i></button>
+
+                                        @*<button class="btn btn-sm btn-success" data-click="abrir-editar" data-id="@item.ID">Editar</button>*@
+                                    </td>
+                                </tr>
+                                }
+                            </tbody>
+                        </table>
+                    }
+                    else
+                    {
+                        <span style="color:#084c20">Nenhuma Empresa cadastrada</span>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</section>

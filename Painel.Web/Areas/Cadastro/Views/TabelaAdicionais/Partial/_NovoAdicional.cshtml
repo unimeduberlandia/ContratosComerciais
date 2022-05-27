@@ -1,0 +1,106 @@
+﻿@model Painel.Web.Areas.Cadastro.Models.TabelaAdicionaisViewModel
+
+
+@{
+    ViewBag.Title = "Cadastro Adicional";
+    Layout = "~/Views/Shared/_Servicos.cshtml";
+}
+
+@section css {
+    <link href="~/Contents/plugins/pace/pace.css" rel="stylesheet" />
+    <link href="~/Contents/plugins/sweetalert/sweetalert2.min.css" rel="stylesheet" />
+}
+
+
+@section js{
+    <script src="~/Contents/js/jquery.mask.min.js"></script>
+    <script src="~/Contents/plugins/pace/pace.min.js"></script>
+    <script src="~/Contents/js/jquerydownloader.min.js"></script>
+    <script src="~/Contents/plugins/block-ui/jquery.blockUI.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            $('#VALOR').mask('#.##0,00', { reverse: true });
+            $('#INICIO').mask('#0', { clearIfNotMatch: true });
+            $('#FIM').mask('#0', { clearIfNotMatch: true });
+
+        });
+    </script>
+}
+
+@using (Html.BeginForm("Inseriradicional", "TabelaAdicionais", FormMethod.Post, new { enctype = "multipart/form-data", id = "novoadicional" }))
+{
+    <section class="content-header">
+        <h1>
+            Cadastro Adicionais
+        </h1>
+    </section>
+    <section class="content">
+        <div class="col-lg-12 col-xs-12">
+            <div class="box box-success box-solid">
+                <div class="box-body">
+                    <div class="col-lg-12">
+                        @Html.AntiForgeryToken()
+                        @Html.HiddenFor(model => model.id)
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                @Html.LabelFor(model => model.NOME)
+                                @Html.TextBoxFor(model => model.NOME, new { @class = "form-control" })
+                                @Html.ValidationMessageFor(model => model.NOME, "", new { @class = "text-danger" })
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                @Html.LabelFor(model => model.GRUPO)
+                                @Html.DropDownListFor(model => model.IDGRUPO, new SelectList(ViewBag.grupos, "value", "text", (Model != null) ? Model.GRUPO : default(string)), "Selecione...", new { @class = "form-control" })
+                                @Html.ValidationMessageFor(model => model.IDGRUPO, "", new { @class = "text-danger" })
+                                <br />
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                @Html.LabelFor(model => model.VALOR)
+                                @Html.TextBoxFor(model => model.VALOR, new { @class = "form-control" })
+                                @Html.ValidationMessageFor(model => model.VALOR, "", new { @class = "text-danger" })
+                            </div>
+                            <div class="col-md-6 mb-3">
+
+                                @if (ViewBag.ativo == "Nao")
+                                {
+                                    @Html.LabelFor(model => model.STATUS)
+                                    <select name="STATUS" class="form-control">
+                                        <option value="Nao">Não</option>
+                                        <option value="Sim">Sim</option>
+                                    </select>
+                                    <br />
+                                }
+                                else
+                                {
+                                    @Html.LabelFor(model => model.STATUS)
+                                    <select name="STATUS" class="form-control">
+                                        <option value="Sim">Sim</option>
+                                        <option value="Nao">Não</option>
+                                    </select>
+                                    <br />
+                                }
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6">
+                                @Html.LabelFor(model => model.NOMEARQUIVO)
+                                <input type="file" name="contrato" class="form-control filestyle" id="contrato" accept="application/pdf" />
+                                @Html.ValidationMessageFor(model => model.NOMEARQUIVO, "", new { @class = "text-danger" })
+                                <br />
+                            </div>
+                        </div>
+                        <div class="col-md-12" align="center">
+                            <br />
+                            <button type="submit" class="btn btn-success btn-flat btn-block">
+                                <i class="fa fa-floppy-o"></i> Salvar Opcional
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </section>
+}
+

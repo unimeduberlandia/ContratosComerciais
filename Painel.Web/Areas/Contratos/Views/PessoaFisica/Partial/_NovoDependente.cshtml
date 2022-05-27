@@ -1,0 +1,123 @@
+﻿@model Painel.Web.Areas.Contratos.Models.DependenteViewModel
+
+<link href="~/Contents/plugins/sweetalert/sweetalert2.min.css" rel="stylesheet" />
+<link href="~/Areas/Cadastro/Contents/css/empresas.css" rel="stylesheet" />
+<link href="~/Contents/plugins/pace/pace.css" rel="stylesheet" />
+<link href="~/Contents/css/jquery.fancybox.css" rel="stylesheet" />
+
+@using (Html.BeginForm("InserirDependente", "PessoaFisica", FormMethod.Post, new { id = "InserirDependente" }))
+{
+
+    @Html.AntiForgeryToken()
+    @Html.HiddenFor(model => model.id)
+    @Html.HiddenFor(model => model.idplano)
+    @Html.HiddenFor(model => model.guidDependente)
+    <div class="col-lg-12">
+        <div row>
+            <div class="col-lg-4">
+                @Html.LabelFor(model => model.NOMEDep)
+                @Html.TextBoxFor(model => model.NOMEDep, new { @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.NOMEDep)
+            </div>
+            <div class="col-lg-4">
+                @Html.LabelFor(model => model.CPFDep)
+                @Html.TextBoxFor(model => model.CPFDep, new { @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.CPFDep)
+            </div>
+            <div class="col-lg-4">
+                @Html.LabelFor(model => model.PARENTESCODep)
+                @Html.DropDownListFor(model => model.IDPARENTESCODep, new SelectList(ViewBag.parentesco, "value", "text", (Model != null) ? Model.PARENTESCODep : default(string)), "Selecione...", new { @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.IDPARENTESCODep)
+                <br />
+            </div>
+        </div>
+        <div row>
+            <div class="col-lg-4">
+                @Html.LabelFor(model => model.SEXODep)
+                @Html.DropDownListFor(model => model.IDSEXODep, new SelectList(ViewBag.sexo, "value", "text", (Model != null) ? Model.SEXODep : default(string)), "Selecione...", new { @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.IDSEXODep)
+            </div>
+            <div class="col-lg-4">
+                @Html.LabelFor(model => model.ESTADOCIVILDep)
+                @Html.DropDownListFor(model => model.IDESTADOCIVILDep, new SelectList(ViewBag.estadocivil, "value", "text", (Model != null) ? Model.ESTADOCIVILDep : default(string)), "Selecione...", new { @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.IDESTADOCIVILDep)
+            </div>
+            <div class="col-lg-4">
+                @Html.LabelFor(model => model.NACIONALIDADEDep)
+                @Html.TextBoxFor(model => model.NACIONALIDADEDep, new { @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.NACIONALIDADEDep)
+                <br />
+            </div>
+        </div>
+        <div row>
+            <div class="col-lg-4">
+                @Html.LabelFor(model => model.DATANASCIMENTODep)
+                @Html.TextBoxFor(model => model.DATANASCIMENTODep, "semdata", new { @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.DATANASCIMENTODep)
+            </div>
+            <div class="col-lg-4">
+                @Html.LabelFor(model => model.IDADEDep)
+                @Html.TextBoxFor(model => model.IDADEDep, new { @class = "form-control", @readonly = "true" })
+            </div>
+            <div class="col-lg-4">
+                @Html.LabelFor(model => model.VALORDep)
+                @Html.TextBoxFor(model => model.VALORDep, new { @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.VALORDep)
+                <br />
+            </div>
+        </div>
+        <div row>
+            <div class="col-lg-4">
+                @Html.LabelFor(model => model.NOMEDAMAEDep)
+                @Html.TextBoxFor(model => model.NOMEDAMAEDep, new { @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.NOMEDAMAEDep)
+            </div>
+            <div class="col-lg-4">
+                @Html.LabelFor(model => model.CARTAODESAUDEDep)
+                @Html.TextBoxFor(model => model.CARTAODESAUDEDep, new { @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.CARTAODESAUDEDep)
+                <br />
+                <br />
+            </div>
+        </div>
+    </div>
+    <div class="col-md-12" align="center">
+        <button type="submit" class="btn btn-success btn-flat btn-block">
+            <i class="fa fa-plus-square"></i> Incluir Dependente
+        </button>
+        <br />
+    </div>
+
+}
+
+<script>
+    if (window.jQuery) {
+        $(function () {
+            $('#VALOR').mask('#.##0,00', { reverse: true });
+            $('#CPFDep').mask('000.000.000-00', { reverse: true });
+            $('#DATANASCIMENTODep').mask("00/00/0000", { clearIfNotMatch: true });
+            $('#VALORDep').mask('#.##0,00', { reverse: true });
+
+            $(document).on("blur keyup", "#DATANASCIMENTODep", function () {
+                if ($("#DATANASCIMENTODep").val().length == 10) {
+                    $.fancybox.showLoading();
+
+                    $.post("@Url.Action("BuscaIdadeDependente", "PessoaFisica")", { datanascimento: $("#DATANASCIMENTODep").val(), idplanos: $("#idplano").val() }, function (data) {
+
+                        if (data != false) {
+                            $("#IDADEDep").val(data.idade);
+                            $("#VALORDep").val(data.valor);
+                        }
+                        $.fancybox.hideLoading();
+                    });
+                }
+            });
+
+            if ($("#PostDependentes .field-validation-error").length > 0) {
+            $('html, body').animate({ scrollTop: $(".field-validation-error").offset().top - 200 }, 2000);
+            swal("Ops", "Corrija os erros e tente novamente", "error");
+            }
+        });
+    }
+</script>
+

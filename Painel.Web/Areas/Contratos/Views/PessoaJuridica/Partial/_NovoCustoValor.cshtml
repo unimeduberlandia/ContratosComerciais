@@ -1,0 +1,1007 @@
+﻿@model Painel.Web.Areas.Contratos.Models.CustoValorViewModel
+
+<link href="~/Contents/plugins/sweetalert/sweetalert2.min.css" rel="stylesheet" />
+@*<link href="~/Areas/Cadastro/Contents/css/empresas.css" rel="stylesheet" />*@
+<link href="~/Contents/plugins/pace/pace.css" rel="stylesheet" />
+<link href="~/Contents/css/jquery.fancybox.css" rel="stylesheet" />
+
+@using (Html.BeginForm("InserirCustoPF", "PessoaJuridica", FormMethod.Post, new { id = "InserirCusto" }))
+{
+
+    @Html.AntiForgeryToken()
+    @Html.HiddenFor(model => model.QNTDFAIXAS)
+    @Html.HiddenFor(model => model.IDPLANO)
+    @Html.HiddenFor(model => model.guidCustoValor)
+    <div class="col-lg-12">
+        <div row class="pn_faixa1">
+            <div class="col-lg-3">
+                @Html.LabelFor(model => model.NOME1)
+                @Html.TextBoxFor(model => model.NOME1, new { @class = "form-control", @readonly = "true" })
+            </div>
+            <div class="col-lg-3">
+                @Html.LabelFor(model => model.QNTDVIDAS1)
+                @Html.TextBoxFor(model => model.QNTDVIDAS1, new { @class = "form-control" })
+            </div>
+            <div class="col-lg-3">
+                @Html.LabelFor(model => model.VALORCUSTO1)
+                @Html.TextBoxFor(model => model.VALORCUSTO1, new { @class = "form-control" })
+
+            </div>
+            <div class="col-lg-3">
+                @Html.LabelFor(model => model.VALORINDIVIDUAL1)
+                @Html.TextBoxFor(model => model.VALORINDIVIDUAL1, new { @class = "form-control", @readonly = "true" })
+                <br />
+                <br />
+            </div>
+        </div>
+        <div row class="pn_faixa2">
+            <div class="col-lg-3">
+                @Html.LabelFor(model => model.NOME2)
+                @Html.TextBoxFor(model => model.NOME2, new { @class = "form-control", @readonly = "true" })
+            </div>
+            <div class="col-lg-3">
+                @Html.LabelFor(model => model.QNTDVIDAS2)
+                @Html.TextBoxFor(model => model.QNTDVIDAS2, new { @class = "form-control" })
+            </div>
+            <div class="col-lg-3">
+                @Html.LabelFor(model => model.VALORCUSTO2)
+                @Html.TextBoxFor(model => model.VALORCUSTO2, new { @class = "form-control" })
+
+            </div>
+            <div class="col-lg-3">
+                @Html.LabelFor(model => model.VALORINDIVIDUAL2)
+                @Html.TextBoxFor(model => model.VALORINDIVIDUAL2, new { @class = "form-control", @readonly = "true" })
+                <br />
+                <br />
+            </div>
+        </div>
+        <div row class="pn_faixa3">
+            <div class="col-lg-3">
+                @Html.LabelFor(model => model.NOME3)
+                @Html.TextBoxFor(model => model.NOME3, new { @class = "form-control", @readonly = "true" })
+            </div>
+            <div class="col-lg-3">
+                @Html.LabelFor(model => model.QNTDVIDAS3)
+                @Html.TextBoxFor(model => model.QNTDVIDAS3, new { @class = "form-control" })
+            </div>
+            <div class="col-lg-3">
+                @Html.LabelFor(model => model.VALORCUSTO3)
+                @Html.TextBoxFor(model => model.VALORCUSTO3, new { @class = "form-control" })
+
+            </div>
+            <div class="col-lg-3">
+                @Html.LabelFor(model => model.VALORINDIVIDUAL3)
+                @Html.TextBoxFor(model => model.VALORINDIVIDUAL3, new { @class = "form-control", @readonly = "true" })
+                <br />
+                <br />
+            </div>
+        </div>
+        <div row class="pn_faixa4">
+            <div class="col-lg-3">
+                @Html.LabelFor(model => model.NOME4)
+                @Html.TextBoxFor(model => model.NOME4, new { @class = "form-control", @readonly = "true" })
+            </div>
+            <div class="col-lg-3">
+                @Html.LabelFor(model => model.QNTDVIDAS4)
+                @Html.TextBoxFor(model => model.QNTDVIDAS4, new { @class = "form-control" })
+            </div>
+            <div class="col-lg-3">
+                @Html.LabelFor(model => model.VALORCUSTO4)
+                @Html.TextBoxFor(model => model.VALORCUSTO4, new { @class = "form-control" })
+            </div>
+            <div class="col-lg-3">
+                @Html.LabelFor(model => model.VALORINDIVIDUAL4)
+                @Html.TextBoxFor(model => model.VALORINDIVIDUAL4, new { @class = "form-control", @readonly = "true" })
+                <br />
+                <br />
+            </div>
+        </div>
+        <div row class="pn_faixa5">
+            <div class="col-lg-3">
+                @Html.LabelFor(model => model.NOME5)
+                @Html.TextBoxFor(model => model.NOME5, new { @class = "form-control", @readonly = "true" })
+            </div>
+            <div class="col-lg-3">
+                @Html.LabelFor(model => model.QNTDVIDAS5)
+                @Html.TextBoxFor(model => model.QNTDVIDAS5, new { @class = "form-control" })
+            </div>
+            <div class="col-lg-3">
+                @Html.LabelFor(model => model.VALORCUSTO5)
+                @Html.TextBoxFor(model => model.VALORCUSTO5, new { @class = "form-control" })
+            </div>
+            <div class="col-lg-3">
+                @Html.LabelFor(model => model.VALORINDIVIDUAL5)
+                @Html.TextBoxFor(model => model.VALORINDIVIDUAL5, new { @class = "form-control", @readonly = "true" })
+                <br />
+                <br />
+            </div>
+        </div>
+        <div row class="pn_faixa6">
+            <div class="col-lg-3">
+                @Html.LabelFor(model => model.NOME6)
+                @Html.TextBoxFor(model => model.NOME6, new { @class = "form-control", @readonly = "true" })
+            </div>
+            <div class="col-lg-3">
+                @Html.LabelFor(model => model.QNTDVIDAS6)
+                @Html.TextBoxFor(model => model.QNTDVIDAS6, new { @class = "form-control" })
+            </div>
+            <div class="col-lg-3">
+                @Html.LabelFor(model => model.VALORCUSTO6)
+                @Html.TextBoxFor(model => model.VALORCUSTO6, new { @class = "form-control" })
+
+            </div>
+            <div class="col-lg-3">
+                @Html.LabelFor(model => model.VALORINDIVIDUAL6)
+                @Html.TextBoxFor(model => model.VALORINDIVIDUAL6, new { @class = "form-control", @readonly = "true" })
+                <br />
+                <br />
+            </div>
+        </div>
+        <div row class="pn_faixa7">
+            <div class="col-lg-3">
+                @Html.LabelFor(model => model.NOME7)
+                @Html.TextBoxFor(model => model.NOME7, new { @class = "form-control", @readonly = "true" })
+            </div>
+            <div class="col-lg-3">
+                @Html.LabelFor(model => model.QNTDVIDAS7)
+                @Html.TextBoxFor(model => model.QNTDVIDAS7, new { @class = "form-control" })
+            </div>
+            <div class="col-lg-3">
+                @Html.LabelFor(model => model.VALORCUSTO7)
+                @Html.TextBoxFor(model => model.VALORCUSTO7, new { @class = "form-control" })
+
+            </div>
+            <div class="col-lg-3">
+                @Html.LabelFor(model => model.VALORINDIVIDUAL7)
+                @Html.TextBoxFor(model => model.VALORINDIVIDUAL7, new { @class = "form-control", @readonly = "true" })
+                <br />
+                <br />
+            </div>
+        </div>
+        <div row class="pn_faixa8">
+            <div class="col-lg-3">
+                @Html.LabelFor(model => model.NOME8)
+                @Html.TextBoxFor(model => model.NOME8, new { @class = "form-control", @readonly = "true" })
+            </div>
+            <div class="col-lg-3">
+                @Html.LabelFor(model => model.QNTDVIDAS8)
+                @Html.TextBoxFor(model => model.QNTDVIDAS8, new { @class = "form-control" })
+            </div>
+            <div class="col-lg-3">
+                @Html.LabelFor(model => model.VALORCUSTO8)
+                @Html.TextBoxFor(model => model.VALORCUSTO8, new { @class = "form-control" })
+
+            </div>
+            <div class="col-lg-3">
+                @Html.LabelFor(model => model.VALORINDIVIDUAL8)
+                @Html.TextBoxFor(model => model.VALORINDIVIDUAL8, new { @class = "form-control", @readonly = "true" })
+                <br />
+                <br />
+            </div>
+        </div>
+        <div row class="pn_faixa9">
+            <div class="col-lg-3">
+                @Html.LabelFor(model => model.NOME9)
+                @Html.TextBoxFor(model => model.NOME9, new { @class = "form-control", @readonly = "true" })
+            </div>
+            <div class="col-lg-3">
+                @Html.LabelFor(model => model.QNTDVIDAS9)
+                @Html.TextBoxFor(model => model.QNTDVIDAS9, new { @class = "form-control" })
+            </div>
+            <div class="col-lg-3">
+                @Html.LabelFor(model => model.VALORCUSTO9)
+                @Html.TextBoxFor(model => model.VALORCUSTO9, new { @class = "form-control" })
+            </div>
+            <div class="col-lg-3">
+                @Html.LabelFor(model => model.VALORINDIVIDUAL9)
+                @Html.TextBoxFor(model => model.VALORINDIVIDUAL9, new { @class = "form-control", @readonly = "true" })
+                <br />
+                <br />
+            </div>
+        </div>
+
+        <div row class="pn_faixa10">
+            <div class="col-lg-3">
+                @Html.LabelFor(model => model.NOME10)
+                @Html.TextBoxFor(model => model.NOME10, new { @class = "form-control", @readonly = "true" })
+            </div>
+            <div class="col-lg-3">
+                @Html.LabelFor(model => model.QNTDVIDAS10)
+                @Html.TextBoxFor(model => model.QNTDVIDAS10, new { @class = "form-control" })
+            </div>
+            <div class="col-lg-3">
+                @Html.LabelFor(model => model.VALORCUSTO10)
+                @Html.TextBoxFor(model => model.VALORCUSTO10, new { @class = "form-control" })
+
+            </div>
+            <div class="col-lg-3">
+                @Html.LabelFor(model => model.VALORINDIVIDUAL10)
+                @Html.TextBoxFor(model => model.VALORINDIVIDUAL10, new { @class = "form-control", @readonly = "true" })
+                <br />
+                <br />
+            </div>
+        </div>
+        <div row class="pn_faixa11">
+            <div class="col-lg-3">
+                @Html.LabelFor(model => model.NOME11)
+                @Html.TextBoxFor(model => model.NOME11, new { @class = "form-control", @readonly = "true" })
+            </div>
+            <div class="col-lg-3">
+                @Html.LabelFor(model => model.QNTDVIDAS11)
+                @Html.TextBoxFor(model => model.QNTDVIDAS11, new { @class = "form-control" })
+            </div>
+            <div class="col-lg-3">
+                @Html.LabelFor(model => model.VALORCUSTO11)
+                @Html.TextBoxFor(model => model.VALORCUSTO11, new { @class = "form-control" })
+
+            </div>
+            <div class="col-lg-3">
+                @Html.LabelFor(model => model.VALORINDIVIDUAL11)
+                @Html.TextBoxFor(model => model.VALORINDIVIDUAL11, new { @class = "form-control", @readonly = "true" })
+                <br />
+                <br />
+            </div>
+        </div>
+        <div row class="pn_faixa12">
+            <div class="col-lg-3">
+                @Html.LabelFor(model => model.NOME12)
+                @Html.TextBoxFor(model => model.NOME12, new { @class = "form-control", @readonly = "true" })
+            </div>
+            <div class="col-lg-3">
+                @Html.LabelFor(model => model.QNTDVIDAS12)
+                @Html.TextBoxFor(model => model.QNTDVIDAS12, new { @class = "form-control" })
+            </div>
+            <div class="col-lg-3">
+                @Html.LabelFor(model => model.VALORCUSTO12)
+                @Html.TextBoxFor(model => model.VALORCUSTO12, new { @class = "form-control" })
+            </div>
+            <div class="col-lg-3">
+                @Html.LabelFor(model => model.VALORINDIVIDUAL12)
+                @Html.TextBoxFor(model => model.VALORINDIVIDUAL12, new { @class = "form-control", @readonly = "true" })
+                <br />
+                <br />
+            </div>
+        </div>
+        <div row class="pn_faixa13">
+            <div class="col-lg-3">
+                @Html.LabelFor(model => model.NOME13)
+                @Html.TextBoxFor(model => model.NOME13, new { @class = "form-control", @readonly = "true" })
+            </div>
+            <div class="col-lg-3">
+                @Html.LabelFor(model => model.QNTDVIDAS13)
+                @Html.TextBoxFor(model => model.QNTDVIDAS13, new { @class = "form-control" })
+            </div>
+            <div class="col-lg-3">
+                @Html.LabelFor(model => model.VALORCUSTO13)
+                @Html.TextBoxFor(model => model.VALORCUSTO13, new { @class = "form-control" })
+
+            </div>
+            <div class="col-lg-3">
+                @Html.LabelFor(model => model.VALORINDIVIDUAL13)
+                @Html.TextBoxFor(model => model.VALORINDIVIDUAL13, new { @class = "form-control", @readonly = "true" })
+                <br />
+                <br />
+            </div>
+        </div>
+        <div row class="pn_faixa14">
+            <div class="col-lg-3">
+                @Html.LabelFor(model => model.NOME14)
+                @Html.TextBoxFor(model => model.NOME14, new { @class = "form-control", @readonly = "true" })
+            </div>
+            <div class="col-lg-3">
+                @Html.LabelFor(model => model.QNTDVIDAS14)
+                @Html.TextBoxFor(model => model.QNTDVIDAS14, new { @class = "form-control" })
+            </div>
+            <div class="col-lg-3">
+                @Html.LabelFor(model => model.VALORCUSTO14)
+                @Html.TextBoxFor(model => model.VALORCUSTO14, new { @class = "form-control" })
+
+            </div>
+            <div class="col-lg-3">
+                @Html.LabelFor(model => model.VALORINDIVIDUAL14)
+                @Html.TextBoxFor(model => model.VALORINDIVIDUAL14, new { @class = "form-control", @readonly = "true" })
+                <br />
+                <br />
+            </div>
+        </div>
+        <div row class="pn_faixa15">
+            <div class="col-lg-3">
+                @Html.LabelFor(model => model.NOME15)
+                @Html.TextBoxFor(model => model.NOME15, new { @class = "form-control", @readonly = "true" })
+            </div>
+            <div class="col-lg-3">
+                @Html.LabelFor(model => model.QNTDVIDAS15)
+                @Html.TextBoxFor(model => model.QNTDVIDAS15, new { @class = "form-control" })
+            </div>
+            <div class="col-lg-3">
+                @Html.LabelFor(model => model.VALORCUSTO15)
+                @Html.TextBoxFor(model => model.VALORCUSTO15, new { @class = "form-control" })
+
+            </div>
+            <div class="col-lg-3">
+                @Html.LabelFor(model => model.VALORINDIVIDUAL15)
+                @Html.TextBoxFor(model => model.VALORINDIVIDUAL15, new { @class = "form-control", @readonly = "true" })
+                <br />
+                <br />
+            </div>
+        </div>
+    </div>
+    <div class="col-md-12" align="center">
+        <button type="submit" class="btn btn-success btn-flat btn-block">
+            <i class="fa fa-plus-square"></i> Incluir Valor
+        </button>
+        <br />
+    </div>
+
+}
+
+<script>
+    if (window.jQuery) {
+        $(function () {
+            $('#QNTDVIDAS1').mask('###0', { reverse: true });
+            $('#VALORCUSTO1').mask('#.##0,00', { reverse: true });
+            $('#VALORINDIVIDUAL1').mask('#.##0,00', { reverse: true });
+
+            $('#QNTDVIDAS2').mask('###0', { reverse: true });
+            $('#VALORCUSTO2').mask('#.##0,00', { reverse: true });
+            $('#VALORINDIVIDUAL2').mask('#.##0,00', { reverse: true });
+
+            $('#QNTDVIDAS3').mask('###0', { reverse: true });
+            $('#VALORCUSTO3').mask('#.##0,00', { reverse: true });
+            $('#VALORINDIVIDUAL3').mask('#.##0,00', { reverse: true });
+
+            $('#QNTDVIDAS4').mask('###0', { reverse: true });
+            $('#VALORCUSTO4').mask('#.##0,00', { reverse: true });
+            $('#VALORINDIVIDUAL4').mask('#.##0,00', { reverse: true });
+
+            $('#QNTDVIDAS5').mask('###0', { reverse: true });
+            $('#VALORCUSTO5').mask('#.##0,00', { reverse: true });
+            $('#VALORINDIVIDUAL5').mask('#.##0,00', { reverse: true });
+
+            $('#QNTDVIDAS5').mask('###0', { reverse: true });
+            $('#VALORCUSTO5').mask('#.##0,00', { reverse: true });
+            $('#VALORINDIVIDUAL5').mask('#.##0,00', { reverse: true });
+
+            $('#QNTDVIDAS6').mask('###0', { reverse: true });
+            $('#VALORCUSTO6').mask('#.##0,00', { reverse: true });
+            $('#VALORINDIVIDUAL6').mask('#.##0,00', { reverse: true });
+
+            $('#QNTDVIDAS7').mask('###0', { reverse: true });
+            $('#VALORCUSTO7').mask('#.##0,00', { reverse: true })
+            $('#VALORINDIVIDUAL7').mask('#.##0,00', { reverse: true });
+            
+            $('#QNTDVIDAS8').mask('###0', { reverse: true });
+            $('#VALORCUSTO8').mask('#.##0,00', { reverse: true });
+            $('#VALORINDIVIDUAL8').mask('#.##0,00', { reverse: true });
+
+            $('#QNTDVIDAS9').mask('###0', { reverse: true });
+            $('#VALORCUSTO9').mask('#.##0,00', { reverse: true });
+            $('#VALORINDIVIDUAL9').mask('#.##0,00', { reverse: true });
+
+            $('#QNTDVIDAS10').mask('###0', { reverse: true });
+            $('#VALORCUSTO10').mask('#.##0,00', { reverse: true });
+            $('#VALORINDIVIDUAL10').mask('#.##0,00', { reverse: true });
+
+            $('#QNTDVIDAS11').mask('###0', { reverse: true });
+            $('#VALORCUSTO11').mask('#.##0,00', { reverse: true });
+            $('#VALORINDIVIDUAL11').mask('#.##0,00', { reverse: true });
+
+            $('#QNTDVIDAS12').mask('###0', { reverse: true });
+            $('#VALORCUSTO12').mask('#.##0,00', { reverse: true });
+            $('#VALORINDIVIDUAL12').mask('#.##0,00', { reverse: true });
+
+            $('#QNTDVIDAS13').mask('###0', { reverse: true });
+            $('#VALORCUSTO13').mask('#.##0,00', { reverse: true });
+            $('#VALORINDIVIDUAL13').mask('#.##0,00', { reverse: true });
+
+            $('#QNTDVIDAS14').mask('###0', { reverse: true });
+            $('#VALORCUSTO14').mask('#.##0,00', { reverse: true });
+            $('#VALORINDIVIDUAL14').mask('#.##0,00', { reverse: true });
+
+            $('#QNTDVIDAS15').mask('###0', { reverse: true });
+            $('#VALORCUSTO15').mask('#.##0,00', { reverse: true });
+            $('#VALORINDIVIDUAL15').mask('#.##0,00', { reverse: true });
+
+            var faixa = $("#QNTDFAIXAS").val();
+
+            if (faixa == "1") {
+                $(".pn_faixa1").fadeIn('fast');
+                $(".pn_faixa2").fadeOut('fast');
+                $(".pn_faixa3").fadeOut('fast');
+                $(".pn_faixa4").fadeOut('fast');
+                $(".pn_faixa5").fadeOut('fast');
+                $(".pn_faixa6").fadeOut('fast');
+                $(".pn_faixa7").fadeOut('fast');
+                $(".pn_faixa8").fadeOut('fast');
+                $(".pn_faixa9").fadeOut('fast');
+                $(".pn_faixa10").fadeOut('fast');
+                $(".pn_faixa11").fadeOut('fast');
+                $(".pn_faixa12").fadeOut('fast');
+                $(".pn_faixa13").fadeOut('fast');
+                $(".pn_faixa14").fadeOut('fast');
+                $(".pn_faixa15").fadeOut('fast');
+            }
+            if (faixa == "2") {
+                $(".pn_faixa1").fadeIn('fast');
+                $(".pn_faixa2").fadeIn('fast');
+                $(".pn_faixa3").fadeOut('fast');
+                $(".pn_faixa4").fadeOut('fast');
+                $(".pn_faixa5").fadeOut('fast');
+                $(".pn_faixa6").fadeOut('fast');
+                $(".pn_faixa7").fadeOut('fast');
+                $(".pn_faixa8").fadeOut('fast');
+                $(".pn_faixa9").fadeOut('fast');
+                $(".pn_faixa10").fadeOut('fast');
+                $(".pn_faixa11").fadeOut('fast');
+                $(".pn_faixa12").fadeOut('fast');
+                $(".pn_faixa13").fadeOut('fast');
+                $(".pn_faixa14").fadeOut('fast');
+                $(".pn_faixa15").fadeOut('fast');
+            }
+            if (faixa == "3") {
+                $(".pn_faixa1").fadeIn('fast');
+                $(".pn_faixa2").fadeIn('fast');
+                $(".pn_faixa3").fadeIn('fast');
+                $(".pn_faixa4").fadeOut('fast');
+                $(".pn_faixa5").fadeOut('fast');
+                $(".pn_faixa6").fadeOut('fast');
+                $(".pn_faixa7").fadeOut('fast');
+                $(".pn_faixa8").fadeOut('fast');
+                $(".pn_faixa9").fadeOut('fast');
+                $(".pn_faixa10").fadeOut('fast');
+                $(".pn_faixa11").fadeOut('fast');
+                $(".pn_faixa12").fadeOut('fast');
+                $(".pn_faixa13").fadeOut('fast');
+                $(".pn_faixa14").fadeOut('fast');
+                $(".pn_faixa15").fadeOut('fast');
+            }
+            if (faixa == "4") {
+                $(".pn_faixa1").fadeIn('fast');
+                $(".pn_faixa2").fadeIn('fast');
+                $(".pn_faixa3").fadeIn('fast');
+                $(".pn_faixa4").fadeIn('fast');
+                $(".pn_faixa5").fadeOut('fast');
+                $(".pn_faixa6").fadeOut('fast');
+                $(".pn_faixa7").fadeOut('fast');
+                $(".pn_faixa8").fadeOut('fast');
+                $(".pn_faixa9").fadeOut('fast');
+                $(".pn_faixa10").fadeOut('fast');
+                $(".pn_faixa11").fadeOut('fast');
+                $(".pn_faixa12").fadeOut('fast');
+                $(".pn_faixa13").fadeOut('fast');
+                $(".pn_faixa14").fadeOut('fast');
+                $(".pn_faixa15").fadeOut('fast');
+            }
+            if (faixa == "5") {
+                $(".pn_faixa1").fadeIn('fast');
+                $(".pn_faixa2").fadeIn('fast');
+                $(".pn_faixa3").fadeIn('fast');
+                $(".pn_faixa4").fadeIn('fast');
+                $(".pn_faixa5").fadeIn('fast');
+                $(".pn_faixa6").fadeOut('fast');
+                $(".pn_faixa7").fadeOut('fast');
+                $(".pn_faixa8").fadeOut('fast');
+                $(".pn_faixa9").fadeOut('fast');
+                $(".pn_faixa10").fadeOut('fast');
+                $(".pn_faixa11").fadeOut('fast');
+                $(".pn_faixa12").fadeOut('fast');
+                $(".pn_faixa13").fadeOut('fast');
+                $(".pn_faixa14").fadeOut('fast');
+                $(".pn_faixa15").fadeOut('fast');
+            }
+            if (faixa == "6") {
+                $(".pn_faixa1").fadeIn('fast');
+                $(".pn_faixa2").fadeIn('fast');
+                $(".pn_faixa3").fadeIn('fast');
+                $(".pn_faixa4").fadeIn('fast');
+                $(".pn_faixa5").fadeIn('fast');
+                $(".pn_faixa6").fadeIn('fast');
+                $(".pn_faixa7").fadeOut('fast');
+                $(".pn_faixa8").fadeOut('fast');
+                $(".pn_faixa9").fadeOut('fast');
+                $(".pn_faixa10").fadeOut('fast');
+                $(".pn_faixa11").fadeOut('fast');
+                $(".pn_faixa12").fadeOut('fast');
+                $(".pn_faixa13").fadeOut('fast');
+                $(".pn_faixa14").fadeOut('fast');
+                $(".pn_faixa15").fadeOut('fast');
+            }
+            if (faixa == "7") {
+                $(".pn_faixa1").fadeIn('fast');
+                $(".pn_faixa2").fadeIn('fast');
+                $(".pn_faixa3").fadeIn('fast');
+                $(".pn_faixa4").fadeIn('fast');
+                $(".pn_faixa5").fadeIn('fast');
+                $(".pn_faixa6").fadeIn('fast');
+                $(".pn_faixa7").fadeIn('fast');
+                $(".pn_faixa8").fadeOut('fast');
+                $(".pn_faixa9").fadeOut('fast');
+                $(".pn_faixa10").fadeOut('fast');
+                $(".pn_faixa11").fadeOut('fast');
+                $(".pn_faixa12").fadeOut('fast');
+                $(".pn_faixa13").fadeOut('fast');
+                $(".pn_faixa14").fadeOut('fast');
+                $(".pn_faixa15").fadeOut('fast');
+            }
+            if (faixa == "8") {
+                $(".pn_faixa1").fadeIn('fast');
+                $(".pn_faixa2").fadeIn('fast');
+                $(".pn_faixa3").fadeIn('fast');
+                $(".pn_faixa4").fadeIn('fast');
+                $(".pn_faixa5").fadeIn('fast');
+                $(".pn_faixa6").fadeIn('fast');
+                $(".pn_faixa7").fadeIn('fast');
+                $(".pn_faixa8").fadeIn('fast');
+                $(".pn_faixa9").fadeOut('fast');
+                $(".pn_faixa10").fadeOut('fast');
+                $(".pn_faixa11").fadeOut('fast');
+                $(".pn_faixa12").fadeOut('fast');
+                $(".pn_faixa13").fadeOut('fast');
+                $(".pn_faixa14").fadeOut('fast');
+                $(".pn_faixa15").fadeOut('fast');
+            }
+            if (faixa == "9") {
+                $(".pn_faixa1").fadeIn('fast');
+                $(".pn_faixa2").fadeIn('fast');
+                $(".pn_faixa3").fadeIn('fast');
+                $(".pn_faixa4").fadeIn('fast');
+                $(".pn_faixa5").fadeIn('fast');
+                $(".pn_faixa6").fadeIn('fast');
+                $(".pn_faixa7").fadeIn('fast');
+                $(".pn_faixa8").fadeIn('fast');
+                $(".pn_faixa9").fadeIn('fast');
+                $(".pn_faixa10").fadeOut('fast');
+                $(".pn_faixa11").fadeOut('fast');
+                $(".pn_faixa12").fadeOut('fast');
+                $(".pn_faixa13").fadeOut('fast');
+                $(".pn_faixa14").fadeOut('fast');
+                $(".pn_faixa15").fadeOut('fast');
+            }
+            if (faixa == "10") {
+                $(".pn_faixa1").fadeIn('fast');
+                $(".pn_faixa2").fadeIn('fast');
+                $(".pn_faixa3").fadeIn('fast');
+                $(".pn_faixa4").fadeIn('fast');
+                $(".pn_faixa5").fadeIn('fast');
+                $(".pn_faixa6").fadeIn('fast');
+                $(".pn_faixa7").fadeIn('fast');
+                $(".pn_faixa8").fadeIn('fast');
+                $(".pn_faixa9").fadeIn('fast');
+                $(".pn_faixa10").fadeIn('fast');
+                $(".pn_faixa11").fadeOut('fast');
+                $(".pn_faixa12").fadeOut('fast');
+                $(".pn_faixa13").fadeOut('fast');
+                $(".pn_faixa14").fadeOut('fast');
+                $(".pn_faixa15").fadeOut('fast');
+            }
+
+            if (faixa == "11") {
+                $(".pn_faixa1").fadeIn('fast');
+                $(".pn_faixa2").fadeIn('fast');
+                $(".pn_faixa3").fadeIn('fast');
+                $(".pn_faixa4").fadeIn('fast');
+                $(".pn_faixa5").fadeIn('fast');
+                $(".pn_faixa6").fadeIn('fast');
+                $(".pn_faixa7").fadeIn('fast');
+                $(".pn_faixa8").fadeIn('fast');
+                $(".pn_faixa9").fadeIn('fast');
+                $(".pn_faixa10").fadeIn('fast');
+                $(".pn_faixa11").fadeIn('fast');
+                $(".pn_faixa12").fadeOut('fast');
+                $(".pn_faixa13").fadeOut('fast');
+                $(".pn_faixa14").fadeOut('fast');
+                $(".pn_faixa15").fadeOut('fast');
+            }
+
+            if (faixa == "12") {
+                $(".pn_faixa1").fadeIn('fast');
+                $(".pn_faixa2").fadeIn('fast');
+                $(".pn_faixa3").fadeIn('fast');
+                $(".pn_faixa4").fadeIn('fast');
+                $(".pn_faixa5").fadeIn('fast');
+                $(".pn_faixa6").fadeIn('fast');
+                $(".pn_faixa7").fadeIn('fast');
+                $(".pn_faixa8").fadeIn('fast');
+                $(".pn_faixa9").fadeIn('fast');
+                $(".pn_faixa10").fadeIn('fast');
+                $(".pn_faixa11").fadeIn('fast');
+                $(".pn_faixa12").fadeIn('fast');
+                $(".pn_faixa13").fadeOut('fast');
+                $(".pn_faixa14").fadeOut('fast');
+                $(".pn_faixa15").fadeOut('fast');
+            }
+            
+            if (faixa == "13") {
+                $(".pn_faixa1").fadeIn('fast');
+                $(".pn_faixa2").fadeIn('fast');
+                $(".pn_faixa3").fadeIn('fast');
+                $(".pn_faixa4").fadeIn('fast');
+                $(".pn_faixa5").fadeIn('fast');
+                $(".pn_faixa6").fadeIn('fast');
+                $(".pn_faixa7").fadeIn('fast');
+                $(".pn_faixa8").fadeIn('fast');
+                $(".pn_faixa9").fadeIn('fast');
+                $(".pn_faixa10").fadeIn('fast');
+                $(".pn_faixa11").fadeIn('fast');
+                $(".pn_faixa12").fadeIn('fast');
+                $(".pn_faixa13").fadeIn('fast');
+                $(".pn_faixa14").fadeOut('fast');
+                $(".pn_faixa15").fadeOut('fast');
+            }
+
+            if (faixa == "14") {
+                $(".pn_faixa1").fadeIn('fast');
+                $(".pn_faixa2").fadeIn('fast');
+                $(".pn_faixa3").fadeIn('fast');
+                $(".pn_faixa4").fadeIn('fast');
+                $(".pn_faixa5").fadeIn('fast');
+                $(".pn_faixa6").fadeIn('fast');
+                $(".pn_faixa7").fadeIn('fast');
+                $(".pn_faixa8").fadeIn('fast');
+                $(".pn_faixa9").fadeIn('fast');
+                $(".pn_faixa10").fadeIn('fast');
+                $(".pn_faixa11").fadeIn('fast');
+                $(".pn_faixa12").fadeIn('fast');
+                $(".pn_faixa13").fadeIn('fast');
+                $(".pn_faixa14").fadeIn('fast');
+                $(".pn_faixa15").fadeOut('fast');
+            }
+
+            if (faixa == "15") {
+                $(".pn_faixa1").fadeIn('fast');
+                $(".pn_faixa2").fadeIn('fast');
+                $(".pn_faixa3").fadeIn('fast');
+                $(".pn_faixa4").fadeIn('fast');
+                $(".pn_faixa5").fadeIn('fast');
+                $(".pn_faixa6").fadeIn('fast');
+                $(".pn_faixa7").fadeIn('fast');
+                $(".pn_faixa8").fadeIn('fast');
+                $(".pn_faixa9").fadeIn('fast');
+                $(".pn_faixa10").fadeIn('fast');
+                $(".pn_faixa11").fadeIn('fast');
+                $(".pn_faixa12").fadeIn('fast');
+                $(".pn_faixa13").fadeIn('fast');
+                $(".pn_faixa14").fadeIn('fast');
+                $(".pn_faixa15").fadeIn('fast');
+            }
+
+
+             $(document).on("blur keyup", "#QNTDVIDAS1", function () {
+                 $.fancybox.showLoading();
+                 $.post('@Url.Action("BuscaValorPlano", "PessoaJuridica")', { valorcusto: $("#VALORCUSTO1").val(), vidas: $("#QNTDVIDAS1").val() },
+                     function (data) {
+                         if (data != false) {
+                             $("#VALORINDIVIDUAL1").val(data.valor);
+                         }
+                         $.fancybox.hideLoading();
+                     });
+             });
+
+             $(document).on("blur keyup", "#VALORCUSTO1", function () {
+                 $.fancybox.showLoading();
+                 $.post('@Url.Action("BuscaValorPlano", "PessoaJuridica")', { valorcusto: $("#VALORCUSTO1").val(), vidas: $("#QNTDVIDAS1").val() },
+                     function (data) {
+                         if (data != false) {
+                             $("#VALORINDIVIDUAL1").val(data.valor);
+                         }
+                         $.fancybox.hideLoading();
+                     });
+             });
+
+            $(document).on("blur keyup", "#QNTDVIDAS2", function () {
+                 $.fancybox.showLoading();
+                 $.post('@Url.Action("BuscaValorPlano", "PessoaJuridica")', { valorcusto: $("#VALORCUSTO2").val(), vidas: $("#QNTDVIDAS2").val() },
+                     function (data) {
+                         if (data != false) {
+                             $("#VALORINDIVIDUAL2").val(data.valor);
+                         }
+                         $.fancybox.hideLoading();
+                     });
+             });
+
+             $(document).on("blur keyup", "#VALORCUSTO2", function () {
+                 $.fancybox.showLoading();
+                 $.post('@Url.Action("BuscaValorPlano", "PessoaJuridica")', { valorcusto: $("#VALORCUSTO2").val(), vidas: $("#QNTDVIDAS2").val() },
+                     function (data) {
+                         if (data != false) {
+                             $("#VALORINDIVIDUAL2").val(data.valor);
+                         }
+                         $.fancybox.hideLoading();
+                     });
+             });
+
+             $(document).on("blur keyup", "#QNTDVIDAS3", function () {
+                 $.fancybox.showLoading();
+                 $.post('@Url.Action("BuscaValorPlano", "PessoaJuridica")', { valorcusto: $("#VALORCUSTO3").val(), vidas: $("#QNTDVIDAS3").val() },
+                     function (data) {
+                         if (data != false) {
+                             $("#VALORINDIVIDUAL3").val(data.valor);
+                         }
+                         $.fancybox.hideLoading();
+                     });
+             });
+
+             $(document).on("blur keyup", "#VALORCUSTO3", function () {
+                 $.fancybox.showLoading();
+                 $.post('@Url.Action("BuscaValorPlano", "PessoaJuridica")', { valorcusto: $("#VALORCUSTO3").val(), vidas: $("#QNTDVIDAS3").val() },
+                     function (data) {
+                         if (data != false) {
+                             $("#VALORINDIVIDUAL3").val(data.valor);
+                         }
+                         $.fancybox.hideLoading();
+                     });
+             });
+
+            $(document).on("blur keyup", "#QNTDVIDAS4", function () {
+                 $.fancybox.showLoading();
+                 $.post('@Url.Action("BuscaValorPlano", "PessoaJuridica")', { valorcusto: $("#VALORCUSTO4").val(), vidas: $("#QNTDVIDAS4").val() },
+                     function (data) {
+                         if (data != false) {
+                             $("#VALORINDIVIDUAL4").val(data.valor);
+                         }
+                         $.fancybox.hideLoading();
+                     });
+            });
+
+            $(document).on("blur keyup", "#VALORCUSTO4", function () {
+                 $.fancybox.showLoading();
+                 $.post('@Url.Action("BuscaValorPlano", "PessoaJuridica")', { valorcusto: $("#VALORCUSTO4").val(), vidas: $("#QNTDVIDAS4").val() },
+                     function (data) {
+                         if (data != false) {
+                             $("#VALORINDIVIDUAL4").val(data.valor);
+                         }
+                         $.fancybox.hideLoading();
+                     });
+            });
+
+            $(document).on("blur keyup", "#QNTDVIDAS5", function () {
+                 $.fancybox.showLoading();
+                 $.post('@Url.Action("BuscaValorPlano", "PessoaJuridica")', { valorcusto: $("#VALORCUSTO5").val(), vidas: $("#QNTDVIDAS5").val() },
+                     function (data) {
+                         if (data != false) {
+                             $("#VALORINDIVIDUAL5").val(data.valor);
+                         }
+                         $.fancybox.hideLoading();
+                     });
+            });
+
+            $(document).on("blur keyup", "#VALORCUSTO5", function () {
+                 $.fancybox.showLoading();
+                 $.post('@Url.Action("BuscaValorPlano", "PessoaJuridica")', { valorcusto: $("#VALORCUSTO5").val(), vidas: $("#QNTDVIDAS5").val() },
+                     function (data) {
+                         if (data != false) {
+                             $("#VALORINDIVIDUAL5").val(data.valor);
+                         }
+                         $.fancybox.hideLoading();
+                     });
+            });
+
+            $(document).on("blur keyup", "#QNTDVIDAS6", function () {
+                 $.fancybox.showLoading();
+                 $.post('@Url.Action("BuscaValorPlano", "PessoaJuridica")', { valorcusto: $("#VALORCUSTO6").val(), vidas: $("#QNTDVIDAS6").val() },
+                     function (data) {
+                         if (data != false) {
+                             $("#VALORINDIVIDUAL6").val(data.valor);
+                         }
+                         $.fancybox.hideLoading();
+                     });
+            });
+
+            $(document).on("blur keyup", "#VALORCUSTO6", function () {
+                 $.fancybox.showLoading();
+                 $.post('@Url.Action("BuscaValorPlano", "PessoaJuridica")', { valorcusto: $("#VALORCUSTO6").val(), vidas: $("#QNTDVIDAS6").val() },
+                     function (data) {
+                         if (data != false) {
+                             $("#VALORINDIVIDUAL6").val(data.valor);
+                         }
+                         $.fancybox.hideLoading();
+                     });
+            });
+            
+            $(document).on("blur keyup", "#QNTDVIDAS7", function () {
+                 $.fancybox.showLoading();
+                 $.post('@Url.Action("BuscaValorPlano", "PessoaJuridica")', { valorcusto: $("#VALORCUSTO7").val(), vidas: $("#QNTDVIDAS7").val() },
+                     function (data) {
+                         if (data != false) {
+                             $("#VALORINDIVIDUAL7").val(data.valor);
+                         }
+                         $.fancybox.hideLoading();
+                     });
+            });
+
+            $(document).on("blur keyup", "#VALORCUSTO7", function () {
+                 $.fancybox.showLoading();
+                 $.post('@Url.Action("BuscaValorPlano", "PessoaJuridica")', { valorcusto: $("#VALORCUSTO7").val(), vidas: $("#QNTDVIDAS7").val() },
+                     function (data) {
+                         if (data != false) {
+                             $("#VALORINDIVIDUAL7").val(data.valor);
+                         }
+                         $.fancybox.hideLoading();
+                     });
+            });
+
+            $(document).on("blur keyup", "#QNTDVIDAS8", function () {
+                 $.fancybox.showLoading();
+                 $.post('@Url.Action("BuscaValorPlano", "PessoaJuridica")', { valorcusto: $("#VALORCUSTO8").val(), vidas: $("#QNTDVIDAS8").val() },
+                     function (data) {
+                         if (data != false) {
+                             $("#VALORINDIVIDUAL8").val(data.valor);
+                         }
+                         $.fancybox.hideLoading();
+                     });
+            });
+
+            $(document).on("blur keyup", "#VALORCUSTO8", function () {
+                $.fancybox.showLoading();
+                $.post('@Url.Action("BuscaValorPlano", "PessoaJuridica")', { valorcusto: $("#VALORCUSTO8").val(), vidas: $("#QNTDVIDAS8").val() },
+                     function (data) {
+                         if (data != false) {
+                             $("#VALORINDIVIDUAL8").val(data.valor);
+                         }
+                         $.fancybox.hideLoading();
+                     });
+            });
+
+            $(document).on("blur keyup", "#QNTDVIDAS9", function () {
+                 $.fancybox.showLoading();
+                 $.post('@Url.Action("BuscaValorPlano", "PessoaJuridica")', { valorcusto: $("#VALORCUSTO9").val(), vidas: $("#QNTDVIDAS9").val() },
+                     function (data) {
+                         if (data != false) {
+                             $("#VALORINDIVIDUAL9").val(data.valor);
+                         }
+                         $.fancybox.hideLoading();
+                     });
+            });
+
+            $(document).on("blur keyup", "#VALORCUSTO9", function () {
+                $.fancybox.showLoading();
+                $.post('@Url.Action("BuscaValorPlano", "PessoaJuridica")', { valorcusto: $("#VALORCUSTO9").val(), vidas: $("#QNTDVIDAS9").val() },
+                     function (data) {
+                         if (data != false) {
+                             $("#VALORINDIVIDUAL9").val(data.valor);
+                         }
+                         $.fancybox.hideLoading();
+                     });
+            });
+            
+            $(document).on("blur keyup", "#QNTDVIDAS10", function () {
+                 $.fancybox.showLoading();
+                 $.post('@Url.Action("BuscaValorPlano", "PessoaJuridica")', { valorcusto: $("#VALORCUSTO10").val(), vidas: $("#QNTDVIDAS10").val() },
+                     function (data) {
+                         if (data != false) {
+                             $("#VALORINDIVIDUAL10").val(data.valor);
+                         }
+                         $.fancybox.hideLoading();
+                     });
+            });
+
+            $(document).on("blur keyup", "#VALORCUSTO10", function () {
+                $.fancybox.showLoading();
+                $.post('@Url.Action("BuscaValorPlano", "PessoaJuridica")', { valorcusto: $("#VALORCUSTO10").val(), vidas: $("#QNTDVIDAS10").val() },
+                     function (data) {
+                         if (data != false) {
+                             $("#VALORINDIVIDUAL10").val(data.valor);
+                         }
+                         $.fancybox.hideLoading();
+                     });
+            });
+
+             $(document).on("blur keyup", "#QNTDVIDAS11", function () {
+                 $.fancybox.showLoading();
+                 $.post('@Url.Action("BuscaValorPlano", "PessoaJuridica")', { valorcusto: $("#VALORCUSTO11").val(), vidas: $("#QNTDVIDAS11").val() },
+                     function (data) {
+                         if (data != false) {
+                             $("#VALORINDIVIDUAL11").val(data.valor);
+                         }
+                         $.fancybox.hideLoading();
+                     });
+            });
+
+            $(document).on("blur keyup", "#VALORCUSTO11", function () {
+                $.fancybox.showLoading();               
+                $.post('@Url.Action("BuscaValorPlano", "PessoaJuridica")', { valorcusto: $("#VALORCUSTO11").val(), vidas: $("#QNTDVIDAS11").val() },
+                     function (data) {
+                         if (data != false) {
+                             $("#VALORINDIVIDUAL11").val(data.valor);
+                         }
+                         $.fancybox.hideLoading();
+                     });
+            });
+            
+            $(document).on("blur keyup", "#QNTDVIDAS12", function () {
+                 $.fancybox.showLoading();
+                 $.post('@Url.Action("BuscaValorPlano", "PessoaJuridica")', { valorcusto: $("#VALORCUSTO12").val(), vidas: $("#QNTDVIDAS12").val() },
+                     function (data) {
+                         if (data != false) {
+                             $("#VALORINDIVIDUAL12").val(data.valor);
+                         }
+                         $.fancybox.hideLoading();
+                     });
+            });
+
+            $(document).on("blur keyup", "#VALORCUSTO12", function () {
+                $.fancybox.showLoading();               
+                $.post('@Url.Action("BuscaValorPlano", "PessoaJuridica")', { valorcusto: $("#VALORCUSTO12").val(), vidas: $("#QNTDVIDAS12").val() },
+                     function (data) {
+                         if (data != false) {
+                             $("#VALORINDIVIDUAL12").val(data.valor);
+                         }
+                         $.fancybox.hideLoading();
+                     });
+            });
+            
+            $(document).on("blur keyup", "#QNTDVIDAS13", function () {
+                 $.fancybox.showLoading();
+                 $.post('@Url.Action("BuscaValorPlano", "PessoaJuridica")', { valorcusto: $("#VALORCUSTO13").val(), vidas: $("#QNTDVIDAS13").val() },
+                     function (data) {
+                         if (data != false) {
+                             $("#VALORINDIVIDUAL13").val(data.valor);
+                         }
+                         $.fancybox.hideLoading();
+                     });
+            });
+
+            $(document).on("blur keyup", "#VALORCUSTO13", function () {
+                $.fancybox.showLoading();               
+                $.post('@Url.Action("BuscaValorPlano", "PessoaJuridica")', { valorcusto: $("#VALORCUSTO13").val(), vidas: $("#QNTDVIDAS13").val() },
+                     function (data) {
+                         if (data != false) {
+                             $("#VALORINDIVIDUAL13").val(data.valor);
+                         }
+                         $.fancybox.hideLoading();
+                     });
+            });
+
+            $(document).on("blur keyup", "#QNTDVIDAS14", function () {
+                 $.fancybox.showLoading();
+                 $.post('@Url.Action("BuscaValorPlano", "PessoaJuridica")', { valorcusto: $("#VALORCUSTO14").val(), vidas: $("#QNTDVIDAS14").val() },
+                     function (data) {
+                         if (data != false) {
+                             $("#VALORINDIVIDUAL14").val(data.valor);
+                         }
+                         $.fancybox.hideLoading();
+                     });
+            });
+
+            $(document).on("blur keyup", "#VALORCUSTO14", function () {
+                $.fancybox.showLoading();               
+                $.post('@Url.Action("BuscaValorPlano", "PessoaJuridica")', { valorcusto: $("#VALORCUSTO14").val(), vidas: $("#QNTDVIDAS14").val() },
+                     function (data) {
+                         if (data != false) {
+                             $("#VALORINDIVIDUAL14").val(data.valor);
+                         }
+                         $.fancybox.hideLoading();
+                     });
+            });
+
+            $(document).on("blur keyup", "#QNTDVIDAS15", function () {
+                 $.fancybox.showLoading();
+                 $.post('@Url.Action("BuscaValorPlano", "PessoaJuridica")', { valorcusto: $("#VALORCUSTO15").val(), vidas: $("#QNTDVIDAS15").val() },
+                     function (data) {
+                         if (data != false) {
+                             $("#VALORINDIVIDUAL15").val(data.valor);
+                         }
+                         $.fancybox.hideLoading();
+                     });
+            });
+
+            $(document).on("blur keyup", "#VALORCUSTO15", function () {
+                $.fancybox.showLoading();               
+                $.post('@Url.Action("BuscaValorPlano", "PessoaJuridica")', { valorcusto: $("#VALORCUSTO15").val(), vidas: $("#QNTDVIDAS15").val() },
+                     function (data) {
+                         if (data != false) {
+                             $("#VALORINDIVIDUAL15").val(data.valor);
+                         }
+                         $.fancybox.hideLoading();
+                     });
+            });
+
+
+            if ($("#PostDependentes .field-validation-error").length > 0) {
+                $('html, body').animate({ scrollTop: $(".field-validation-error").offset().top - 200 }, 2000);
+                swal("Ops", "Corrija os erros e tente novamente", "error");
+            }
+        });
+    }
+</script>
+

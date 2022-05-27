@@ -1,0 +1,85 @@
+body {
+  padding-top: 2rem;
+  padding-bottom: 2rem;
+}
+
+h3 {
+  margin-top: 2rem;
+}
+
+h4{
+	font-size:10px;
+}
+
+hr {
+  color:#000;
+  width:80%;
+  float:left;
+}
+
+[class*="col-"] {
+  border: 1px solid #009261;
+}
+
+
+
+[class*="unimed"] {
+  color:#FFF;
+  background-color: #009261;
+}
+
+[class*="txtUnimedSup"] {
+  font-size:10px;
+  height:40px;
+  font-weight:bold;
+  border: 1px solid #009261;
+}
+
+[class*="txtUnimedInf"] {
+  font-size:20px;
+  height:40px;
+  font-weight:bold;
+  border: 1px solid #009261;
+}
+
+[class*="txtUnimed"] {
+  font-size:10px;
+  height:40px;
+  font-weight:bold;
+}
+
+[class*="txtUnimed2"] {
+  font-size:13px;
+  font-weight:bold;
+  height:40px;
+}
+
+[class*="alinhaDireita"] {
+	text-align:right;
+}
+
+[class*="height40"] {
+  height:40px;
+}
+
+[class*="tiraborda"] {
+  border: 1px solid #FFF;
+}
+
+[class*="poeBorda0"] {
+  text-align:LEFT;
+  height:40px;
+  font-weight:bold;
+  border: 1px solid #009261;
+}
+
+[class*="poeBorda"] {
+  text-align:right;
+  font-size:10px;
+  height:40px;
+  font-weight:bold;
+  border: 1px solid #009261;
+}
+
+
+
